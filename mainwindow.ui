@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>847</width>
+    <height>626</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>CAD-A_Qt</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>847</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="exit_action"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Данные</string>
+    </property>
+    <addaction name="action_3"/>
+    <addaction name="separator"/>
+    <addaction name="antenna_array"/>
+    <addaction name="action_2"/>
+    <addaction name="separator"/>
+    <addaction name="action"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>Расчеты</string>
+    </property>
+    <widget class="QMenu" name="menu_8">
+     <property name="title">
+      <string>Характеристики направленности</string>
+     </property>
+     <widget class="QMenu" name="menu_9">
+      <property name="title">
+       <string>Излучающая антенная решетка</string>
+      </property>
+      <addaction name="action_13"/>
+      <addaction name="action_14"/>
+     </widget>
+     <addaction name="action_11"/>
+     <addaction name="menu_9"/>
+    </widget>
+    <addaction name="separator"/>
+    <addaction name="menu_8"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>Результаты</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="charts_action"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>Справка</string>
+    </property>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_5"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action">
+   <property name="text">
+    <string>Расстановка элементов</string>
+   </property>
+  </action>
+  <action name="antenna_array">
+   <property name="text">
+    <string>Параметры антенной решетки</string>
+   </property>
+  </action>
+  <action name="exit_action">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>Приемная антенная решетка</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>Вертикальные сечения</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>Азимутальные сечения</string>
+   </property>
+  </action>
+  <action name="action_11">
+   <property name="text">
+    <string>Приемная антенная решетка</string>
+   </property>
+  </action>
+  <action name="action_13">
+   <property name="text">
+    <string>Вертикальные сечения</string>
+   </property>
+  </action>
+  <action name="action_14">
+   <property name="text">
+    <string>Азимутальные сечения</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>Рабочие параметры системы</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>Тип антенны</string>
+   </property>
+  </action>
+  <action name="charts_action">
+   <property name="text">
+    <string>Графики</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
