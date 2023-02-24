@@ -72,7 +72,8 @@ private:
     void hide_reshape_buttons();
     void disabled_channel_button(bool b);
     bool eventFilter(QObject *watched, QEvent *event);
-
+    void rect_click(QObject *watched, QEvent *event);
+    void hex_click(QObject *watched, QEvent *event);
 
 signals:
     void signal_arrange_to_select_weight (double, int, int, int);

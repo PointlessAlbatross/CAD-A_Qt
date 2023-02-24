@@ -21,7 +21,7 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     scene->installEventFilter(this);
 }
 
-bool Arrangement_of_elements::eventFilter(QObject *watched, QEvent *event)
+void Arrangement_of_elements::rect_click(QObject *watched, QEvent *event)
 {
     if(watched == scene){
              QGraphicsSceneMouseEvent *mouseSceneEvent;
@@ -81,9 +81,109 @@ bool Arrangement_of_elements::eventFilter(QObject *watched, QEvent *event)
                               }
                          }
                  }
-        }
-        return QDialog::eventFilter(watched, event);
+    }
 }
+
+/*
+                                            //(1)
+                                            -mouseSceneEvent->scenePos().y() >= rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() + sqrt(rad_circ_scr_pix))
+                                                / sqrt(rad_circ_scr_pix) + 1) + std::get<1>(Button_pos[i][j]) and
+                                            //(2)
+                                            -mouseSceneEvent->scenePos().y() >= -rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / sqrt(rad_circ_scr_pix)
+                                               + rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
+                                            //(3)
+                                            -mouseSceneEvent->scenePos().x() >= sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j]) and
+                                            //(4)
+                                            -mouseSceneEvent->scenePos().y() <= -rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() - sqrt(rad_circ_scr_pix))
+                                               / -sqrt(rad_circ_scr_pix) - 1) + std::get<1>(Button_pos[i][j]) and
+                                            //(5)
+                                            -mouseSceneEvent->scenePos().y() <= rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / -sqrt(rad_circ_scr_pix)
+                                               - rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
+                                            //(6)
+                                            -mouseSceneEvent->scenePos().x() <= -sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j])
+
+
+*/
+
+
+
+void Arrangement_of_elements::hex_click(QObject *watched, QEvent *event)
+{
+    if(watched == scene){
+             QGraphicsSceneMouseEvent *mouseSceneEvent;
+             //![1]
+             if(event->type() == QEvent::GraphicsSceneMousePress){
+                         mouseSceneEvent = static_cast<QGraphicsSceneMouseEvent *>(event);
+                         if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::RightButton)
+                            qDebug()<< mouseSceneEvent->scenePos();
+                         for (int i = 0, i_fl = 0; i < Button_pos.size() and !i_fl; i++)
+                         {
+                             for (int j = 0, j_fl = 0; j < Button_pos[i].size() and !j_fl; j++)
+                             {
+                                if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::RightButton)
+                                {
+                                    if(
+                                       pow(mouseSceneEvent->scenePos().x() - std::get<0>(Button_pos[i][j]),2) +
+                                       pow(mouseSceneEvent->scenePos().y() - std::get<1>(Button_pos[i][j]),2) <= pow(rad_circ_scr_pix,2)
+                                      )
+                                    {
+                                       qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(Button_pos[i][j]) <<Qt::endl;
+                                       qDebug() << Weight_coef << Qt::endl;
+                                       Select_weight window;
+                                       connect(this, &Arrangement_of_elements::signal_arrange_to_select_weight, &window, &Select_weight::slot_arrange_to_select_weigth);
+                                       emit signal_arrange_to_select_weight(Weight_coef[i][j], i, j, std::get<2>(Button_pos[i][j]));
+                                       connect(&window, &Select_weight::signal_select_weight_to_arrange, this, &Arrangement_of_elements::slot_select_weight_to_arrange);
+                                       window.setModal(true);
+                                       window.exec();
+                                       i_fl = 1; //  флаги выхода из цикла
+                                       j_fl = 1;
+                                    }
+                                }
+                                if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::LeftButton)
+                                {
+                                    if (
+                                            pow(mouseSceneEvent->scenePos().x() - std::get<0>(Button_pos[i][j]),2) +
+                                            pow(mouseSceneEvent->scenePos().y() - std::get<1>(Button_pos[i][j]),2) <= pow(rad_circ_scr_pix,2)
+                                       )
+                                    {
+                                        if (regime)
+                                        {
+                                            qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(Button_pos[i][j]) <<Qt::endl;
+                                            qDebug() << Selected_elem[channel_num - 1][i][j] << Qt::endl;
+                                            qDebug() << "координаты выбранного элемента" <<std::get<0>(Button_pos[i][j])<<std::get<1>(Button_pos[i][j]) << Qt::endl;
+                                            qDebug() << "rad_src_pix" <<rad_circ_scr_pix << Qt::endl;
+                                            if(!Selected_elem[channel_num - 1][i][j])
+                                               Selected_elem[channel_num - 1][i][j] = true;
+                                            else
+                                               Selected_elem[channel_num - 1][i][j] = false;
+                                            scene->clear();
+                                            draw_circ();
+                                            redrawing();
+                                            i_fl = 1; //  флаги выхода из цикла
+                                            j_fl = 1;
+                                        }
+                                    }
+                                }
+                              }
+                         }
+                 }
+    }
+}
+
+
+
+bool Arrangement_of_elements::eventFilter(QObject *watched, QEvent *event)
+{
+    if (!overlay_type) // клик по прямоугольникам
+        rect_click(watched, event);
+    else if (overlay_type) // клик по шестиугольникам
+        hex_click(watched, event);
+    return QDialog::eventFilter(watched, event);
+}
+
+
+
+
 
 
 void Arrangement_of_elements::hide_reshape_buttons()
