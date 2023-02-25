@@ -33,6 +33,8 @@ private:
     QVector<int> Curr_num_elem;
     QVector<QVector<double> > Weight_coef;
     QVector<QVector<QPair<double,double>>> Center_pos;
+    QVector<QVector<std::tuple<int, int, int> > > Button_pos;
+    int overlay_type;
 
     double k;
     double size_x;
@@ -40,6 +42,8 @@ private:
     double dist_x;
     double dist_z;
 
+    int rad_circ_scr_pix;
+    int dist_hex_pix;
 
     double theta;
     double theta_t;
@@ -58,7 +62,9 @@ public slots:
                              QVector<QVector<std::tuple<int, int, int> > > Button_pos,
                              double k,
                              double size_x, double size_z, double dist_x, double dist_z,
-                             int size_x_pix, int size_z_pix);
+                             int size_x_pix, int size_z_pix,
+                             int rad_circ_scr_pix, int dist_hex_pix,
+                             int overlay_type);
 private:
     Ui::Pattern_charts *ui;
 };

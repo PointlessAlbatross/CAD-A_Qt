@@ -1089,7 +1089,8 @@ void Arrangement_of_elements::on_ChannelNumButton_16_clicked()
 void Arrangement_of_elements::on_saveButton_clicked()
 {
     emit signal_arrange_to_main(Curr_num_elem, Weight_coef, Button_pos,
-                                size_x_pix, size_z_pix, dist_x_pix, dist_x_pix);
+                                size_x_pix, size_z_pix, dist_x_pix, dist_x_pix,
+                                rad_circ_scr_pix, dist_hex_pix);
     QWidget::close();
 }
 

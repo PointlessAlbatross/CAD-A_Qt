@@ -142,7 +142,8 @@ void MainWindow::slot_operating_system_parameters_to_main(int duration1, int pre
 }
 
 void MainWindow::slot_arrange_to_main(QVector<int> Curr_num_elem1, QVector<QVector<double> > Weight_coef1, QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
-                                      int size_x_pix1, int size_z_pix1, int dist_x_pix1, int dist_z_pix1)
+                                      int size_x_pix1, int size_z_pix1, int dist_x_pix1, int dist_z_pix1,
+                                      int rad_circ_scr_pix1, int dist_hex_pix1)
 {
     Curr_num_elem = Curr_num_elem1;
     Weight_coef = Weight_coef1;
@@ -151,6 +152,8 @@ void MainWindow::slot_arrange_to_main(QVector<int> Curr_num_elem1, QVector<QVect
     size_z_pix = size_z_pix1;
     dist_x_pix = dist_x_pix1;
     dist_z_pix = dist_z_pix1;
+    rad_circ_scr_pix = rad_circ_scr_pix1;
+    dist_hex_pix = dist_hex_pix1;
 }
 
 
@@ -186,7 +189,8 @@ void MainWindow::on_charts_action_triggered()
     connect(this, &MainWindow::signal_main_to_charts, &window, &Pattern_charts::slot_main_to_charts);
     emit signal_main_to_charts(Curr_num_elem, Weight_coef, Button_pos, k,
                                size_x, size_z, dist_x, dist_z,
-                               size_x_pix, size_z_pix);
+                               size_x_pix, size_z_pix,
+                               rad_circ_scr_pix, dist_hex_pix, overlay_type);
     window.setModal(true);
     window.exec();
 }

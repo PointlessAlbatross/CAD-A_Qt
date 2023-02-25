@@ -49,6 +49,9 @@ private:
     int dist_x_pix;
     int dist_z_pix;
 
+    int rad_circ_scr_pix;
+    int dist_hex_pix;
+
     int duration;
     int pressure;
     int radiation_freq;
@@ -81,7 +84,9 @@ signals:
     void signal_main_to_charts(QVector<int> Curr_num_elem, QVector<QVector<double>> Weight_coef, QVector<QVector<std::tuple<int, int, int> > > Button_pos,
                                double k,
                                double size_x, double size_z, double dist_x, double dist_z,
-                               int size_x_pix, int size_z_pix);
+                               int size_x_pix, int size_z_pix,
+                               int rad_circ_scr_pix, int dist_hex_pix,
+                               int overlay_type);
 public slots:
     void slot_param_rect_to_main(double size_x, double size_z,
               double dist_x, double dist_z,
@@ -93,6 +98,7 @@ public slots:
     void slot_operating_system_parameters_to_main(int duration, int pressure, int receiving_freq,
                                                   int radiation_freq);
     void slot_arrange_to_main(QVector<int> Curr_num_elem, QVector<QVector<double>> Weight_coef, QVector <QVector<std::tuple<int, int, int>>> Button_pos,
-                              int size_x_pix, int size_z_pix, int dist_x_pix, int dist_z_pix);
+                              int size_x_pix, int size_z_pix, int dist_x_pix, int dist_z_pix,
+                              int rad_circ_scr_pix, int dist_hex_pix);
 };
 #endif // MAINWINDOW_H

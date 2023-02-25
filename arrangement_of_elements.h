@@ -79,7 +79,8 @@ private:
 signals:
     void signal_arrange_to_select_weight (double, int, int, int);
     void signal_arrange_to_main(QVector<int> Curr_num_elem, QVector<QVector<double>> Weight_coef, QVector <QVector<std::tuple<int, int, int>>> Button_pos,
-                                int size_x_pix, int size_z_pix, int dist_x_pix, int dist_z_pix);
+                                int size_x_pix, int size_z_pix, int dist_x_pix, int dist_z_pix,
+                                int rad_circ_scr_pix, int dist_hex_pix);
 
 
 public slots:
