@@ -120,8 +120,8 @@ bool Arrangement_of_elements::hex_check(int x, int y, int getx, int gety)
                */
     return x <= sqrt(rad_circ_scr_pix) + getx and
             x >= -sqrt(rad_circ_scr_pix) + getx and
-            y <= rad_circ_scr_pix + gety and
-            y >= -rad_circ_scr_pix + gety;
+            y <= rad_circ_scr_pix/2 + gety and
+            y >= -rad_circ_scr_pix/2 + gety;
 }
 
 void Arrangement_of_elements::hex_click(QObject *watched, QEvent *event)
@@ -784,9 +784,8 @@ void Arrangement_of_elements::on_ButtonMinus_7_clicked()
 
 void Arrangement_of_elements::reshape_plus(int n)
 {
-    if (overlay_type and ((Curr_num_elem[num_row / 2 - n] != 0
-                          and Curr_num_elem[num_row / 2 + n] != 0)
-                              or ((num_row / 2 - n) % 2 != 0)))
+    if (overlay_type and (Curr_num_elem[num_row / 2 - n] != 0
+                          or ((num_row - n) % 2 == 0)))
     {
 
         if((Curr_num_elem[num_row / 2 - n] < Max_elem[num_row / 2 - n]) and
