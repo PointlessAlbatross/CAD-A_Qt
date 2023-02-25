@@ -86,26 +86,43 @@ void Arrangement_of_elements::rect_click(QObject *watched, QEvent *event)
 
 /*
                                             //(1)
-                                            -mouseSceneEvent->scenePos().y() >= rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() + sqrt(rad_circ_scr_pix))
+                                            mouseSceneEvent->scenePos().y() >= rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() + sqrt(rad_circ_scr_pix))
                                                 / sqrt(rad_circ_scr_pix) + 1) + std::get<1>(Button_pos[i][j]) and
                                             //(2)
-                                            -mouseSceneEvent->scenePos().y() >= -rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / sqrt(rad_circ_scr_pix)
+                                            mouseSceneEvent->scenePos().y() >= -rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / sqrt(rad_circ_scr_pix)
                                                + rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
                                             //(3)
-                                            -mouseSceneEvent->scenePos().x() >= sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j]) and
+                                            mouseSceneEvent->scenePos().x() >= sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j]) and
                                             //(4)
-                                            -mouseSceneEvent->scenePos().y() <= -rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() - sqrt(rad_circ_scr_pix))
+                                            mouseSceneEvent->scenePos().y() <= -rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() - sqrt(rad_circ_scr_pix))
                                                / -sqrt(rad_circ_scr_pix) - 1) + std::get<1>(Button_pos[i][j]) and
                                             //(5)
-                                            -mouseSceneEvent->scenePos().y() <= rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / -sqrt(rad_circ_scr_pix)
+                                            mouseSceneEvent->scenePos().y() <= rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / -sqrt(rad_circ_scr_pix)
                                                - rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
                                             //(6)
-                                            -mouseSceneEvent->scenePos().x() <= -sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j])
+                                            mouseSceneEvent->scenePos().x() <= -sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j])
 
 
 */
 
-
+bool Arrangement_of_elements::hex_check(int x, int y, int getx, int gety)
+{
+    /* return x <= sqrt(rad_circ_scr_pix) + getx and
+           x >= -sqrt(rad_circ_scr_pix) + getx and
+           y >= rad_circ_scr_pix/2*((x + sqrt(rad_circ_scr_pix))
+                / sqrt(rad_circ_scr_pix) + 1) + gety and
+           y >= -rad_circ_scr_pix/2 * x / sqrt(rad_circ_scr_pix)
+               + rad_circ_scr_pix + gety and
+           y <= rad_circ_scr_pix/2 * x / -sqrt(rad_circ_scr_pix)
+               - rad_circ_scr_pix + gety and
+           y <= rad_circ_scr_pix/2 * x / -sqrt(rad_circ_scr_pix)
+               - rad_circ_scr_pix + gety;
+               */
+    return x <= sqrt(rad_circ_scr_pix) + getx and
+            x >= -sqrt(rad_circ_scr_pix) + getx and
+            y <= rad_circ_scr_pix + gety and
+            y >= -rad_circ_scr_pix + gety;
+}
 
 void Arrangement_of_elements::hex_click(QObject *watched, QEvent *event)
 {
@@ -123,8 +140,8 @@ void Arrangement_of_elements::hex_click(QObject *watched, QEvent *event)
                                 if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::RightButton)
                                 {
                                     if(
-                                       pow(mouseSceneEvent->scenePos().x() - std::get<0>(Button_pos[i][j]),2) +
-                                       pow(mouseSceneEvent->scenePos().y() - std::get<1>(Button_pos[i][j]),2) <= pow(rad_circ_scr_pix,2)
+                                            hex_check(mouseSceneEvent->scenePos().x(), mouseSceneEvent->scenePos().y(),
+                                                    std::get<0>(Button_pos[i][j]), std::get<1>(Button_pos[i][j]))
                                       )
                                     {
                                        qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(Button_pos[i][j]) <<Qt::endl;
@@ -142,8 +159,8 @@ void Arrangement_of_elements::hex_click(QObject *watched, QEvent *event)
                                 if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::LeftButton)
                                 {
                                     if (
-                                            pow(mouseSceneEvent->scenePos().x() - std::get<0>(Button_pos[i][j]),2) +
-                                            pow(mouseSceneEvent->scenePos().y() - std::get<1>(Button_pos[i][j]),2) <= pow(rad_circ_scr_pix,2)
+                                            hex_check(mouseSceneEvent->scenePos().x(), mouseSceneEvent->scenePos().y(),
+                                                         std::get<0>(Button_pos[i][j]), std::get<1>(Button_pos[i][j]))
                                        )
                                     {
                                         if (regime)
@@ -171,7 +188,6 @@ void Arrangement_of_elements::hex_click(QObject *watched, QEvent *event)
 }
 
 
-
 bool Arrangement_of_elements::eventFilter(QObject *watched, QEvent *event)
 {
     if (!overlay_type) // клик по прямоугольникам
@@ -180,10 +196,6 @@ bool Arrangement_of_elements::eventFilter(QObject *watched, QEvent *event)
         hex_click(watched, event);
     return QDialog::eventFilter(watched, event);
 }
-
-
-
-
 
 
 void Arrangement_of_elements::hide_reshape_buttons()
@@ -774,7 +786,7 @@ void Arrangement_of_elements::reshape_plus(int n)
 {
     if (overlay_type and ((Curr_num_elem[num_row / 2 - n] != 0
                           and Curr_num_elem[num_row / 2 + n] != 0)
-                              or ((num_row / 2 - n) % 2 == 0)))
+                              or ((num_row / 2 - n) % 2 != 0)))
     {
 
         if((Curr_num_elem[num_row / 2 - n] < Max_elem[num_row / 2 - n]) and
