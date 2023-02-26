@@ -31,7 +31,7 @@ double Pattern_charts::D(double theta, double phi)
     {
         double a;
         if (phi != 0)
-            a = j1(theta) *(k * (sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta)*sin(phi),2)+pow(cos(theta),2)))/
+            a = j1(theta/180 * M_PI) *(k * (sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta)*sin(phi),2)+pow(cos(theta),2)))/
                             (k*(sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta)*sin(phi),2)+pow(cos(theta),2)));
         return a;
     }

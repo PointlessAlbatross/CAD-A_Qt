@@ -85,43 +85,43 @@ void Arrangement_of_elements::rect_click(QObject *watched, QEvent *event)
 }
 
 /*
-                                            //(1)
-                                            mouseSceneEvent->scenePos().y() >= rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() + sqrt(rad_circ_scr_pix))
-                                                / sqrt(rad_circ_scr_pix) + 1) + std::get<1>(Button_pos[i][j]) and
-                                            //(2)
-                                            mouseSceneEvent->scenePos().y() >= -rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / sqrt(rad_circ_scr_pix)
-                                               + rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
-                                            //(3)
-                                            mouseSceneEvent->scenePos().x() >= sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j]) and
-                                            //(4)
-                                            mouseSceneEvent->scenePos().y() <= -rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() - sqrt(rad_circ_scr_pix))
-                                               / -sqrt(rad_circ_scr_pix) - 1) + std::get<1>(Button_pos[i][j]) and
-                                            //(5)
-                                            mouseSceneEvent->scenePos().y() <= rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / -sqrt(rad_circ_scr_pix)
-                                               - rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
-                                            //(6)
-                                            mouseSceneEvent->scenePos().x() <= -sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j])
-
+          //(1)
+          mouseSceneEvent->scenePos().y() >= rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() + sqrt(rad_circ_scr_pix))
+            / sqrt(rad_circ_scr_pix) + 1) + std::get<1>(Button_pos[i][j]) and
+          //(2)
+          mouseSceneEvent->scenePos().y() >= -rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / sqrt(rad_circ_scr_pix)
+             + rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
+          //(3)
+          mouseSceneEvent->scenePos().x() >= sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j]) and
+          //(4)
+          mouseSceneEvent->scenePos().y() <= -rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() - sqrt(rad_circ_scr_pix))
+             / -sqrt(rad_circ_scr_pix) - 1) + std::get<1>(Button_pos[i][j]) and
+          //(5)
+          mouseSceneEvent->scenePos().y() <= rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / -sqrt(rad_circ_scr_pix)
+             - rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
+          //(6)
+          mouseSceneEvent->scenePos().x() <= -sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j])
 
 */
 
 bool Arrangement_of_elements::hex_check(int x, int y, int getx, int gety)
 {
-    /* return x <= sqrt(rad_circ_scr_pix) + getx and
-           x >= -sqrt(rad_circ_scr_pix) + getx and
-           y >= rad_circ_scr_pix/2*((x + sqrt(rad_circ_scr_pix))
-                / sqrt(rad_circ_scr_pix) + 1) + gety and
-           y >= -rad_circ_scr_pix/2 * x / sqrt(rad_circ_scr_pix)
-               + rad_circ_scr_pix + gety and
-           y <= rad_circ_scr_pix/2 * x / -sqrt(rad_circ_scr_pix)
-               - rad_circ_scr_pix + gety and
-           y <= rad_circ_scr_pix/2 * x / -sqrt(rad_circ_scr_pix)
-               - rad_circ_scr_pix + gety;
-               */
-    return x <= sqrt(rad_circ_scr_pix) + getx and
+     return x <= sqrt(rad_circ_scr_pix) + getx and
             x >= -sqrt(rad_circ_scr_pix) + getx and
             y <= rad_circ_scr_pix/2 + gety and
             y >= -rad_circ_scr_pix/2 + gety;
+/*
+    return x <= sqrt(rad_circ_scr_pix) + getx and
+            x >= -sqrt(rad_circ_scr_pix) + getx and
+            y >= rad_circ_scr_pix/2*((x + sqrt(rad_circ_scr_pix))
+                / sqrt(rad_circ_scr_pix) + 1) + gety and
+            y >= -rad_circ_scr_pix/2 * x / sqrt(rad_circ_scr_pix)
+               + rad_circ_scr_pix + gety and
+            y <= -rad_circ_scr_pix/2*((x - sqrt(rad_circ_scr_pix))
+               / -sqrt(rad_circ_scr_pix) - 1) + gety and
+            y <= rad_circ_scr_pix/2 * x / -sqrt(rad_circ_scr_pix)
+               - rad_circ_scr_pix + gety;
+*/
 }
 
 void Arrangement_of_elements::hex_click(QObject *watched, QEvent *event)
@@ -577,7 +577,7 @@ void Arrangement_of_elements::redrawing_hex()
             for (int i = 0; i < Curr_num_elem[j] / 2; i++)
             {
                 draw_hex(x, z, rad_circ_scr_pix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= (2 * rad_circ_scr_pix * cos(M_PI/6) + dist_hex_pix);
             }
         }
@@ -617,7 +617,7 @@ void Arrangement_of_elements::redrawing_hex()
             for (int i = 0; i < Curr_num_elem[j] / 2; i++)
             {
                 draw_hex(x, z, rad_circ_scr_pix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= 2* rad_circ_scr_pix * cos(M_PI/6) + dist_hex_pix;
             }
         }
@@ -647,6 +647,16 @@ void Arrangement_of_elements::redrawing_hex()
             std::get<2>(Button_pos[j][i]) = n;
             n++;
         }
+    }
+
+    qDebug() << "Button_pos" <<Qt::endl;
+    for (int i = 0; i < Button_pos.size(); i++)
+    {
+        for (int j = 0; j < Button_pos[i].size(); j++)
+        {
+            qDebug() << std::get<0>(Button_pos[i][j]) << std::get<1>(Button_pos[i][j]) << " ";
+        }
+        qDebug() <<Qt::endl;
     }
 }
 
