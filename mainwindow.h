@@ -85,6 +85,7 @@ signals:
                                double k,
                                double size_x, double size_z, double dist_x, double dist_z,
                                int size_x_pix, int size_z_pix,
+                               double rad_circ_scr, double dist_hex,
                                int rad_circ_scr_pix, int dist_hex_pix,
                                int overlay_type);
 public slots:

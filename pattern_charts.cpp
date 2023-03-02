@@ -30,11 +30,14 @@ double Pattern_charts::D(double theta, double phi)
     else if (overlay_type != 0)  // Шестиугольник
     {
         //theta/180 * M_PI
-        double a;
+        double a1,b1;
         if (phi != 0)
-            a = 2 * j1(k * (sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta)*sin(phi), 2)+pow(cos(theta), 2))) /
-                            (k * (sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta) * sin(phi), 2) + pow(cos(theta), 2)));
-        return a;
+        {
+            a1 = 2 * j1(k * (sqrt(3)*rad_circ_scr+dist_hex)/2 * sqrt(pow(sin(theta)*sin(phi), 2)+pow(cos(theta), 2)));
+            b1 = k * (sqrt(3)*rad_circ_scr+dist_hex)/2 * sqrt(pow(sin(theta) * sin(phi), 2) + pow(cos(theta), 2));
+            return a1/b1;
+        }
+
     }
     return 1;
 }
@@ -44,40 +47,18 @@ std::complex<double> Pattern_charts::Dt(double theta, double phi)
     double theta_t = M_PI_2, phi_t = 0;
     std::complex<double> i (0, 1); // Мнимая единица
     std::complex<double> D_numerator = 0, D_denumerator = 0;
-    if (overlay_type == 0) // Четырехугольник
+    for (int a = 0; a < Center_pos.size(); a++)
     {
-        for (int a = 0; a < Center_pos.size(); a++)
+        for(int b = 0; b < Center_pos[a].size(); b++)
         {
-            for(int b = 0; b < Center_pos[a].size(); b++)
-            {
-                    //[1] Числитель
-                    D_numerator += (Weight_coef[a][b] * exp( (1.0*i) * k * (Center_pos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
-                                                       + Center_pos[a][b].second * (cos (theta) - cos(theta_t))) ) *
-                             D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
-                    //[2] Знаменатель
-                    D_denumerator += Weight_coef[a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2;
-            }
-        }
-    }
-
-    else if (overlay_type != 0) // Шестиугольник
-    {
-
-
-        for (int a = 0; a < Button_pos.size(); a++)
-        {
-            for(int b = 0; b < Button_pos[a].size(); b++)
-            {
                 //[1] Числитель
-                D_numerator += (Weight_coef[a][b] * exp( (1.0*i) * k * (std::get<0>(Button_pos[a][b]) * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
-                                                   + std::get<1>(Button_pos[a][b]) * (cos (theta) - cos(theta_t))) ) *
+                D_numerator += (Weight_coef[a][b] * exp( (1.0*i) * k * (Center_pos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
+                                                   + Center_pos[a][b].second * (cos (theta) - cos(theta_t))) ) *
                          D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
                 //[2] Знаменатель
                 D_denumerator += Weight_coef[a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2;
-            }
         }
     }
-
     return D_numerator / D_denumerator;
 }
 
@@ -198,12 +179,18 @@ void Pattern_charts::slot_main_to_charts(QVector<int> Curr_num_elem1, QVector<QV
                          QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
                          double k1,
                          double size_x1, double size_z1, double dist_x1, double dist_z1,
-                         int size_x_pix1, int size_z_pix1, int rad_circ_scr_pix1, int dist_hex_pix1,
+                         int size_x_pix1, int size_z_pix1, double rad_circ_scr1, double dist_hex1, int rad_circ_scr_pix1, int dist_hex_pix1,
                          int overlay_type1)
 {
 
     overlay_type = overlay_type1;
-    double scale_koef = size_x1 / size_x_pix1 ;
+    double scale_koef;
+    if (overlay_type1 == 0)
+        scale_koef = size_x1 / size_x_pix1 ;
+    else
+        scale_koef = rad_circ_scr1 / rad_circ_scr_pix1 ;
+    rad_circ_scr = rad_circ_scr1;
+    dist_hex = dist_hex1;
     Curr_num_elem = Curr_num_elem1;
     Weight_coef = Weight_coef1;
     k = k1;
@@ -212,11 +199,16 @@ void Pattern_charts::slot_main_to_charts(QVector<int> Curr_num_elem1, QVector<QV
     {
         Button_pos = Button_pos1;
         qDebug() << "Button_pos" <<Qt::endl;
+        Center_pos.resize(Button_pos1.size());
         for (int i = 0; i < Button_pos1.size(); i++)
         {
+            Center_pos[i].resize(Button_pos1[i].size());
             for (int j = 0; j < Button_pos1[i].size(); j++)
             {
-                qDebug() << std::get<0>(Button_pos1[i][j]) << std::get<1>(Button_pos1[i][j]) << " ";
+                Center_pos[i][j].first = std::get<0>(Button_pos1[i][j]) ;
+                Center_pos[i][j].second = -(std::get<1>(Button_pos1[i][j]));
+                Center_pos[i][j].first = round(Center_pos[i][j].first * scale_koef * 100)/100;
+                Center_pos[i][j].second = round(Center_pos[i][j].second * scale_koef * 100)/100;
             }
         }
     }

@@ -190,6 +190,7 @@ void MainWindow::on_charts_action_triggered()
     emit signal_main_to_charts(Curr_num_elem, Weight_coef, Button_pos, k,
                                size_x, size_z, dist_x, dist_z,
                                size_x_pix, size_z_pix,
+                               rad_circ_scr, dist,
                                rad_circ_scr_pix, dist_hex_pix, overlay_type);
     window.setModal(true);
     window.exec();
