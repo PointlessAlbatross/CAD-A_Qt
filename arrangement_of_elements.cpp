@@ -16,6 +16,7 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     ui->setupUi(this);
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
+    scene->setBackgroundBrush(Qt::white);
     draw_circ();
 
     scene->installEventFilter(this);
@@ -374,6 +375,7 @@ void Arrangement_of_elements::redrawing()
         redrawing_hex();
 }
 
+
 void Arrangement_of_elements::redrawing_rect()
 {
     int x, z, n;
@@ -553,6 +555,7 @@ void Arrangement_of_elements::redrawing_rect()
     }
 }
 
+
 void Arrangement_of_elements::redrawing_hex()
 {
     int x, z, n;
@@ -659,9 +662,9 @@ void Arrangement_of_elements::redrawing_hex()
         qDebug() <<Qt::endl;
     }
 }
-
-
-
+/*
+  Слот
+*/
 void Arrangement_of_elements::slot_main_to_arrange(double size_x1, double size_z1, double dist_x1, double dist_z1,
                                                    double rad_circ_scr1, double dist1,
                                                    double rad_ant1, int num_row1, QVector<int> Max_elem1, QVector<int> Curr_num_elem1,
@@ -716,30 +719,25 @@ void Arrangement_of_elements::on_radioButton_2_clicked(bool checked)
     }
 }
 
-
 void Arrangement_of_elements::on_ButtonPlus_1_clicked()
 {
     reshape_plus(0);
 }
-
 
 void Arrangement_of_elements::on_ButtonMinus_1_clicked()
 {
     reshape_minus(0);
 }
 
-
 void Arrangement_of_elements::on_ButtonPlus_2_clicked()
 {
     reshape_plus(1);
 }
 
-
 void Arrangement_of_elements::on_ButtonMinus_2_clicked()
 {
     reshape_minus(1);
 }
-
 
 void Arrangement_of_elements::on_ButtonPlus_3_clicked()
 {
@@ -1094,7 +1092,6 @@ void Arrangement_of_elements::on_ChannelNumButton_16_clicked()
     channel_num = 16;
     redrawing();
 }
-
 
 void Arrangement_of_elements::on_saveButton_clicked()
 {

@@ -17,22 +17,23 @@ Pattern_charts::~Pattern_charts()
 
 double Pattern_charts::D(double theta, double phi)
 {
-    if (overlay_type == 0)
+    if (overlay_type == 0) // Четырехугольник
     {
         double a;
-        if (phi)
+        if (phi != 0)
            a = sin( k * (size_x+dist_x) / 2 * sin(theta) * sin (phi) )/ (k*(size_x+dist_x) / 2 * (sin(theta) * sin (phi)));
         else
            a = 1;
         double b = sin ( k * (size_z+dist_z) / 2 * cos (theta)) / (k * (size_z+dist_z) / 2 * cos (theta));
         return a * b;
     }
-    else if (overlay_type != 0)
+    else if (overlay_type != 0)  // Шестиугольник
     {
+        //theta/180 * M_PI
         double a;
         if (phi != 0)
-            a = j1(theta/180 * M_PI) *(k * (sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta)*sin(phi),2)+pow(cos(theta),2)))/
-                            (k*(sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta)*sin(phi),2)+pow(cos(theta),2)));
+            a = 2 * j1(k * (sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta)*sin(phi), 2)+pow(cos(theta), 2))) /
+                            (k * (sqrt(3)*rad_circ_scr_pix+dist_hex_pix)/2 * sqrt(pow(sin(theta) * sin(phi), 2) + pow(cos(theta), 2)));
         return a;
     }
     return 1;
@@ -43,7 +44,7 @@ std::complex<double> Pattern_charts::Dt(double theta, double phi)
     double theta_t = M_PI_2, phi_t = 0;
     std::complex<double> i (0, 1); // Мнимая единица
     std::complex<double> D_numerator = 0, D_denumerator = 0;
-    if (overlay_type == 0)
+    if (overlay_type == 0) // Четырехугольник
     {
         for (int a = 0; a < Center_pos.size(); a++)
         {
