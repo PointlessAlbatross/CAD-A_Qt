@@ -15,7 +15,6 @@ SOURCES += \
     mainwindow.cpp \
     operating_system_parameters.cpp \
     pattern_charts.cpp \
-    radiation_pattern_parameters.cpp \
     select_weight.cpp
 HEADERS += \
     antenna_array_parameters_hex.h \
@@ -24,7 +23,6 @@ HEADERS += \
     mainwindow.h \
     operating_system_parameters.h \
     pattern_charts.h \
-    radiation_pattern_parameters.h \
     select_weight.h
 
 FORMS += \
@@ -34,7 +32,6 @@ FORMS += \
     mainwindow.ui \
     operating_system_parameters.ui \
     pattern_charts.ui \
-    radiation_pattern_parameters.ui \
     select_weight.ui
 
 # Default rules for deployment.

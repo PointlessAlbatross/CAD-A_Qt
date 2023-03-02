@@ -90,7 +90,6 @@ public slots:
                               std::array<QVector<QVector<bool>>, 16> Selected_elem,
                               int overlay_type);
     void slot_select_weight_to_arrange(double weight, int i1, int j1);
-\
 
 private slots:
     void on_radioButton_clicked(bool checked);

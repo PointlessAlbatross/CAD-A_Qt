@@ -11,16 +11,16 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Arrangement_of_elements)
 {
-    diam_pix = 430; // число пикселей в диаметре
+    diam_pix = 450; // число пикселей в диаметре
     channel_num = 1;
     ui->setupUi(this);
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
     scene->setBackgroundBrush(Qt::white);
     draw_circ();
-
     scene->installEventFilter(this);
 }
+
 
 void Arrangement_of_elements::rect_click(QObject *watched, QEvent *event)
 {
