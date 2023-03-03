@@ -107,13 +107,13 @@ void Arrangement_of_elements::rect_click(QObject *watched, QEvent *event)
 
 bool Arrangement_of_elements::hex_check(int x, int y, int getx, int gety)
 {
-     return x <= sqrt(rad_circ_scr_pix) + getx and
-            x >= -sqrt(rad_circ_scr_pix) + getx and
+     return x <= sqrt(3)/2*rad_circ_scr_pix + getx and
+            x >= -sqrt(3)/2*rad_circ_scr_pix + getx and
             y <= rad_circ_scr_pix/2 + gety and
             y >= -rad_circ_scr_pix/2 + gety;
 /*
-    return x <= sqrt(rad_circ_scr_pix) + getx and
-            x >= -sqrt(rad_circ_scr_pix) + getx and
+    return x <= sqrt(3)/2*rad_circ_scr_pix + getx and
+            x >= -sqrt(3)/2*rad_circ_scr_pix + getx and
             y >= rad_circ_scr_pix/2*((x + sqrt(rad_circ_scr_pix))
                 / sqrt(rad_circ_scr_pix) + 1) + gety and
             y >= -rad_circ_scr_pix/2 * x / sqrt(rad_circ_scr_pix)
