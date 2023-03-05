@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "operating_system_parameters.h"
-#include "arrangement_of_elements.h"
+#include "arrangementOfElements.h"
 #include "antenna_array_parameters_rect.h"
 #include "antenna_array_parameters_hex.h"
 #include "pattern_charts.h"

@@ -10,7 +10,7 @@ CONFIG += c++17
 SOURCES += \
     antenna_array_parameters_hex.cpp \
     antenna_array_parameters_rect.cpp \
-    arrangement_of_elements.cpp \
+    arrangementOfElements.cpp \
     main.cpp \
     mainwindow.cpp \
     operating_system_parameters.cpp \
@@ -19,7 +19,7 @@ SOURCES += \
 HEADERS += \
     antenna_array_parameters_hex.h \
     antenna_array_parameters_rect.h \
-    arrangement_of_elements.h \
+    arrangementOfElements.h \
     mainwindow.h \
     operating_system_parameters.h \
     pattern_charts.h \
@@ -28,7 +28,7 @@ HEADERS += \
 FORMS += \
     antenna_array_parameters_hex.ui \
     antenna_array_parameters_rect.ui \
-    arrangement_of_elements.ui \
+    arrangementOfElements.ui \
     mainwindow.ui \
     operating_system_parameters.ui \
     pattern_charts.ui \

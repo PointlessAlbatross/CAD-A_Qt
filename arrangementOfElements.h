@@ -1,5 +1,5 @@
-#ifndef ARRANGEMENT_OF_ELEMENTS_H
-#define ARRANGEMENT_OF_ELEMENTS_H
+#ifndef ARRANGEMENTOFELEMENTS_H
+#define ARRANGEMENTOFELEMENTS_H
 
 #include <QDialog>
 #include <QPainter>
@@ -50,11 +50,11 @@ private:
     int numRow;
     int channelNum;
     bool regime;
-    QVector<int> Max_elem;
-    QVector<int> Curr_num_elem;
-    QVector<QVector<double>> Weight_coef;
-    QVector <QVector<std::tuple<int, int, int>>> Button_pos;
-    std::array<QVector<QVector<bool>>, 16> Selected_elem;
+    QVector<int> MaxElem;
+    QVector<int> CurrNumElem;
+    QVector<QVector<double>> WeightCoef;
+    QVector <QVector<std::tuple<int, int, int>>> ButtonPos;
+    std::array<QVector<QVector<bool>>, 16> SelectedElem;
 
 
     void redrawing();
@@ -129,4 +129,4 @@ private slots:
     void on_saveButton_clicked();
 };
 
-#endif // ARRANGEMENT_OF_ELEMENTS_H
+#endif // ARRANGEMENTOFELEMENTS_H

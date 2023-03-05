@@ -1,4 +1,4 @@
-#include "arrangement_of_elements.h"
+#include "arrangementOfElements.h"
 #include "select_weight.h"
 #include "ui_arrangement_of_elements.h"
 
@@ -31,24 +31,24 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
                          mouseSceneEvent = static_cast<QGraphicsSceneMouseEvent *>(event);
                          if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::RightButton)
                             qDebug()<< mouseSceneEvent->scenePos();
-                         for (int i = 0, i_fl = 0; i < Button_pos.size() and !i_fl; i++)
+                         for (int i = 0, i_fl = 0; i < ButtonPos.size() and !i_fl; i++)
                          {
-                             for (int j = 0, j_fl = 0; j < Button_pos[i].size() and !j_fl; j++)
+                             for (int j = 0, j_fl = 0; j < ButtonPos[i].size() and !j_fl; j++)
                              {
                                 if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::RightButton)
                                 {
                                     if      (
-                                            mouseSceneEvent->scenePos().x() >= std::get<0>(Button_pos[i][j]) and
-                                            mouseSceneEvent->scenePos().x() <= std::get<0>(Button_pos[i][j]) + sizeXPix and
-                                            mouseSceneEvent->scenePos().y() >= std::get<1>(Button_pos[i][j]) and
-                                            mouseSceneEvent->scenePos().y() <= std::get<1>(Button_pos[i][j]) + sizeZPix
+                                            mouseSceneEvent->scenePos().x() >= std::get<0>(ButtonPos[i][j]) and
+                                            mouseSceneEvent->scenePos().x() <= std::get<0>(ButtonPos[i][j]) + sizeXPix and
+                                            mouseSceneEvent->scenePos().y() >= std::get<1>(ButtonPos[i][j]) and
+                                            mouseSceneEvent->scenePos().y() <= std::get<1>(ButtonPos[i][j]) + sizeZPix
                                             )
                                     {
-                                       qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(Button_pos[i][j]) <<Qt::endl;
-                                       qDebug() << Weight_coef << Qt::endl;
+                                       qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
+                                       qDebug() << WeightCoef << Qt::endl;
                                        Select_weight window;
                                        connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slot_arrange_to_select_weigth);
-                                       emit signalArrangeToSelectWeight(Weight_coef[i][j], i, j, std::get<2>(Button_pos[i][j]));
+                                       emit signalArrangeToSelectWeight(WeightCoef[i][j], i, j, std::get<2>(ButtonPos[i][j]));
                                        connect(&window, &Select_weight::signal_select_weight_to_arrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
                                        window.setModal(true);
                                        window.exec();
@@ -58,19 +58,19 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
                                 }
                                 if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::LeftButton)
                                 {
-                                    if (mouseSceneEvent->scenePos().x() >= std::get<0>(Button_pos[i][j]) and
-                                        mouseSceneEvent->scenePos().x() <= std::get<0>(Button_pos[i][j]) + sizeXPix and
-                                        mouseSceneEvent->scenePos().y() >= std::get<1>(Button_pos[i][j]) and
-                                        mouseSceneEvent->scenePos().y() <= std::get<1>(Button_pos[i][j]) + sizeZPix)
+                                    if (mouseSceneEvent->scenePos().x() >= std::get<0>(ButtonPos[i][j]) and
+                                        mouseSceneEvent->scenePos().x() <= std::get<0>(ButtonPos[i][j]) + sizeXPix and
+                                        mouseSceneEvent->scenePos().y() >= std::get<1>(ButtonPos[i][j]) and
+                                        mouseSceneEvent->scenePos().y() <= std::get<1>(ButtonPos[i][j]) + sizeZPix)
                                     {
                                         if (regime)
                                         {
-                                            qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(Button_pos[i][j]) <<Qt::endl;
-                                            qDebug() << Selected_elem[channelNum - 1][i][j] << Qt::endl;
-                                            if(!Selected_elem[channelNum - 1][i][j])
-                                               Selected_elem[channelNum - 1][i][j] = true;
+                                            qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
+                                            qDebug() << SelectedElem[channelNum - 1][i][j] << Qt::endl;
+                                            if(!SelectedElem[channelNum - 1][i][j])
+                                               SelectedElem[channelNum - 1][i][j] = true;
                                             else
-                                               Selected_elem[channelNum - 1][i][j] = false;
+                                               SelectedElem[channelNum - 1][i][j] = false;
                                             scene->clear();
                                             drawCirc();
                                             redrawing();
@@ -134,22 +134,22 @@ void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
                          mouseSceneEvent = static_cast<QGraphicsSceneMouseEvent *>(event);
                          if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::RightButton)
                             qDebug()<< mouseSceneEvent->scenePos();
-                         for (int i = 0, i_fl = 0; i < Button_pos.size() and !i_fl; i++)
+                         for (int i = 0, i_fl = 0; i < ButtonPos.size() and !i_fl; i++)
                          {
-                             for (int j = 0, j_fl = 0; j < Button_pos[i].size() and !j_fl; j++)
+                             for (int j = 0, j_fl = 0; j < ButtonPos[i].size() and !j_fl; j++)
                              {
                                 if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::RightButton)
                                 {
                                     if(
                                             hexCheck(mouseSceneEvent->scenePos().x(), mouseSceneEvent->scenePos().y(),
-                                                    std::get<0>(Button_pos[i][j]), std::get<1>(Button_pos[i][j]))
+                                                    std::get<0>(ButtonPos[i][j]), std::get<1>(ButtonPos[i][j]))
                                       )
                                     {
-                                       qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(Button_pos[i][j]) <<Qt::endl;
-                                       qDebug() << Weight_coef << Qt::endl;
+                                       qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
+                                       qDebug() << WeightCoef << Qt::endl;
                                        Select_weight window;
                                        connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slot_arrange_to_select_weigth);
-                                       emit signalArrangeToSelectWeight(Weight_coef[i][j], i, j, std::get<2>(Button_pos[i][j]));
+                                       emit signalArrangeToSelectWeight(WeightCoef[i][j], i, j, std::get<2>(ButtonPos[i][j]));
                                        connect(&window, &Select_weight::signal_select_weight_to_arrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
                                        window.setModal(true);
                                        window.exec();
@@ -161,19 +161,19 @@ void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
                                 {
                                     if (
                                             hexCheck(mouseSceneEvent->scenePos().x(), mouseSceneEvent->scenePos().y(),
-                                                         std::get<0>(Button_pos[i][j]), std::get<1>(Button_pos[i][j]))
+                                                         std::get<0>(ButtonPos[i][j]), std::get<1>(ButtonPos[i][j]))
                                        )
                                     {
                                         if (regime)
                                         {
-                                            qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(Button_pos[i][j]) <<Qt::endl;
-                                            qDebug() << Selected_elem[channelNum - 1][i][j] << Qt::endl;
-                                            qDebug() << "координаты выбранного элемента" <<std::get<0>(Button_pos[i][j])<<std::get<1>(Button_pos[i][j]) << Qt::endl;
+                                            qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
+                                            qDebug() << SelectedElem[channelNum - 1][i][j] << Qt::endl;
+                                            qDebug() << "координаты выбранного элемента" <<std::get<0>(ButtonPos[i][j])<<std::get<1>(ButtonPos[i][j]) << Qt::endl;
                                             qDebug() << "rad_src_pix" <<radCircScrPix << Qt::endl;
-                                            if(!Selected_elem[channelNum - 1][i][j])
-                                               Selected_elem[channelNum - 1][i][j] = true;
+                                            if(!SelectedElem[channelNum - 1][i][j])
+                                               SelectedElem[channelNum - 1][i][j] = true;
                                             else
-                                               Selected_elem[channelNum - 1][i][j] = false;
+                                               SelectedElem[channelNum - 1][i][j] = false;
                                             scene->clear();
                                             drawCirc();
                                             redrawing();
@@ -287,7 +287,7 @@ void Arrangement_of_elements::drawRect (int x, int z, int size_x_pix, int size_z
 {
     if (regime)
     {
-        if (Selected_elem[channelNum - 1][j][i])
+        if (SelectedElem[channelNum - 1][j][i])
         {
             QGraphicsRectItem *received_pressed = scene->addRect(x, z, size_x_pix, size_z_pix);
             received_pressed->setPen(QPen(Qt::black));
@@ -317,7 +317,7 @@ void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j,
 {
     if (regime)
     {
-        if (Selected_elem[channelNum - 1][j][i])
+        if (SelectedElem[channelNum - 1][j][i])
         {
             QPen pen(Qt::black);
             QBrush brush;
@@ -388,37 +388,37 @@ void Arrangement_of_elements::redrawingRect()
     z = -sizeZPix * 3 / 2 - distZPix;
     for (int j = numRow / 2 - 1; j >= 0; j--) //
     {
-        if (Curr_num_elem[j] & 1) // для нечетных
+        if (CurrNumElem[j] & 1) // для нечетных
         {
             x = -sizeXPix / 2;
-            for (int i = 0; i < Curr_num_elem[j] / 2 + 1; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2 + 1; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += sizeXPix + distXPix;
             }
             x = -sizeXPix / 2 - sizeXPix - distXPix;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= (sizeXPix + distXPix);
             }
         }
         else // для четных
         {
             x = distXPix / 2;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += sizeXPix + distXPix;
             }
             x = -distXPix / 2 - sizeXPix;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= (sizeXPix + distXPix);
             }
         }
@@ -427,37 +427,37 @@ void Arrangement_of_elements::redrawingRect()
     z = -sizeZPix / 2;
     for (int j = numRow / 2; j < numRow ; j++)
     {
-        if (Curr_num_elem[j] & 1) // для нечетных
+        if (CurrNumElem[j] & 1) // для нечетных
         {
             x = -sizeXPix / 2;
-            for (int i = 0; i < Curr_num_elem[j] / 2 + 1; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2 + 1; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += sizeXPix + distXPix;
             }
             x = -sizeXPix / 2 - sizeXPix - distXPix;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= (sizeXPix + distXPix);
             }
         }
         else // для четных
         {
             x = distXPix / 2;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += sizeXPix + distXPix;
             }
             x = -distXPix / 2 - sizeXPix;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= (sizeXPix + distXPix);
             }
         }
@@ -469,37 +469,37 @@ void Arrangement_of_elements::redrawingRect()
         z = -distZPix / 2 - sizeZPix ;
         for (int j = numRow / 2 - 1; j >= 0; j--)
         {
-            if (Curr_num_elem[j] & 1) // для нечетных
+            if (CurrNumElem[j] & 1) // для нечетных
             {
                 x = -sizeXPix / 2;
-                for (int i = 0; i < Curr_num_elem[j] / 2 + 1; i++)
+                for (int i = 0; i < CurrNumElem[j] / 2 + 1; i++)
                 {
-                    drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 + i);
-                    Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                    drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 + i);
+                    ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                     x += sizeXPix + distXPix;
                 }
                 x = -sizeXPix / 2 - sizeXPix - distXPix;
-                for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+                for (int i = 0; i < CurrNumElem[j] / 2; i++)
                 {
-                    drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                    Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                    drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 - 1 - i);
+                    ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                     x -= (sizeXPix + distXPix);
                 }
             }
             else // для четных
             {
                 x = distXPix / 2;
-                for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+                for (int i = 0; i < CurrNumElem[j] / 2; i++)
                 {
-                    drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 + i);
-                    Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                    drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 + i);
+                    ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                     x += sizeXPix + distXPix;
                 }
                 x = -distXPix / 2 - sizeXPix;
-                for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+                for (int i = 0; i < CurrNumElem[j] / 2; i++)
                 {
-                    drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                    Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                    drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 - 1 - i);
+                    ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                     x -= (sizeXPix + distXPix);
                 }
             }
@@ -508,37 +508,37 @@ void Arrangement_of_elements::redrawingRect()
         z = distZPix / 2;
     for (int j = numRow / 2; j < numRow ; j++)
     {
-        if (Curr_num_elem[j] & 1) // для нечетных
+        if (CurrNumElem[j] & 1) // для нечетных
         {
             x = -sizeXPix / 2;
-            for (int i = 0; i < Curr_num_elem[j] / 2 + 1; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2 + 1; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += sizeXPix + distXPix;
             }
             x = -sizeXPix / 2 - sizeXPix - distXPix;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= (sizeXPix + distXPix);
             }
         }
         else // для четных
         {
             x = distXPix / 2;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += sizeXPix + distXPix;
             }
             x = -distXPix / 2 - sizeXPix;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawRect(x, z, sizeXPix, sizeZPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawRect(x, z, sizeXPix, sizeZPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= (sizeXPix + distXPix);
             }
         }
@@ -546,10 +546,10 @@ void Arrangement_of_elements::redrawingRect()
     }
  }
     n = 1;
-    for (int j = 0; j < Button_pos.size(); j++){
-        for (int i = 0; i < Button_pos[j].size(); i++)
+    for (int j = 0; j < ButtonPos.size(); j++){
+        for (int i = 0; i < ButtonPos[j].size(); i++)
         {
-            std::get<2>(Button_pos[j][i]) = n;
+            std::get<2>(ButtonPos[j][i]) = n;
             n++;
         }
     }
@@ -567,37 +567,37 @@ void Arrangement_of_elements::redrawingHex()
     z = 0;
     for (int j = numRow / 2; j < numRow ; j++)
     {
-        if (Curr_num_elem[j] & 1) // для нечетных
+        if (CurrNumElem[j] & 1) // для нечетных
         {
             x = 0;
-            for (int i = 0; i < Curr_num_elem[j] / 2 + 1; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2 + 1; i++)
             {
-                drawHex(x, z, radCircScrPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawHex(x, z, radCircScrPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += (2 * radCircScrPix * cos(M_PI/6) + distHexPix);
             }
             x = - 2*radCircScrPix * cos(M_PI/6) - distHexPix;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawHex(x, z, radCircScrPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawHex(x, z, radCircScrPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= (2 * radCircScrPix * cos(M_PI/6) + distHexPix);
             }
         }
         else // для четных
         {
             x = (radCircScrPix * cos(M_PI/6) + distHexPix / 2);
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawHex(x, z, radCircScrPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawHex(x, z, radCircScrPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += 2 * radCircScrPix * cos(M_PI/6) + distHexPix;
             }
             x = -(radCircScrPix * cos(M_PI/6) + distHexPix / 2);
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawHex(x, z, radCircScrPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawHex(x, z, radCircScrPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= 2 * radCircScrPix * cos(M_PI/6) + distHexPix;
             }
         }
@@ -607,57 +607,57 @@ void Arrangement_of_elements::redrawingHex()
     z = -(radCircScrPix * 3/2 + distHexPix * cos(M_PI/6));
     for (int j = numRow / 2 - 1; j >= 0; j--)
     {
-        if (Curr_num_elem[j] & 1) // для нечетных
+        if (CurrNumElem[j] & 1) // для нечетных
         {
             x = 0;
-            for (int i = 0; i < Curr_num_elem[j] / 2 + 1; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2 + 1; i++)
             {
-                drawHex(x, z, radCircScrPix, j, Curr_num_elem[j] / 2 + i);
-                Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+                drawHex(x, z, radCircScrPix, j, CurrNumElem[j] / 2 + i);
+                ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                 x += 2* radCircScrPix * cos(M_PI/6) + distHexPix;
             }
             x = - 2 *radCircScrPix * cos(M_PI/6) - distHexPix;
-            for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+            for (int i = 0; i < CurrNumElem[j] / 2; i++)
             {
-                drawHex(x, z, radCircScrPix, j, Curr_num_elem[j] / 2 - 1 - i);
-                Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+                drawHex(x, z, radCircScrPix, j, CurrNumElem[j] / 2 - 1 - i);
+                ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                 x -= 2* radCircScrPix * cos(M_PI/6) + distHexPix;
             }
         }
         else // для четных
         {
            x = radCircScrPix * cos(M_PI/6) + distHexPix / 2;
-           for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+           for (int i = 0; i < CurrNumElem[j] / 2; i++)
            {
-               drawHex(x, z, radCircScrPix, j, Curr_num_elem[j] / 2 + i);
-               Button_pos[j][Curr_num_elem[j] / 2 + i] = std::make_tuple(x, z, 1);
+               drawHex(x, z, radCircScrPix, j, CurrNumElem[j] / 2 + i);
+               ButtonPos[j][CurrNumElem[j] / 2 + i] = std::make_tuple(x, z, 1);
                x += 2 * radCircScrPix * cos(M_PI/6) + distHexPix;
            }
            x = -radCircScrPix * cos(M_PI/6) - distHexPix / 2;
-           for (int i = 0; i < Curr_num_elem[j] / 2; i++)
+           for (int i = 0; i < CurrNumElem[j] / 2; i++)
            {
-               drawHex(x, z, radCircScrPix, j, Curr_num_elem[j] / 2 - 1 - i);
-               Button_pos[j][Curr_num_elem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
+               drawHex(x, z, radCircScrPix, j, CurrNumElem[j] / 2 - 1 - i);
+               ButtonPos[j][CurrNumElem[j] / 2 - 1 - i] = std::make_tuple(x, z, 1);
                x -= 2 * radCircScrPix * cos(M_PI/6) + distHexPix;
            }
         }
         z -= (radCircScrPix * 3/2 + distHexPix * cos(M_PI/6));
     }
     n = 1;
-    for (int j = 0; j < Button_pos.size(); j++){
-        for (int i = 0; i < Button_pos[j].size(); i++)
+    for (int j = 0; j < ButtonPos.size(); j++){
+        for (int i = 0; i < ButtonPos[j].size(); i++)
         {
-            std::get<2>(Button_pos[j][i]) = n;
+            std::get<2>(ButtonPos[j][i]) = n;
             n++;
         }
     }
 
     qDebug() << "Button_pos" <<Qt::endl;
-    for (int i = 0; i < Button_pos.size(); i++)
+    for (int i = 0; i < ButtonPos.size(); i++)
     {
-        for (int j = 0; j < Button_pos[i].size(); j++)
+        for (int j = 0; j < ButtonPos[i].size(); j++)
         {
-            qDebug() << std::get<0>(Button_pos[i][j]) << std::get<1>(Button_pos[i][j]) << " ";
+            qDebug() << std::get<0>(ButtonPos[i][j]) << std::get<1>(ButtonPos[i][j]) << " ";
         }
         qDebug() <<Qt::endl;
     }
@@ -675,21 +675,21 @@ void Arrangement_of_elements::slotMainToArrange(double size_x1, double size_z1, 
     sizeX = size_x1; sizeZ = size_z1; distX = dist_x1;
     distZ = dist_z1; radAnt = rad_ant1; numRow = num_row1;
     radCircScr = rad_circ_scr1; distHex = dist1;
-    Selected_elem = Selected_elem1;
-    Max_elem = Max_elem1;
-    Weight_coef = Weight_coef1;
-    Curr_num_elem = Curr_num_elem1;
-    Button_pos.resize(Curr_num_elem.size());
-    for (int i = 0; i < Curr_num_elem.size(); i++)
+    SelectedElem = Selected_elem1;
+    MaxElem = Max_elem1;
+    WeightCoef = Weight_coef1;
+    CurrNumElem = Curr_num_elem1;
+    ButtonPos.resize(CurrNumElem.size());
+    for (int i = 0; i < CurrNumElem.size(); i++)
     {
-        Button_pos[i].resize(Curr_num_elem[i]);
+        ButtonPos[i].resize(CurrNumElem[i]);
     }
     hideReshapeButtons();
 }
 
 void Arrangement_of_elements::slotSelectWeightToArrange(double weight1, int i, int j)
 {
-    Weight_coef[i][j] = weight1;
+    WeightCoef[i][j] = weight1;
 }
 
 
@@ -792,37 +792,37 @@ void Arrangement_of_elements::on_ButtonMinus_7_clicked()
 
 void Arrangement_of_elements::reshapePlus(int n)
 {
-    if (overlayType and (Curr_num_elem[numRow / 2 - n] != 0
+    if (overlayType and (CurrNumElem[numRow / 2 - n] != 0
                           or ((numRow - n) % 2 == 0)))
     {
 
-        if((Curr_num_elem[numRow / 2 - n] < Max_elem[numRow / 2 - n]) and
-                (Curr_num_elem[numRow / 2 + n] < Max_elem[numRow / 2 + n]))
+        if((CurrNumElem[numRow / 2 - n] < MaxElem[numRow / 2 - n]) and
+                (CurrNumElem[numRow / 2 + n] < MaxElem[numRow / 2 + n]))
         {
             if (n)
-                Curr_num_elem[numRow / 2 - n] += 2;
-            Curr_num_elem[numRow / 2 + n] += 2;
+                CurrNumElem[numRow / 2 - n] += 2;
+            CurrNumElem[numRow / 2 + n] += 2;
             scene->clear();
             if (n)
             {
-                Button_pos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
-                Weight_coef[numRow / 2 + n].push_back(1);
-                Button_pos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
-                Weight_coef[numRow / 2 + n].push_back(1);
-                for (unsigned int i = 0; i < Selected_elem.size(); i++)
+                ButtonPos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
+                WeightCoef[numRow / 2 + n].push_back(1);
+                ButtonPos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
+                WeightCoef[numRow / 2 + n].push_back(1);
+                for (unsigned int i = 0; i < SelectedElem.size(); i++)
                 {
-                    Selected_elem[i][numRow / 2 + n].push_back(false);
-                    Selected_elem[i][numRow / 2 + n].push_back(false);
+                    SelectedElem[i][numRow / 2 + n].push_back(false);
+                    SelectedElem[i][numRow / 2 + n].push_back(false);
                 }
             }
-            Button_pos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
-            Weight_coef[numRow / 2 - n].push_back(1);
-            Button_pos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
-            Weight_coef[numRow / 2 - n].push_back(1);
-            for (unsigned int i = 0; i < Selected_elem.size(); i++)
+            ButtonPos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
+            WeightCoef[numRow / 2 - n].push_back(1);
+            ButtonPos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
+            WeightCoef[numRow / 2 - n].push_back(1);
+            for (unsigned int i = 0; i < SelectedElem.size(); i++)
             {
-                Selected_elem[i][numRow / 2 - n].push_back(false);
-                Selected_elem[i][numRow / 2 - n].push_back(false);
+                SelectedElem[i][numRow / 2 - n].push_back(false);
+                SelectedElem[i][numRow / 2 - n].push_back(false);
             }
         }
         drawCirc();
@@ -833,44 +833,44 @@ void Arrangement_of_elements::reshapePlus(int n)
     {
         if (numRow & 1)
         {
-            if((Curr_num_elem[numRow / 2 - n] < Max_elem[numRow / 2 - n]) and
-                    (Curr_num_elem[numRow / 2 + n] < Max_elem[numRow / 2 + n]))
+            if((CurrNumElem[numRow / 2 - n] < MaxElem[numRow / 2 - n]) and
+                    (CurrNumElem[numRow / 2 + n] < MaxElem[numRow / 2 + n]))
             {
                 if (n)
-                    Curr_num_elem[numRow / 2 - n] += 1;
-                Curr_num_elem[numRow / 2 + n] += 1;
+                    CurrNumElem[numRow / 2 - n] += 1;
+                CurrNumElem[numRow / 2 + n] += 1;
                 scene->clear();
                 if (n)
                 {
-                    Button_pos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
-                    Weight_coef[numRow / 2 + n].push_back(1);
-                    for (unsigned int i = 0; i < Selected_elem.size(); i++)
-                        Selected_elem[i][numRow / 2 + n].push_back(false);
+                    ButtonPos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
+                    WeightCoef[numRow / 2 + n].push_back(1);
+                    for (unsigned int i = 0; i < SelectedElem.size(); i++)
+                        SelectedElem[i][numRow / 2 + n].push_back(false);
                 }
-                Button_pos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
-                Weight_coef[numRow / 2 - n].push_back(1);
-                for (unsigned int i = 0; i < Selected_elem.size(); i++)
-                    Selected_elem[i][numRow / 2 - n].push_back(false);
+                ButtonPos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
+                WeightCoef[numRow / 2 - n].push_back(1);
+                for (unsigned int i = 0; i < SelectedElem.size(); i++)
+                    SelectedElem[i][numRow / 2 - n].push_back(false);
             }
             drawCirc();
             redrawing();
         }
         else
             {
-                if((Curr_num_elem[numRow / 2 + n] < Max_elem[numRow / 2 + n]) and
-                        (Curr_num_elem[numRow / 2 - n - 1] < Max_elem[numRow / 2 - n - 1]))
+                if((CurrNumElem[numRow / 2 + n] < MaxElem[numRow / 2 + n]) and
+                        (CurrNumElem[numRow / 2 - n - 1] < MaxElem[numRow / 2 - n - 1]))
                 {
-                    Curr_num_elem[numRow / 2 + n] += 1;
-                    Curr_num_elem[numRow / 2 - n - 1] += 1;
+                    CurrNumElem[numRow / 2 + n] += 1;
+                    CurrNumElem[numRow / 2 - n - 1] += 1;
                     scene->clear();
-                    Button_pos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
-                    Weight_coef[numRow / 2 + n].push_back(1);
-                    for (unsigned int i = 0; i < Selected_elem.size(); i++)
-                        Selected_elem[i][numRow / 2 + n].push_back(false);
-                    Button_pos[numRow / 2 - n - 1].push_back(std::make_tuple(0, 0, 0));
-                    Weight_coef[numRow / 2 - n - 1].push_back(1);
-                    for (unsigned int i = 0; i < Selected_elem.size(); i++)
-                        Selected_elem[i][numRow / 2 - n - 1].push_back(false);
+                    ButtonPos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
+                    WeightCoef[numRow / 2 + n].push_back(1);
+                    for (unsigned int i = 0; i < SelectedElem.size(); i++)
+                        SelectedElem[i][numRow / 2 + n].push_back(false);
+                    ButtonPos[numRow / 2 - n - 1].push_back(std::make_tuple(0, 0, 0));
+                    WeightCoef[numRow / 2 - n - 1].push_back(1);
+                    for (unsigned int i = 0; i < SelectedElem.size(); i++)
+                        SelectedElem[i][numRow / 2 - n - 1].push_back(false);
                     drawCirc();
                     redrawing();
                 }
@@ -880,36 +880,36 @@ void Arrangement_of_elements::reshapePlus(int n)
 
 void Arrangement_of_elements::reshapeMinus(int n)
 {
-    if (overlayType and Curr_num_elem[numRow / 2 - n] != 1 // для шестиугольных элементов
-            and Curr_num_elem[numRow / 2 + n] != 1)
+    if (overlayType and CurrNumElem[numRow / 2 - n] != 1 // для шестиугольных элементов
+            and CurrNumElem[numRow / 2 + n] != 1)
     {
-            if((Curr_num_elem[numRow / 2 - n] > 0) and
-                    (Curr_num_elem[numRow / 2 + n] > 0))
+            if((CurrNumElem[numRow / 2 - n] > 0) and
+                    (CurrNumElem[numRow / 2 + n] > 0))
             {
                 if (n)
-                    Curr_num_elem[numRow / 2 - n] -= 2;
-                Curr_num_elem[numRow / 2 + n] -= 2;
+                    CurrNumElem[numRow / 2 - n] -= 2;
+                CurrNumElem[numRow / 2 + n] -= 2;
                 scene->clear();
                 if (n)
                 {
-                    Button_pos[numRow / 2 + n].pop_back();
-                    Button_pos[numRow / 2 + n].pop_back();
-                    Weight_coef[numRow / 2 + n].pop_back();
-                    Weight_coef[numRow / 2 + n].pop_back();
-                    for (unsigned int i = 0; i < Selected_elem.size(); i++)
+                    ButtonPos[numRow / 2 + n].pop_back();
+                    ButtonPos[numRow / 2 + n].pop_back();
+                    WeightCoef[numRow / 2 + n].pop_back();
+                    WeightCoef[numRow / 2 + n].pop_back();
+                    for (unsigned int i = 0; i < SelectedElem.size(); i++)
                     {
-                        Selected_elem[i][numRow / 2 + n].pop_back();
-                        Selected_elem[i][numRow / 2 + n].pop_back();
+                        SelectedElem[i][numRow / 2 + n].pop_back();
+                        SelectedElem[i][numRow / 2 + n].pop_back();
                     }
                 }
-                Button_pos[numRow / 2 - n].pop_back();
-                Button_pos[numRow / 2 - n].pop_back();
-                Weight_coef[numRow / 2 - n].pop_back();
-                Weight_coef[numRow / 2 - n].pop_back();
-                for (unsigned int i = 0; i < Selected_elem.size(); i++)
+                ButtonPos[numRow / 2 - n].pop_back();
+                ButtonPos[numRow / 2 - n].pop_back();
+                WeightCoef[numRow / 2 - n].pop_back();
+                WeightCoef[numRow / 2 - n].pop_back();
+                for (unsigned int i = 0; i < SelectedElem.size(); i++)
                 {
-                    Selected_elem[i][numRow / 2 - n].pop_back();
-                    Selected_elem[i][numRow / 2 - n].pop_back();
+                    SelectedElem[i][numRow / 2 - n].pop_back();
+                    SelectedElem[i][numRow / 2 - n].pop_back();
                 }
                 drawCirc();
                 redrawing();
@@ -919,42 +919,42 @@ void Arrangement_of_elements::reshapeMinus(int n)
     {
         if (numRow & 1)
         {
-            if((Curr_num_elem[numRow / 2 - n] > 0) and
-                    (Curr_num_elem[numRow / 2 + n] > 0))
+            if((CurrNumElem[numRow / 2 - n] > 0) and
+                    (CurrNumElem[numRow / 2 + n] > 0))
             {
                 if (n)
-                    Curr_num_elem[numRow / 2 - n] -= 1;
-                Curr_num_elem[numRow / 2 + n] -= 1;
+                    CurrNumElem[numRow / 2 - n] -= 1;
+                CurrNumElem[numRow / 2 + n] -= 1;
                 scene->clear();
                 if (n)
                 {
-                    Button_pos[numRow / 2 + n].pop_back();
-                    Weight_coef[numRow / 2 + n].pop_back();
-                    for (unsigned int i = 0; i < Selected_elem.size(); i++)
-                        Selected_elem[i][numRow / 2 + n].pop_back();
+                    ButtonPos[numRow / 2 + n].pop_back();
+                    WeightCoef[numRow / 2 + n].pop_back();
+                    for (unsigned int i = 0; i < SelectedElem.size(); i++)
+                        SelectedElem[i][numRow / 2 + n].pop_back();
                 }
-                Button_pos[numRow / 2 - n].pop_back();
-                Weight_coef[numRow / 2 - n].pop_back();
-                for (unsigned int i = 0; i < Selected_elem.size(); i++)
-                    Selected_elem[i][numRow / 2 - n].pop_back();
+                ButtonPos[numRow / 2 - n].pop_back();
+                WeightCoef[numRow / 2 - n].pop_back();
+                for (unsigned int i = 0; i < SelectedElem.size(); i++)
+                    SelectedElem[i][numRow / 2 - n].pop_back();
                 drawCirc();
                 redrawing();
             }
         }
         else
         {
-            if((Curr_num_elem[numRow / 2 + n] > 0) and
-                    (Curr_num_elem[numRow / 2 - n - 1] > 0))
+            if((CurrNumElem[numRow / 2 + n] > 0) and
+                    (CurrNumElem[numRow / 2 - n - 1] > 0))
             {
-                Curr_num_elem[numRow / 2 + n] -= 1;
-                Curr_num_elem[numRow / 2 - n - 1] -= 1;
+                CurrNumElem[numRow / 2 + n] -= 1;
+                CurrNumElem[numRow / 2 - n - 1] -= 1;
                 scene->clear();
-                Button_pos[numRow / 2 + n].pop_back();
-                Button_pos[numRow / 2 - n - 1].pop_back();
-                for (unsigned int i = 0; i < Selected_elem.size(); i++)
+                ButtonPos[numRow / 2 + n].pop_back();
+                ButtonPos[numRow / 2 - n - 1].pop_back();
+                for (unsigned int i = 0; i < SelectedElem.size(); i++)
                 {
-                    Selected_elem[i][numRow / 2 + n].pop_back();
-                    Selected_elem[i][numRow / 2 - n - 1].pop_back();
+                    SelectedElem[i][numRow / 2 + n].pop_back();
+                    SelectedElem[i][numRow / 2 - n - 1].pop_back();
                 }
                 drawCirc();
                 redrawing();
@@ -1095,7 +1095,7 @@ void Arrangement_of_elements::on_ChannelNumButton_16_clicked()
 
 void Arrangement_of_elements::on_saveButton_clicked()
 {
-    emit signalArrangeToMain(Curr_num_elem, Weight_coef, Button_pos,
+    emit signalArrangeToMain(CurrNumElem, WeightCoef, ButtonPos,
                                 sizeXPix, sizeZPix, distXPix, distXPix,
                                 radCircScrPix, distHexPix);
     QWidget::close();
