@@ -19,6 +19,27 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     scene->setBackgroundBrush(Qt::white);
     drawCirc();
     scene->installEventFilter(this);
+
+    // устанавливаем начальный масштаб
+
+
+    /*
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    ui->graphicsView->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing);
+    ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    ui->graphicsView->setRenderHint(QPainter::SmoothPixmapTransform);
+    ui->graphicsView->setInteractive(true);
+    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+
+    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+    ui->graphicsView->viewport()->setCursor(Qt::ArrowCursor);
+
+*/
 }
 
 
@@ -255,6 +276,29 @@ void Arrangement_of_elements::disabledChannelButton(bool b)
     ui->ChannelNumButton_14->setDisabled(b);
     ui->ChannelNumButton_15->setDisabled(b);
     ui->ChannelNumButton_16->setDisabled(b);
+}
+
+void Arrangement_of_elements::wheelEvent(QWheelEvent *event)
+{
+    // получаем указатель на элемент QGraphicsView из объекта ui
+        QGraphicsView* graphicsView = ui->graphicsView;
+
+        if (event->modifiers() & Qt::ControlModifier) {
+            // зумирование при удерживании клавиши Ctrl
+            QPointF scenePos = graphicsView->mapToScene(event->position().toPoint());
+            int delta = event->angleDelta().y();
+            qreal scaleFactor = 1.15;
+            if (delta < 0) {
+                scaleFactor = 1.0 / scaleFactor;
+            }
+            graphicsView->scale(scaleFactor, scaleFactor);
+            QPointF newScenePos = graphicsView->mapToScene(event->position().toPoint());
+            QPointF deltaScenePos = newScenePos - scenePos;
+            graphicsView->horizontalScrollBar()->setValue(graphicsView->horizontalScrollBar()->value() + static_cast<int>(deltaScenePos.x()));
+            graphicsView->verticalScrollBar()->setValue(graphicsView->verticalScrollBar()->value() + static_cast<int>(deltaScenePos.y()));
+        } else {
+            QDialog::wheelEvent(event);
+        }
 }
 
 void Arrangement_of_elements::drawCirc()

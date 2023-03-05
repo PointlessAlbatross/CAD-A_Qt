@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QGraphicsView>
 #include <QMouseEvent>
+#include <QScrollBar>
 
 
 namespace Ui {
@@ -74,8 +75,8 @@ private:
     bool eventFilter(QObject *watched, QEvent *event);
     void rectClick(QObject *watched, QEvent *event);
     void hexClick(QObject *watched, QEvent *event);
-    bool hexCheck(int x, int y, int getx, int gety);
-
+    bool hexCheck(int x, int y, int getx, int gety);   
+    void wheelEvent(QWheelEvent* event);
 signals:
     void signalArrangeToSelectWeight (double, int, int, int);
     void signalArrangeToMain(QVector<int> Curr_num_elem, QVector<QVector<double>> Weight_coef, QVector <QVector<std::tuple<int, int, int>>> Button_pos,
