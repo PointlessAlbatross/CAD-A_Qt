@@ -26,26 +26,26 @@ private slots:
 
 private:
     Ui::Antenna_Array_Parameters *ui;
-    void arr_capacity(QVector<int> & Ar,
+    void arrCapacity(QVector<int> & Ar,
                       const QVector<int> & Ar1);
-    int max_capacity(int i);
+    int maxCapacity(int i);
 
-    double size_x;
-    double size_z;
-    double dist_x;
-    double dist_z;
-    double rad_ant;
-    int num_row;
-    QVector<int> Max_elem;
+    double sizeX;
+    double sizeZ;
+    double distX;
+    double distZ;
+    double radAnt;
+    int numRow;
+    QVector<int> MaxElem;
 
     bool PARAM_WINDOW_FLAG;
 
 signals:
-    void signal_param_rect_to_main(double size_x, double size_z,
+    void signalParamRectToMain(double size_x, double size_z,
                 double dist_x, double dist_z, double rad_ant, int num_row,
                 QVector<int> Max_elem);
 public slots:
-    void slot_main_to_param_rect(double size_x, double size_z,
+    void slotMainToParamRect(double size_x, double size_z,
               double dist_x, double dist_z,
               double rad_ant, int num_row);
 

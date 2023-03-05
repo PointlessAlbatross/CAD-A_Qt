@@ -2,63 +2,63 @@
 #include "ui_antenna_array_parameters_rect.h"
 #include "mainwindow.h"
 
-void Antenna_Array_Parameters::arr_capacity(QVector<int> & Ar,
+void Antenna_Array_Parameters::arrCapacity(QVector<int> & Ar,
                   const QVector<int> & Ar1) {
-    if (num_row & 1) // Нечетное число рядов
+    if (numRow & 1) // Нечетное число рядов
     {
-    for (int i = 0; i < num_row / 2; i++)
-    Ar[i] = Ar1[num_row / 2  - i];
-    for (int i =num_row / 2; i < num_row; i++)
-    Ar[i] = Ar1[i - num_row / 2];
+    for (int i = 0; i < numRow / 2; i++)
+    Ar[i] = Ar1[numRow / 2  - i];
+    for (int i =numRow / 2; i < numRow; i++)
+    Ar[i] = Ar1[i - numRow / 2];
     }
     else // Четное число рядов
     {
-        for (int i = 0; i < num_row / 2; i++)
-            Ar[i] = Ar1[num_row / 2 - 1 - i];
-        for (int i = num_row / 2; i < num_row; i++)
-            Ar[i] = Ar1[i - num_row / 2];
+        for (int i = 0; i < numRow / 2; i++)
+            Ar[i] = Ar1[numRow / 2 - 1 - i];
+        for (int i = numRow / 2; i < numRow; i++)
+            Ar[i] = Ar1[i - numRow / 2];
     }
 }
 
- int Antenna_Array_Parameters::max_capacity(int i)
+ int Antenna_Array_Parameters::maxCapacity(int i)
  {
 
      size_t n = 0;
      double xn = 0;
 
-     if(num_row % 2 == 0){// число рядов четное
-         double l = 2 * rad_ant *
-                 sqrt(1 - pow(((size_z  + i * (dist_z + size_z)) / rad_ant), 2));
-         while ((xn + size_x + dist_x) < l) {
-             xn += (size_x + dist_x);
+     if(numRow % 2 == 0){// число рядов четное
+         double l = 2 * radAnt *
+                 sqrt(1 - pow(((sizeZ  + i * (distZ + sizeZ)) / radAnt), 2));
+         while ((xn + sizeX + distX) < l) {
+             xn += (sizeX + distX);
              n++;
          }
      }
-     else if(num_row & 1){ // число рядов не четное
-         double l = 2 * rad_ant *
-                 sqrt(1 - pow(((size_z / 2 + i * (dist_z + size_z)) / rad_ant), 2));
-         while ((xn + size_x + dist_x) < l) {
-             xn += (size_x + dist_x);
+     else if(numRow & 1){ // число рядов не четное
+         double l = 2 * radAnt *
+                 sqrt(1 - pow(((sizeZ / 2 + i * (distZ + sizeZ)) / radAnt), 2));
+         while ((xn + sizeX + distX) < l) {
+             xn += (sizeX + distX);
              n++;
          }
      }
      return n;
  }
 
- void Antenna_Array_Parameters::slot_main_to_param_rect(double size_x1, double size_z1,
+ void Antenna_Array_Parameters::slotMainToParamRect(double size_x1, double size_z1,
                                                    double dist_x1, double dist_z1,
                                                    double rad_ant1, int num_row1)
  {
      qDebug()<<"Вызов слота main_to_param "<<Qt::endl;
-     size_x = size_x1; size_z = size_z1; dist_x = dist_x1;
-     dist_z = dist_z1; rad_ant = rad_ant1; num_row = num_row1;
+     sizeX = size_x1; sizeZ = size_z1; distX = dist_x1;
+     distZ = dist_z1; radAnt = rad_ant1; numRow = num_row1;
      PARAM_WINDOW_FLAG = true;
-     ui->doubleSpinBox->setValue(size_x);
-     ui->doubleSpinBox_2->setValue(size_z);
-     ui->doubleSpinBox_3->setValue(dist_x);
-     ui->doubleSpinBox_4->setValue(dist_z);
-     ui->doubleSpinBox_5->setValue(rad_ant);
-     ui->spinBox->setValue(num_row);
+     ui->doubleSpinBox->setValue(sizeX);
+     ui->doubleSpinBox_2->setValue(sizeZ);
+     ui->doubleSpinBox_3->setValue(distX);
+     ui->doubleSpinBox_4->setValue(distZ);
+     ui->doubleSpinBox_5->setValue(radAnt);
+     ui->spinBox->setValue(numRow);
  }
 
 
@@ -80,22 +80,22 @@ Antenna_Array_Parameters::~Antenna_Array_Parameters()
 
 void Antenna_Array_Parameters::on_pushButton_clicked()
 {
-    size_x = ui->doubleSpinBox->value();
-    size_z = ui->doubleSpinBox_2->value();
-    dist_x = ui->doubleSpinBox_3->value();
-    dist_z = ui->doubleSpinBox_4->value();
-    rad_ant = ui->doubleSpinBox_5->value();
-    num_row = ui->spinBox->value();
-    qDebug()<<"size "<<size_x<<Qt::endl;
-    QVector<int> Arr(num_row);
-    QVector<int> Arr1(num_row / 2 + num_row % 2);
-    for (int i = 0; i < num_row / 2 + num_row % 2; i++)
-        Arr1[i] = max_capacity(i);
-    arr_capacity(Arr, Arr1);
-    Max_elem = Arr;
-    qDebug()<<Max_elem<<Qt::endl;
-    emit signal_param_rect_to_main(size_x, size_z, dist_x, dist_z,
-                rad_ant, num_row, Max_elem);
+    sizeX = ui->doubleSpinBox->value();
+    sizeZ = ui->doubleSpinBox_2->value();
+    distX = ui->doubleSpinBox_3->value();
+    distZ = ui->doubleSpinBox_4->value();
+    radAnt = ui->doubleSpinBox_5->value();
+    numRow = ui->spinBox->value();
+    qDebug()<<"size "<<sizeX<<Qt::endl;
+    QVector<int> Arr(numRow);
+    QVector<int> Arr1(numRow / 2 + numRow % 2);
+    for (int i = 0; i < numRow / 2 + numRow % 2; i++)
+        Arr1[i] = maxCapacity(i);
+    arrCapacity(Arr, Arr1);
+    MaxElem = Arr;
+    qDebug()<<MaxElem<<Qt::endl;
+    emit signalParamRectToMain(sizeX, sizeZ, distX, distZ,
+                radAnt, numRow, MaxElem);
     QWidget::close();
 }
 

@@ -38,13 +38,13 @@ void MainWindow::on_action_triggered() // Растановка элементо�
     {
         qDebug() << "Вызов растановки " <<Qt::endl;
         Arrangement_of_elements window;
-        connect(this, &MainWindow::signal_main_to_arrange, &window, &Arrangement_of_elements::slot_main_to_arrange);
+        connect(this, &MainWindow::signal_main_to_arrange, &window, &Arrangement_of_elements::slotMainToArrange);
         emit signal_main_to_arrange(size_x, size_z,
                                     dist_x, dist_z,
                                     rad_circ_scr, dist,
                                     rad_ant, num_row, Max_elem, Curr_num_elem,  Weight_coef, Selected_elem,
                                     overlay_type);
-        connect(&window, &Arrangement_of_elements::signal_arrange_to_main, this, &MainWindow::slot_arrange_to_main);
+        connect(&window, &Arrangement_of_elements::signalArrangeToMain, this, &MainWindow::slot_arrange_to_main);
         window.setModal(true);
         window.exec();
     }
@@ -56,22 +56,22 @@ void MainWindow::on_antenna_array_triggered()
     if (!overlay_type)
     {
         Antenna_Array_Parameters window;
-        connect(this, &MainWindow::signal_main_to_param_rect, &window, &Antenna_Array_Parameters::slot_main_to_param_rect);
+        connect(this, &MainWindow::signal_main_to_param_rect, &window, &Antenna_Array_Parameters::slotMainToParamRect);
         if (PARAM_WINDOW_FLAG)
             emit signal_main_to_param_rect(size_x, size_z, dist_x,
                                       dist_z, rad_ant, num_row);
-        connect(&window, &Antenna_Array_Parameters::signal_param_rect_to_main, this, &MainWindow::slot_param_rect_to_main);
+        connect(&window, &Antenna_Array_Parameters::signalParamRectToMain, this, &MainWindow::slot_param_rect_to_main);
         window.setModal(true);
         window.exec();
     }
     else if (overlay_type)
     {
         Antenna_Array_Parameters_Hex window;
-        connect(this, &MainWindow::signal_main_to_param_hex, &window, &Antenna_Array_Parameters_Hex::slot_main_to_param_hex);
+        connect(this, &MainWindow::signal_main_to_param_hex, &window, &Antenna_Array_Parameters_Hex::slotMainToParamHex);
         if (PARAM_WINDOW_FLAG)
             emit signal_main_to_param_hex(rad_circ_scr, dist,
                                       rad_ant, num_row);
-        connect(&window, &Antenna_Array_Parameters_Hex::signal_param_hex_to_main, this, &MainWindow::slot_param_hex_to_main);
+        connect(&window, &Antenna_Array_Parameters_Hex::signalParamHexToMain, this, &MainWindow::slot_param_hex_to_main);
         window.setModal(true);
         window.exec();
 

@@ -26,29 +26,29 @@ private:
     Ui::Arrangement_of_elements *ui;
     QGraphicsScene *scene;
 
-    int overlay_type;
+    int overlayType;
 
-    int diam_pix;
+    int diamPix;
     int cnt;
-    double size_x;
-    double size_z;
-    double dist_x;
-    double dist_z;
-    double rad_ant;
+    double sizeX;
+    double sizeZ;
+    double distX;
+    double distZ;
+    double radAnt;
 
-    double rad_circ_scr;
-    double dist_hex;
+    double radCircScr;
+    double distHex;
 
-    int size_x_pix;
-    int size_z_pix;
-    int dist_x_pix;
-    int dist_z_pix;
+    int sizeXPix;
+    int sizeZPix;
+    int distXPix;
+    int distZPix;
 
-    int rad_circ_scr_pix;
-    int dist_hex_pix;
+    int radCircScrPix;
+    int distHexPix;
 
-    int num_row;
-    int channel_num;
+    int numRow;
+    int channelNum;
     bool regime;
     QVector<int> Max_elem;
     QVector<int> Curr_num_elem;
@@ -58,38 +58,38 @@ private:
 
 
     void redrawing();
-    void redrawing_rect();
-    void redrawing_hex();
-    void draw_circ();
-    void draw_rect (int x, int z, int size_x_pix, int size_z_pix, int j1, int i1);
-    void draw_hex (int x, int z, int rad_circ_scr_pix, int j1, int i1);
+    void redrawingRect();
+    void redrawingHex();
+    void drawCirc();
+    void drawRect (int x, int z, int size_x_pix, int size_z_pix, int j1, int i1);
+    void drawHex (int x, int z, int rad_circ_scr_pix, int j1, int i1);
     int i1, j1, n1;
     double weight;
 
 
-    void reshape_plus(int n);
-    void reshape_minus(int n);
-    void hide_reshape_buttons();
-    void disabled_channel_button(bool b);
+    void reshapePlus(int n);
+    void reshapeMinus(int n);
+    void hideReshapeButtons();
+    void disabledChannelButton(bool b);
     bool eventFilter(QObject *watched, QEvent *event);
-    void rect_click(QObject *watched, QEvent *event);
-    void hex_click(QObject *watched, QEvent *event);
-    bool hex_check(int x, int y, int getx, int gety);
+    void rectClick(QObject *watched, QEvent *event);
+    void hexClick(QObject *watched, QEvent *event);
+    bool hexCheck(int x, int y, int getx, int gety);
 
 signals:
-    void signal_arrange_to_select_weight (double, int, int, int);
-    void signal_arrange_to_main(QVector<int> Curr_num_elem, QVector<QVector<double>> Weight_coef, QVector <QVector<std::tuple<int, int, int>>> Button_pos,
+    void signalArrangeToSelectWeight (double, int, int, int);
+    void signalArrangeToMain(QVector<int> Curr_num_elem, QVector<QVector<double>> Weight_coef, QVector <QVector<std::tuple<int, int, int>>> Button_pos,
                                 int size_x_pix, int size_z_pix, int dist_x_pix, int dist_z_pix,
                                 int rad_circ_scr_pix, int dist_hex_pix);
 
 
 public slots:
-    void slot_main_to_arrange(double size_x, double size_z, double dist_x, double dist_z,
+    void slotMainToArrange(double size_x, double size_z, double dist_x, double dist_z,
                               double rad_circ_scr, double dist_hex,
                               double rad_ant, int num_row, QVector<int> Max_elem, QVector<int> Curr_num_elem, QVector<QVector<double>> Weight_coef,
                               std::array<QVector<QVector<bool>>, 16> Selected_elem,
                               int overlay_type);
-    void slot_select_weight_to_arrange(double weight, int i1, int j1);
+    void slotSelectWeightToArrange(double weight, int i1, int j1);
 
 private slots:
     void on_radioButton_clicked(bool checked);
