@@ -85,44 +85,28 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
     }
 }
 
-/*
-          //(1)
-          mouseSceneEvent->scenePos().y() >= rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() + sqrt(rad_circ_scr_pix))
-            / sqrt(rad_circ_scr_pix) + 1) + std::get<1>(Button_pos[i][j]) and
-          //(2)
-          mouseSceneEvent->scenePos().y() >= -rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / sqrt(rad_circ_scr_pix)
-             + rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
-          //(3)
-          mouseSceneEvent->scenePos().x() >= sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j]) and
-          //(4)
-          mouseSceneEvent->scenePos().y() <= -rad_circ_scr_pix/2*((mouseSceneEvent->scenePos().x() - sqrt(rad_circ_scr_pix))
-             / -sqrt(rad_circ_scr_pix) - 1) + std::get<1>(Button_pos[i][j]) and
-          //(5)
-          mouseSceneEvent->scenePos().y() <= rad_circ_scr_pix/2 * mouseSceneEvent->scenePos().x() / -sqrt(rad_circ_scr_pix)
-             - rad_circ_scr_pix + std::get<1>(Button_pos[i][j]) and
-          //(6)
-          mouseSceneEvent->scenePos().x() <= -sqrt(rad_circ_scr_pix) + std::get<0>(Button_pos[i][j])
 
-*/
-
-bool Arrangement_of_elements::hexCheck(int x, int y, int getx, int gety)
+bool Arrangement_of_elements::hexCheck(int cx, int cy, int x, int y)
 {
-     return x <= sqrt(3)/2*radCircScrPix + getx and
-            x >= -sqrt(3)/2*radCircScrPix + getx and
-            y <= radCircScrPix/2 + gety and
-            y >= -radCircScrPix/2 + gety;
-/*
-    return x <= sqrt(3)/2*rad_circ_scr_pix + getx and
-            x >= -sqrt(3)/2*rad_circ_scr_pix + getx and
-            y >= rad_circ_scr_pix/2*((x + sqrt(rad_circ_scr_pix))
-                / sqrt(rad_circ_scr_pix) + 1) + gety and
-            y >= -rad_circ_scr_pix/2 * x / sqrt(rad_circ_scr_pix)
-               + rad_circ_scr_pix + gety and
-            y <= -rad_circ_scr_pix/2*((x - sqrt(rad_circ_scr_pix))
-               / -sqrt(rad_circ_scr_pix) - 1) + gety and
-            y <= rad_circ_scr_pix/2 * x / -sqrt(rad_circ_scr_pix)
-               - rad_circ_scr_pix + gety;
-*/
+    const int sides = 6;
+    double angle = M_PI / 6.0; // 30 градусов в радиан
+    double vertexX[sides];
+    double vertexY[sides];
+    for (int i = 0; i < sides; ++i) {
+        vertexX[i] = cx + radCircScrPix * cos(angle);
+        vertexY[i] = cy + radCircScrPix * sin(angle);
+        angle += M_PI / 3.0; // 60 градусов в радиан
+    }
+
+    // Проверяет принадлежит ли точка шестиугольнику
+    bool inside = false;
+    for (int i = 0, j = sides - 1; i < sides; j = i++) {
+        if (((vertexY[i] > y) != (vertexY[j] > y)) and
+            (x < (vertexX[j] - vertexX[i]) * (y - vertexY[i]) / (vertexY[j] - vertexY[i]) + vertexX[i])) {
+            inside = !inside;
+        }
+    }
+    return inside;
 }
 
 void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
