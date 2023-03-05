@@ -1,8 +1,8 @@
-#ifndef ANTENNAARRAYPARAMETERSHEX_H
-#define ANTENNAARRAYPARAMETERSHEX_H
+#ifndef ANTENNA_ARRAY_PARAMETERS_HEX_H
+#define ANTENNA_ARRAY_PARAMETERS_HEX_H
 
 #include <QDialog>
-#include<QDebug>
+#include <QDebug>
 #include <vector>
 #include <cmath>
 
@@ -49,4 +49,4 @@ public slots:
 
 };
 
-#endif // ANTENNAARRAYPARAMETERSHEX_H
+#endif // ANTENNA_ARRAY_PARAMETERS_HEX_H

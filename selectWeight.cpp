@@ -1,4 +1,4 @@
-#include "select_weight.h"
+#include "selectWeight.h"
 #include "ui_select_weight.h"
 
 Select_weight::Select_weight(QWidget *parent) :
@@ -13,7 +13,7 @@ Select_weight::~Select_weight()
     delete ui;
 }
 
-void Select_weight::slot_arrange_to_select_weigth(double weigth1, int i1, int j1, int n1)
+void Select_weight::slotArrangeToSelectWeigth(double weigth1, int i1, int j1, int n1)
 {
     weigth = weigth1;
     i = i1;
@@ -25,7 +25,7 @@ void Select_weight::slot_arrange_to_select_weigth(double weigth1, int i1, int j1
 
 void Select_weight::on_pushButton_clicked()
 {
-    emit signal_select_weight_to_arrange(ui->doubleSpinBox->value(), i, j);
+    emit signalSelectWeightToArrange(ui->doubleSpinBox->value(), i, j);
     QWidget::close();
 }
 

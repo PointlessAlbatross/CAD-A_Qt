@@ -1,5 +1,5 @@
-#ifndef ARRANGEMENTOFELEMENTS_H
-#define ARRANGEMENTOFELEMENTS_H
+#ifndef ARRANGEMENT_OF_ELEMENTS_H
+#define ARRANGEMENT_OF_ELEMENTS_H
 
 #include <QDialog>
 #include <QPainter>
@@ -130,4 +130,4 @@ private slots:
     void on_saveButton_clicked();
 };
 
-#endif // ARRANGEMENTOFELEMENTS_H
+#endif // ARRANGEMENT_OF_ELEMENTS_H

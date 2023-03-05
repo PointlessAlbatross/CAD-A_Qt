@@ -22,10 +22,10 @@ public:
     ~Select_weight();
 
 signals:
-    void signal_select_weight_to_arrange (double weigth, int i, int j);
+    void signalSelectWeightToArrange (double weigth, int i, int j);
 
 public slots:
-   void slot_arrange_to_select_weigth (double weigth, int i, int j, int n);
+   void slotArrangeToSelectWeigth (double weigth, int i, int j, int n);
 private slots:
     void on_pushButton_clicked();
 

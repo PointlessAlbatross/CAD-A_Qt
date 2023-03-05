@@ -4,7 +4,7 @@
 #include "arrangementOfElements.h"
 #include "antennaArrayParametersRect.h"
 #include "antennaArrayParametersHex.h"
-#include "pattern_charts.h"
+#include "patternCharts.h"
 #include <QMessageBox>
 #include <QDebug>
 
@@ -161,9 +161,9 @@ void MainWindow::slot_arrange_to_main(QVector<int> Curr_num_elem1, QVector<QVect
 void MainWindow::on_action_2_triggered() // Рабочие параметры системы
 {
     Operating_system_parameters window;
-    connect(this, &MainWindow::signal_main_to_operating_system_parameters, &window, &Operating_system_parameters::slot_main_to_operating_system_parameters);
+    connect(this, &MainWindow::signal_main_to_operating_system_parameters, &window, &Operating_system_parameters::slotMainToOperatingSystemParameters);
     emit signal_main_to_operating_system_parameters(duration, pressure, receiving_freq, radiation_freq);
-    connect(&window, &Operating_system_parameters::signal_operating_system_parameters_to_main, this, &MainWindow::slot_operating_system_parameters_to_main);
+    connect(&window, &Operating_system_parameters::signalOperatingSystemParametersToMain, this, &MainWindow::slot_operating_system_parameters_to_main);
     window.setModal(true);
     window.exec();
 }

@@ -1,5 +1,5 @@
 #include "arrangementOfElements.h"
-#include "select_weight.h"
+#include "selectWeight.h"
 #include "ui_arrangement_of_elements.h"
 
 
@@ -68,9 +68,9 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
                                        qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
                                        qDebug() << WeightCoef << Qt::endl;
                                        Select_weight window;
-                                       connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slot_arrange_to_select_weigth);
+                                       connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
                                        emit signalArrangeToSelectWeight(WeightCoef[i][j], i, j, std::get<2>(ButtonPos[i][j]));
-                                       connect(&window, &Select_weight::signal_select_weight_to_arrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
+                                       connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
                                        window.setModal(true);
                                        window.exec();
                                        i_fl = 1; //  флаги выхода из цикла
@@ -153,9 +153,9 @@ void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
                                        qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
                                        qDebug() << WeightCoef << Qt::endl;
                                        Select_weight window;
-                                       connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slot_arrange_to_select_weigth);
+                                       connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
                                        emit signalArrangeToSelectWeight(WeightCoef[i][j], i, j, std::get<2>(ButtonPos[i][j]));
-                                       connect(&window, &Select_weight::signal_select_weight_to_arrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
+                                       connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
                                        window.setModal(true);
                                        window.exec();
                                        i_fl = 1; //  флаги выхода из цикла
@@ -368,11 +368,11 @@ void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j,
             brush.setStyle(Qt::SolidPattern);
             QPolygonF hex;
             hex << QPointF(x, y + rad_circ_scr_pix)
-                << QPointF(x + int(rad_circ_scr_pix * cos(M_PI/6)), y + rad_circ_scr_pix / 2)
-                << QPointF(x + int(rad_circ_scr_pix * cos(M_PI/6)), y - rad_circ_scr_pix / 2)
+                << QPointF(x + int(rad_circ_scr_pix * cos(M_PI/6.0)), y + rad_circ_scr_pix / 2.0)
+                << QPointF(x + int(rad_circ_scr_pix * cos(M_PI/6.0)), y - rad_circ_scr_pix / 2.0)
                 << QPointF(x, y - rad_circ_scr_pix)
-                << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6)), y - rad_circ_scr_pix / 2)
-                << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6)), y + rad_circ_scr_pix / 2);
+                << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y - rad_circ_scr_pix / 2.0)
+                << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y + rad_circ_scr_pix / 2.0);
             scene->addPolygon(hex, pen, brush);
         }
     }
@@ -384,11 +384,11 @@ void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j,
         brush.setStyle(Qt::SolidPattern);
         QPolygonF hex;
         hex << QPointF(x, y + rad_circ_scr_pix)
-            << QPointF(x + int(rad_circ_scr_pix * cos(M_PI/6)), y + rad_circ_scr_pix / 2)
-            << QPointF(x + int(rad_circ_scr_pix * cos(M_PI/6)), y - rad_circ_scr_pix / 2)
+            << QPointF(x + int(rad_circ_scr_pix * cos(M_PI/6.0)), y + rad_circ_scr_pix / 2.0)
+            << QPointF(x + int(rad_circ_scr_pix * cos(M_PI/6.0)), y - rad_circ_scr_pix / 2.0)
             << QPointF(x, y - rad_circ_scr_pix)
-            << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6)), y - rad_circ_scr_pix / 2)
-            << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6)), y + rad_circ_scr_pix / 2);
+            << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y - rad_circ_scr_pix / 2.0)
+            << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y + rad_circ_scr_pix / 2.0);
         scene->addPolygon(hex, pen, brush);
     }
 }

@@ -1,5 +1,5 @@
-#ifndef OPERATINGSYSTEMPARAMETERS_H
-#define OPERATINGSYSTEMPARAMETERS_H
+#ifndef OPERATING_SYSTEM_PARAMETERS_H
+#define OPERATING_SYSTEM_PARAMETERS_H
 
 #include <QDialog>
 
@@ -17,8 +17,8 @@ public:
 
     int duration;
     int pressure;
-    int radiation_freq;
-    int receiving_freq;
+    int radiationFreq;
+    int receivingFreq;
 
 private slots:
     void on_pushButton_clicked();
@@ -27,15 +27,15 @@ private slots:
 
 
 signals:
-    void signal_operating_system_parameters_to_main (int duration, int pressure,
+    void signalOperatingSystemParametersToMain (int duration, int pressure,
         int radiation_freq,int receiving_freq);
 
 public slots:
-   void slot_main_to_operating_system_parameters (int duration, int pressure,
+   void slotMainToOperatingSystemParameters (int duration, int pressure,
                                                   int radiation_freq,int receiving_freq);
 
 private:
     Ui::Operating_system_parameters *ui;
 };
 
-#endif // OPERATINGSYSTEMPARAMETERS_H
+#endif // OPERATING_SYSTEM_PARAMETERS_H

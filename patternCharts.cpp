@@ -1,4 +1,4 @@
-#include "pattern_charts.h"
+#include "patternCharts.h"
 #include "ui_pattern_charts.h"
 #include <QDebug>
 
