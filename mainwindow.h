@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <antenna_array_parameters_rect.h>
-#include <antenna_array_parameters_hex.h>
+#include <antennaArrayParametersRect.h>
+#include <antennaArrayParametersHex.h>
 #include <array>
 
 QT_BEGIN_NAMESPACE

@@ -1,5 +1,5 @@
-#ifndef OPERATING_SYSTEM_PARAMETERS_H
-#define OPERATING_SYSTEM_PARAMETERS_H
+#ifndef OPERATINGSYSTEMPARAMETERS_H
+#define OPERATINGSYSTEMPARAMETERS_H
 
 #include <QDialog>
 
@@ -38,4 +38,4 @@ private:
     Ui::Operating_system_parameters *ui;
 };
 
-#endif // OPERATING_SYSTEM_PARAMETERS_H
+#endif // OPERATINGSYSTEMPARAMETERS_H

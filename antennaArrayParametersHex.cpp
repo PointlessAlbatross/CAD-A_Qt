@@ -1,4 +1,4 @@
-#include "antenna_array_parameters_hex.h"
+#include "antennaArrayParametersHex.h"
 #include "ui_antenna_array_parameters_hex.h"
 
 void Antenna_Array_Parameters_Hex::arrCapacity(QVector<int> & Ar,

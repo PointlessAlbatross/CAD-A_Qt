@@ -1,4 +1,4 @@
-#include "operating_system_parameters.h"
+#include "operatingSystemParameters.h"
 #include "ui_operating_system_parameters.h"
 
 Operating_system_parameters::Operating_system_parameters(QWidget *parent) :

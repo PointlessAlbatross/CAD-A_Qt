@@ -8,29 +8,29 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    antenna_array_parameters_hex.cpp \
-    antenna_array_parameters_rect.cpp \
+    antennaArrayParametersHex.cpp \
+    antennaArrayParametersRect.cpp \
     arrangementOfElements.cpp \
     main.cpp \
     mainwindow.cpp \
-    operating_system_parameters.cpp \
+    operatingSystemParameters.cpp \
     pattern_charts.cpp \
     select_weight.cpp
 HEADERS += \
-    antenna_array_parameters_hex.h \
-    antenna_array_parameters_rect.h \
+    antennaArrayParametersHex.h \
+    antennaArrayParametersRect.h \
     arrangementOfElements.h \
     mainwindow.h \
-    operating_system_parameters.h \
+    operatingSystemParameters.h \
     pattern_charts.h \
     select_weight.h
 
 FORMS += \
-    antenna_array_parameters_hex.ui \
-    antenna_array_parameters_rect.ui \
+    antennaArrayParametersHex.ui \
+    antennaArrayParametersRect.ui \
     arrangementOfElements.ui \
     mainwindow.ui \
-    operating_system_parameters.ui \
+    operatingSystemParameters.ui \
     pattern_charts.ui \
     select_weight.ui
 
