@@ -30,37 +30,37 @@ public:
 
 private:
 
-    QVector<int> Curr_num_elem;
-    QVector<QVector<double> > Weight_coef;
-    QVector<QVector<QPair<double,double>>> Center_pos;
-    QVector<QVector<std::tuple<int, int, int> > > Button_pos;
-    int overlay_type;
+    QVector<int> CurrNumElem;
+    QVector<QVector<double> > WeightCoef;
+    QVector<QVector<QPair<double,double>>> CenterPos;
+    QVector<QVector<std::tuple<int, int, int> > > ButtonPos;
+    int overlayType;
 
     double k;
-    double size_x;
-    double size_z;
-    double dist_x;
-    double dist_z;
+    double sizeX;
+    double sizeZ;
+    double distX;
+    double distZ;
 
-    double rad_circ_scr;
-    double dist_hex;
-    int rad_circ_scr_pix;
-    int dist_hex_pix;
+    double radCircScr;
+    double distHex;
+    int radCircScrPix;
+    int distHexPix;
 
     double theta;
     double theta_t;
     double phi;
     double phi_t;
 
-    int reg_chart;
+    int regChart;
 
     double D(double theta, double phi);
     std::complex<double> Dt(double theta, double phi);
-    void drow_chart();
-    void drow_polar_chart();
+    void drawChart();
+    void drawPolarChart();
 
 public slots:
-    void slot_main_to_charts(QVector<int> Curr_num_elem, QVector<QVector<double> > Weight_coef,
+    void slotMainToCharts(QVector<int> Curr_num_elem, QVector<QVector<double> > Weight_coef,
                              QVector<QVector<std::tuple<int, int, int> > > Button_pos,
                              double k,
                              double size_x, double size_z, double dist_x, double dist_z,

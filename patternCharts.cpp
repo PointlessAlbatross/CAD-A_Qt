@@ -7,7 +7,6 @@ Pattern_charts::Pattern_charts(QWidget *parent) :
     ui(new Ui::Pattern_charts)
 {
     ui->setupUi(this);
-    qDebug() << "bessel" <<j1(2);
 }
 
 Pattern_charts::~Pattern_charts()
@@ -17,24 +16,24 @@ Pattern_charts::~Pattern_charts()
 
 double Pattern_charts::D(double theta, double phi)
 {
-    if (overlay_type == 0) // Четырехугольник
+    if (overlayType == 0) // Четырехугольник
     {
         double a;
         if (phi != 0)
-           a = sin( k * (size_x+dist_x) / 2 * sin(theta) * sin (phi) )/ (k*(size_x+dist_x) / 2 * (sin(theta) * sin (phi)));
+           a = sin( k * (sizeX+distX) / 2 * sin(theta) * sin (phi) )/ (k*(sizeX+distX) / 2 * (sin(theta) * sin (phi)));
         else
            a = 1;
-        double b = sin ( k * (size_z+dist_z) / 2 * cos (theta)) / (k * (size_z+dist_z) / 2 * cos (theta));
+        double b = sin ( k * (sizeZ+distZ) / 2 * cos (theta)) / (k * (sizeZ+distZ) / 2 * cos (theta));
         return a * b;
     }
-    else if (overlay_type != 0)  // Шестиугольник
+    else if (overlayType != 0)  // Шестиугольник
     {
         //theta/180 * M_PI
         double a1,b1;
         if (phi != 0)
         {
-            a1 = 2 * j1(k * (sqrt(3)*rad_circ_scr+dist_hex)/2 * sqrt(pow(sin(theta)*sin(phi), 2)+pow(cos(theta), 2)));
-            b1 = k * (sqrt(3)*rad_circ_scr+dist_hex)/2 * sqrt(pow(sin(theta) * sin(phi), 2) + pow(cos(theta), 2));
+            a1 = 2 * j1(k * (sqrt(3)*radCircScr+distHex)/2 * sqrt(pow(sin(theta)*sin(phi), 2)+pow(cos(theta), 2)));
+            b1 = k * (sqrt(3)*radCircScr+distHex)/2 * sqrt(pow(sin(theta) * sin(phi), 2) + pow(cos(theta), 2));
             return a1/b1;
         }
 
@@ -47,36 +46,36 @@ std::complex<double> Pattern_charts::Dt(double theta, double phi)
     double theta_t = M_PI_2, phi_t = 0;
     std::complex<double> i (0, 1); // Мнимая единица
     std::complex<double> D_numerator = 0, D_denumerator = 0;
-    for (int a = 0; a < Center_pos.size(); a++)
+    for (int a = 0; a < CenterPos.size(); a++)
     {
-        for(int b = 0; b < Center_pos[a].size(); b++)
+        for(int b = 0; b < CenterPos[a].size(); b++)
         {
                 //[1] Числитель
-                D_numerator += (Weight_coef[a][b] * exp( (1.0*i) * k * (Center_pos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
-                                                   + Center_pos[a][b].second * (cos (theta) - cos(theta_t))) ) *
+                D_numerator += (WeightCoef[a][b] * exp( (1.0*i) * k * (CenterPos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
+                                                   + CenterPos[a][b].second * (cos (theta) - cos(theta_t))) ) *
                          D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
                 //[2] Знаменатель
-                D_denumerator += Weight_coef[a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2;
+                D_denumerator += WeightCoef[a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2;
         }
     }
     return D_numerator / D_denumerator;
 }
 
-void Pattern_charts::drow_chart()
+void Pattern_charts::drawChart()
 {
-    for(int reg_chart = 1; reg_chart < 3; reg_chart++)
+    for(int reg_chart = 1; reg_chart <= 2; reg_chart++)
     {
         QLineSeries *series = new QLineSeries();
         switch (reg_chart) {
         case 1:
             phi = 0;
             for (double deg = 0; deg <= 181; deg += 0.1)
-                series->append(deg, abs(Dt(double(deg)/180 * M_PI, phi)));
+                series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
             break;
         case 2:
             theta = M_PI_2;
                 for (double deg = -90; deg <= 91; deg += 0.1)
-                    series->append(deg, abs(Dt(theta, double(deg)/180 * M_PI)));
+                    series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
             break;
         }
 
@@ -125,22 +124,22 @@ void Pattern_charts::drow_chart()
     }
 }
 
-void Pattern_charts::drow_polar_chart()
+void Pattern_charts::drawPolarChart()
 {
     const qreal angularMin = 0;
     const qreal angularMax = 360;
 
     QSplineSeries *series = new QSplineSeries();
-    switch (reg_chart) {
+    switch (regChart) {
     case 1:
         phi = 0;
         for (double deg = angularMin; deg <= angularMax; deg += 0.1)
-            series->append(deg, abs(Dt(double(deg)/180 * M_PI, phi)));
+            series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
         break;
     case 2:
         theta = M_PI_2;
             for (double deg = angularMin; deg <= angularMax; deg += 0.1)
-                series->append(deg, abs(Dt(theta, double(deg)/180 * M_PI)));
+                series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
         break;
     }
 
@@ -175,7 +174,7 @@ void Pattern_charts::drow_polar_chart()
 
 
 
-void Pattern_charts::slot_main_to_charts(QVector<int> Curr_num_elem1, QVector<QVector<double> > Weight_coef1,
+void Pattern_charts::slotMainToCharts(QVector<int> Curr_num_elem1, QVector<QVector<double> > Weight_coef1,
                          QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
                          double k1,
                          double size_x1, double size_z1, double dist_x1, double dist_z1,
@@ -183,60 +182,60 @@ void Pattern_charts::slot_main_to_charts(QVector<int> Curr_num_elem1, QVector<QV
                          int overlay_type1)
 {
 
-    overlay_type = overlay_type1;
+    overlayType = overlay_type1;
     double scale_koef;
     if (overlay_type1 == 0)
         scale_koef = size_x1 / size_x_pix1 ;
     else
         scale_koef = rad_circ_scr1 / rad_circ_scr_pix1 ;
-    rad_circ_scr = rad_circ_scr1;
-    dist_hex = dist_hex1;
-    Curr_num_elem = Curr_num_elem1;
-    Weight_coef = Weight_coef1;
+    radCircScr = rad_circ_scr1;
+    distHex = dist_hex1;
+    CurrNumElem = Curr_num_elem1;
+    WeightCoef = Weight_coef1;
     k = k1;
 
     if (overlay_type1 != 0)
     {
-        Button_pos = Button_pos1;
+        ButtonPos = Button_pos1;
         qDebug() << "Button_pos" <<Qt::endl;
-        Center_pos.resize(Button_pos1.size());
+        CenterPos.resize(Button_pos1.size());
         for (int i = 0; i < Button_pos1.size(); i++)
         {
-            Center_pos[i].resize(Button_pos1[i].size());
+            CenterPos[i].resize(Button_pos1[i].size());
             for (int j = 0; j < Button_pos1[i].size(); j++)
             {
-                Center_pos[i][j].first = std::get<0>(Button_pos1[i][j]) ;
-                Center_pos[i][j].second = -(std::get<1>(Button_pos1[i][j]));
-                Center_pos[i][j].first = round(Center_pos[i][j].first * scale_koef * 100)/100;
-                Center_pos[i][j].second = round(Center_pos[i][j].second * scale_koef * 100)/100;
+                CenterPos[i][j].first = std::get<0>(Button_pos1[i][j]) ;
+                CenterPos[i][j].second = -(std::get<1>(Button_pos1[i][j]));
+                CenterPos[i][j].first = round(CenterPos[i][j].first * scale_koef * 100)/100;
+                CenterPos[i][j].second = round(CenterPos[i][j].second * scale_koef * 100)/100;
             }
         }
     }
 
-    size_x = size_x1;
-    size_z = size_z1;
-    dist_x = dist_x1;
-    dist_z = dist_z1;
-    rad_circ_scr_pix = rad_circ_scr_pix1;
-    dist_hex_pix = dist_hex_pix1;
+    sizeX = size_x1;
+    sizeZ = size_z1;
+    distX = dist_x1;
+    distZ = dist_z1;
+    radCircScrPix = rad_circ_scr_pix1;
+    distHexPix = dist_hex_pix1;
     if (overlay_type1 == 0)
     {
-        Center_pos.resize(Button_pos1.size());
+        CenterPos.resize(Button_pos1.size());
         for (int i = 0; i < Button_pos1.size(); i++)
         {
-            Center_pos[i].resize(Button_pos1[i].size());
+            CenterPos[i].resize(Button_pos1[i].size());
             for (int j = 0; j < Button_pos1[i].size(); j++)
             {
-                Center_pos[i][j].first = (std::get<0>(Button_pos1[i][j]) + double(size_x_pix1) / 2) * scale_koef;
-                Center_pos[i][j].second = -(std::get<1>(Button_pos1[i][j]) + double(size_z_pix1) / 2) * scale_koef;
-                Center_pos[i][j].first = round(Center_pos[i][j].first * 100)/100;
-                Center_pos[i][j].second = round(Center_pos[i][j].second * 100)/100;
+                CenterPos[i][j].first = (std::get<0>(Button_pos1[i][j]) + double(size_x_pix1) / 2) * scale_koef;
+                CenterPos[i][j].second = -(std::get<1>(Button_pos1[i][j]) + double(size_z_pix1) / 2) * scale_koef;
+                CenterPos[i][j].first = round(CenterPos[i][j].first * 100)/100;
+                CenterPos[i][j].second = round(CenterPos[i][j].second * 100)/100;
             }
         }
         qDebug() << "Center_pos" <<Qt::endl;
-        qDebug() << Center_pos <<Qt::endl;
+        qDebug() << CenterPos <<Qt::endl;
     }
 
-    drow_chart();
-    //drow_polar_chart();
+    drawChart();
+    //drawPolarChart();
 }

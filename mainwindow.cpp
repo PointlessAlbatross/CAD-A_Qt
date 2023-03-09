@@ -186,7 +186,7 @@ void MainWindow::on_action_3_triggered()
 void MainWindow::on_charts_action_triggered()
 {
     Pattern_charts window;
-    connect(this, &MainWindow::signal_main_to_charts, &window, &Pattern_charts::slot_main_to_charts);
+    connect(this, &MainWindow::signal_main_to_charts, &window, &Pattern_charts::slotMainToCharts);
     emit signal_main_to_charts(Curr_num_elem, Weight_coef, Button_pos, k,
                                size_x, size_z, dist_x, dist_z,
                                size_x_pix, size_z_pix,
