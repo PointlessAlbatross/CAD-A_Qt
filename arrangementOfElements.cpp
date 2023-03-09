@@ -20,6 +20,8 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     drawCirc();
     scene->installEventFilter(this);
 
+
+
     // устанавливаем начальный масштаб
 
 
@@ -713,6 +715,10 @@ void Arrangement_of_elements::slotMainToArrange(double size_x1, double size_z1, 
         ButtonPos[i].resize(CurrNumElem[i]);
     }
     hideReshapeButtons();
+    // Изначальное отображение сцены
+    regime = true;
+    redrawing();
+    ui->radioButton->setChecked(true);
 }
 
 void Arrangement_of_elements::slotSelectWeightToArrange(double weight1, int i, int j)
