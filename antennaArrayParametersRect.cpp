@@ -6,10 +6,11 @@
 AntennaArrayParametersRect::AntennaArrayParametersRect(QWidget *parent):
     QDialog(parent),
     ui(new Ui::AntennaArrayParametersRect)
-
 {
     PARAM_WINDOW_FLAG = false;
     ui->setupUi(this);
+    // выделение верхнего виджета
+    ui->sizeXBox->setFocus();
     ui->sizeXBox->selectAll();
 }
 

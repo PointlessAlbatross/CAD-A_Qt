@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>847</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -61,6 +61,7 @@
     </widget>
     <addaction name="separator"/>
     <addaction name="menu_8"/>
+    <addaction name="corrective_action"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -140,6 +141,11 @@
   <action name="charts_action">
    <property name="text">
     <string>Графики</string>
+   </property>
+  </action>
+  <action name="corrective_action">
+   <property name="text">
+    <string>Подбор корректирующих элементов</string>
    </property>
   </action>
  </widget>

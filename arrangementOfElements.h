@@ -27,6 +27,7 @@ private:
     Ui::Arrangement_of_elements *ui;
     QGraphicsScene *scene;
 
+    double scaleKoef = 20.0; // масштаб уменьшения
     int overlayType;
 
     int diamPix;

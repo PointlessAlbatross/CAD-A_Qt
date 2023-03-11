@@ -10,7 +10,6 @@ namespace Ui {
 class AntennaArrayParametersRect;
 }
 
-
 class AntennaArrayParametersRect : public QDialog
 {
     Q_OBJECT

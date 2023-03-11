@@ -8,6 +8,8 @@ AntennaArrayParametersHex::AntennaArrayParametersHex(QWidget *parent) :
 {
     PARAM_WINDOW_FLAG = false;
     ui->setupUi(this);
+    // выделение верхнего виджета
+    ui->radHexBox->setFocus();
     ui->radHexBox->selectAll();
 }
 

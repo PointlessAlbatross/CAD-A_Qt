@@ -6,6 +6,7 @@ Operating_system_parameters::Operating_system_parameters(QWidget *parent) :
     ui(new Ui::Operating_system_parameters)
 {
     ui->setupUi(this);
+    ui->radiationFrequencyBox->setFocus();
     ui->radiationFrequencyBox->selectAll();
 }
 

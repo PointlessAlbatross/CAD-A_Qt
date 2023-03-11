@@ -6,6 +6,7 @@ Select_weight::Select_weight(QWidget *parent) :
     ui(new Ui::Select_weight)
 {
     ui->setupUi(this);
+    ui->weightBox->setFocus();
     ui->weightBox->selectAll();
 }
 

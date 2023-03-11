@@ -11,7 +11,7 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Arrangement_of_elements)
 {
-    diamPix = 450; // число пикселей в диаметре
+    diamPix = 500 * scaleKoef; // число пикселей в диаметре
     channelNum = 1;
     ui->setupUi(this);
     scene = new QGraphicsScene();
@@ -19,29 +19,7 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     scene->setBackgroundBrush(Qt::white);
     drawCirc();
     scene->installEventFilter(this);
-
-
-
-    // устанавливаем начальный масштаб
-
-
-    /*
-    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    ui->graphicsView->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing);
-    ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    ui->graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
-    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    ui->graphicsView->setRenderHint(QPainter::SmoothPixmapTransform);
-    ui->graphicsView->setInteractive(true);
-    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->graphicsView->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
-
-    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    ui->graphicsView->viewport()->setCursor(Qt::ArrowCursor);
-
-*/
+    ui->graphicsView->scale(1 / (scaleKoef), 1 / (scaleKoef)); // начальный масштаб
 }
 
 
@@ -306,7 +284,7 @@ void Arrangement_of_elements::wheelEvent(QWheelEvent *event)
 void Arrangement_of_elements::drawCirc()
 {
     QPen pen;
-    int width_pen = 4;
+    int width_pen = 4*scaleKoef;
     pen.setWidth(width_pen); // Ширина круга
     scene->addEllipse(-diamPix/2 - width_pen, -diamPix/2 - width_pen,
                       diamPix + width_pen * 2, diamPix + width_pen * 2, pen);
@@ -319,23 +297,29 @@ void Arrangement_of_elements::drawRect (int x, int z, int size_x_pix, int size_z
     {
         if (SelectedElem[channelNum - 1][j][i])
         {
+            QPen pen(Qt::black);
+            pen.setWidth(int (scaleKoef));
             QGraphicsRectItem *received_pressed = scene->addRect(x, z, size_x_pix, size_z_pix);
-            received_pressed->setPen(QPen(Qt::black));
+            received_pressed->setPen(pen);
             received_pressed->setBrush(QBrush(QColor(0, 0, 139)));
             received_pressed->show();
         }
         else
         {
+            QPen pen(Qt::black);
+            pen.setWidth(int (scaleKoef));
             QGraphicsRectItem *received = scene->addRect(x, z, size_x_pix, size_z_pix);
-            received->setPen(QPen(Qt::black));
+            received->setPen(pen);
             received->setBrush(QBrush(QColor(64, 207, 255)));
             received->show();
         }
     }
     else
     {
+        QPen pen(Qt::black);
+        pen.setWidth(int (scaleKoef));
         QGraphicsRectItem *radiation = scene->addRect(x, z, size_x_pix, size_z_pix);
-        radiation->setPen(QPen(Qt::black));
+        radiation->setPen(pen);
         radiation->setBrush(QBrush(QColor(244, 169, 0)));
         radiation->show();
     }
@@ -350,6 +334,7 @@ void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j,
         if (SelectedElem[channelNum - 1][j][i])
         {
             QPen pen(Qt::black);
+            pen.setWidth(int (scaleKoef));
             QBrush brush;
             brush.setColor(QColor(0, 0, 139));
             brush.setStyle(Qt::SolidPattern);
@@ -365,6 +350,7 @@ void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j,
         else
         {
             QPen pen(Qt::black);
+            pen.setWidth(int (scaleKoef));
             QBrush brush;
             brush.setColor(QColor(64, 207, 255));
             brush.setStyle(Qt::SolidPattern);
@@ -381,6 +367,7 @@ void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j,
     else
     {
         QPen pen(Qt::black);
+        pen.setWidth(int (scaleKoef));
         QBrush brush;
         brush.setColor(QColor(244, 169, 0));
         brush.setStyle(Qt::SolidPattern);

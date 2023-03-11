@@ -18,9 +18,13 @@ public:
     explicit AntennaArrayParametersHex(QWidget *parent = nullptr);
     ~AntennaArrayParametersHex();
 
+private slots:
+    void on_saveButton_clicked();
+
+    void on_cancelButton_clicked();
+
 private:
     Ui::AntennaArrayParametersHex *ui;
-
     void arrCapacity(QVector<int> & Ar,
                       const QVector<int> & Ar1);
     int maxCapacity(int i);
@@ -33,10 +37,6 @@ private:
 
     bool PARAM_WINDOW_FLAG;
 
-private slots:
-    void on_saveButton_clicked();
-
-    void on_cancelButton_clicked();
 
 signals:
     void signalParamHexToMain(double rad_circ_scr, double dist,

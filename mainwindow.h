@@ -5,6 +5,7 @@
 #include <antennaArrayParametersRect.h>
 #include <antennaArrayParametersHex.h>
 #include <array>
+#include <functional>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -57,6 +58,18 @@ private:
 
     bool PARAM_WINDOW_FLAG;
 
+    double q;
+    double q1;
+    double freq;       // f
+    double deltaFreq;  // delta_f
+    double capacity_0; // C0
+    double capacity;   // C
+    double resistance; // R
+    double inductance; // L
+
+    QVector<double> abs_K;
+    QVector<double> abs_K0;
+
 
 private slots:
     void on_action_triggered();
@@ -66,6 +79,8 @@ private slots:
     void on_action_3_triggered();
     void on_charts_action_triggered();
 
+
+    void on_corrective_action_triggered();
 
 signals:
     void signalMainToParamRect(double size_x, double size_z,
@@ -87,6 +102,8 @@ signals:
                                double rad_circ_scr, double dist_hex,
                                int rad_circ_scr_pix, int dist_hex_pix,
                                int overlay_type);
+    void signal_mainToSelectionOfCorrectiveElements(double qSignal, double q1Signal, double f, double delta_f,
+                                                    double C0, double C, double R, double L);
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
               double dist_x, double dist_z,
@@ -100,6 +117,10 @@ public slots:
     void slotArrangeToMain(QVector<int> Curr_num_elem, QVector<QVector<double>> Weight_coef, QVector <QVector<std::tuple<int, int, int>>> Button_pos,
                               int size_x_pix, int size_z_pix, int dist_x_pix, int dist_z_pix,
                               int rad_circ_scr_pix, int dist_hex_pix);
+    void slot_selectionOfCorrectiveElementsToMain_save(double qSlot, double q1Slot, double f, double delta_f,
+                                                        double C0, double C, double R, double L);
+    void slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot, double q1Slot, double f, double delta_f,
+                                                            double C0, double C, double R, double L);
 
 };
 #endif // MAINWINDOW_H

@@ -13,50 +13,75 @@
   <property name="windowTitle">
    <string>Подбор корректирующих элементов</string>
   </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
+  </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>Центральная частота F, Гц</string>
+        <string>Xn / |Z0| (q)</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+      <widget class="QDoubleSpinBox" name="qBox">
+       <property name="maximum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.010000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>Центральная частота F, Гц</string>
+        <string>Rn / |Z0| (q1)</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+      <widget class="QDoubleSpinBox" name="q1Box">
+       <property name="maximum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.010000000000000</double>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item row="1" column="0">
     <layout class="QFormLayout" name="formLayout_2">
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+      <widget class="QDoubleSpinBox" name="freqBox">
+       <property name="maximum">
+        <double>1000000.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Центральная частота F, Гц</string>
+        <string>Центральная частота f, Гц</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+      <widget class="QDoubleSpinBox" name="deltaFreqBox">
+       <property name="maximum">
+        <double>1000000.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Полоса EF, Гц</string>
+        <string>Полоса Δf, Гц</string>
        </property>
       </widget>
      </item>
@@ -72,7 +97,11 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_8"/>
+      <widget class="QDoubleSpinBox" name="capacityC0Box">
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
@@ -82,7 +111,11 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+      <widget class="QDoubleSpinBox" name="capacityCBox">
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
@@ -92,7 +125,11 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_7"/>
+      <widget class="QDoubleSpinBox" name="resistanceRBox">
+       <property name="maximum">
+        <double>10000.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
@@ -102,28 +139,32 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+      <widget class="QDoubleSpinBox" name="inductanceLBox">
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item row="3" column="0">
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="calculateButton">
        <property name="text">
-        <string>Расчитать</string>
+        <string>Расcчитать</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="saveButton">
        <property name="text">
-        <string>Элементы</string>
+        <string>Сохранить</string>
        </property>
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="cancelButton">
        <property name="text">
         <string>Отмена</string>
        </property>
