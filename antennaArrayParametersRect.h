@@ -2,22 +2,22 @@
 #define ANTENNA_ARRAY_PARAMETERS_RECT_H
 
 #include <QDialog>
-#include<QDebug>
+#include <QDebug>
 #include <vector>
 #include <cmath>
 
 namespace Ui {
-class Antenna_Array_Parameters;
+class AntennaArrayParametersRect;
 }
 
 
-class Antenna_Array_Parameters : public QDialog
+class AntennaArrayParametersRect : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Antenna_Array_Parameters(QWidget *parent = nullptr);
-    ~Antenna_Array_Parameters();
+    explicit AntennaArrayParametersRect(QWidget *parent = nullptr);
+    ~AntennaArrayParametersRect();
 
 private slots:
     void on_pushButton_clicked();
@@ -25,7 +25,7 @@ private slots:
     void on_pushButton_2_clicked();
 
 private:
-    Ui::Antenna_Array_Parameters *ui;
+    Ui::AntennaArrayParametersRect *ui;
     void arrCapacity(QVector<int> & Ar,
                       const QVector<int> & Ar1);
     int maxCapacity(int i);

@@ -1,11 +1,12 @@
 #include "operatingSystemParameters.h"
-#include "ui_operating_system_parameters.h"
+#include "ui_operatingSystemParameters.h"
 
 Operating_system_parameters::Operating_system_parameters(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Operating_system_parameters)
 {
     ui->setupUi(this);
+    ui->radiationFrequencyBox->selectAll();
 }
 
 Operating_system_parameters::~Operating_system_parameters()

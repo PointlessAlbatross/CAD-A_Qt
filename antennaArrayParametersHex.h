@@ -7,19 +7,19 @@
 #include <cmath>
 
 namespace Ui {
-class Antenna_Array_Parameters_Hex;
+class AntennaArrayParametersHex;
 }
 
-class Antenna_Array_Parameters_Hex : public QDialog
+class AntennaArrayParametersHex : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Antenna_Array_Parameters_Hex(QWidget *parent = nullptr);
-    ~Antenna_Array_Parameters_Hex();
+    explicit AntennaArrayParametersHex(QWidget *parent = nullptr);
+    ~AntennaArrayParametersHex();
 
 private:
-    Ui::Antenna_Array_Parameters_Hex *ui;
+    Ui::AntennaArrayParametersHex *ui;
 
     void arrCapacity(QVector<int> & Ar,
                       const QVector<int> & Ar1);

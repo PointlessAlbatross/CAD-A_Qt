@@ -1,5 +1,5 @@
 #include "patternCharts.h"
-#include "ui_pattern_charts.h"
+#include "ui_patternCharts.h"
 #include <QDebug>
 
 Pattern_charts::Pattern_charts(QWidget *parent) :
@@ -28,7 +28,6 @@ double Pattern_charts::D(double theta, double phi)
     }
     else if (overlayType != 0)  // Шестиугольник
     {
-        //theta/180 * M_PI
         double a1,b1;
         if (phi != 0)
         {

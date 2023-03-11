@@ -1,7 +1,18 @@
 #include "antennaArrayParametersHex.h"
-#include "ui_antenna_array_parameters_hex.h"
+#include "ui_antennaArrayParametersHex.h"
 
-void Antenna_Array_Parameters_Hex::arrCapacity(QVector<int> & Ar,
+    //Конструктор//
+AntennaArrayParametersHex::AntennaArrayParametersHex(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::AntennaArrayParametersHex)
+{
+    PARAM_WINDOW_FLAG = false;
+    ui->setupUi(this);
+    ui->radHexBox->selectAll();
+}
+
+
+void AntennaArrayParametersHex::arrCapacity(QVector<int> & Ar,
                   const QVector<int> & Ar1)
 {
     for (int i = 0; i < numRow / 2; i++)
@@ -11,7 +22,7 @@ void Antenna_Array_Parameters_Hex::arrCapacity(QVector<int> & Ar,
 }
 
 
-int Antenna_Array_Parameters_Hex::maxCapacity(int i)
+int AntennaArrayParametersHex::maxCapacity(int i)
 {
     size_t n = 0;
     double rad_circ_scr_n = dist * tan(M_PI/6) ;
@@ -53,25 +64,17 @@ int Antenna_Array_Parameters_Hex::maxCapacity(int i)
 }
 
 
-Antenna_Array_Parameters_Hex::Antenna_Array_Parameters_Hex(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Antenna_Array_Parameters_Hex)
-{
-    ui->setupUi(this);
-}
-
-
-Antenna_Array_Parameters_Hex::~Antenna_Array_Parameters_Hex()
+AntennaArrayParametersHex::~AntennaArrayParametersHex()
 {
     delete ui;
 }
 
-void Antenna_Array_Parameters_Hex::on_saveButton_clicked() // сохранить
+void AntennaArrayParametersHex::on_saveButton_clicked() // сохранить
 {
-    radCircScr = ui->doubleSpinBox_1->value();
-    dist = ui->doubleSpinBox_2->value();
-    radAnt = ui->doubleSpinBox_3->value();
-    numRow = ui->spinBox->value();
+    radCircScr = ui->radHexBox->value();
+    dist = ui->distHexBox->value();
+    radAnt = ui->radAntBox->value();
+    numRow = ui->numRowBox->value();
     if (numRow > 1 and numRow % 2 == 0)
         numRow += 1;
     qDebug()<<"size "<<radCircScr<<Qt::endl;
@@ -89,21 +92,21 @@ void Antenna_Array_Parameters_Hex::on_saveButton_clicked() // сохранить
 }
 
 
-void Antenna_Array_Parameters_Hex::on_cancelButton_clicked() // отмена
+void AntennaArrayParametersHex::on_cancelButton_clicked() // отмена
 {
     QWidget::close();
 }
 
-void Antenna_Array_Parameters_Hex::slotMainToParamHex(double rad_circ_scr_1, double dist_1, double rad_ant_1, int num_row_1)
+void AntennaArrayParametersHex::slotMainToParamHex(double rad_circ_scr_1, double dist_1, double rad_ant_1, int num_row_1)
 {
     qDebug()<<"Вызов слота main_to_param_hex "<<Qt::endl;
     radCircScr = rad_circ_scr_1; dist = dist_1;
     radAnt = rad_ant_1; numRow = num_row_1;
     PARAM_WINDOW_FLAG = true;
-    ui->doubleSpinBox_1->setValue(radCircScr);
-    ui->doubleSpinBox_2->setValue(dist);
-    ui->doubleSpinBox_3->setValue(radAnt);
-    ui->spinBox->setValue(numRow);
+    ui->radHexBox->setValue(radCircScr);
+    ui->distHexBox->setValue(dist);
+    ui->radAntBox->setValue(radAnt);
+    ui->numRowBox->setValue(numRow);
 }
 
 

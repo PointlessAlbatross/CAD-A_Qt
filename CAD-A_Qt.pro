@@ -15,7 +15,8 @@ SOURCES += \
     mainwindow.cpp \
     operatingSystemParameters.cpp \
     patternCharts.cpp \
-    selectWeight.cpp
+    selectWeight.cpp \
+    selectionOfCorrectiveElements.cpp
 HEADERS += \
     antennaArrayParametersHex.h \
     antennaArrayParametersRect.h \
@@ -23,7 +24,8 @@ HEADERS += \
     mainwindow.h \
     operatingSystemParameters.h \
     patternCharts.h \
-    selectWeight.h
+    selectWeight.h \
+    selectionOfCorrectiveElements.h
 
 FORMS += \
     antennaArrayParametersHex.ui \
@@ -32,7 +34,8 @@ FORMS += \
     mainwindow.ui \
     operatingSystemParameters.ui \
     patternCharts.ui \
-    selectWeight.ui
+    selectWeight.ui \
+    selectionOfCorrectiveElements.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

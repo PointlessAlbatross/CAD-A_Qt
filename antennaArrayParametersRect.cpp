@@ -1,8 +1,20 @@
 #include "antennaArrayParametersRect.h"
-#include "ui_antenna_array_parameters_rect.h"
+#include "ui_antennaArrayParametersRect.h"
 #include "mainwindow.h"
 
-void Antenna_Array_Parameters::arrCapacity(QVector<int> & Ar,
+    //Конструктор//
+AntennaArrayParametersRect::AntennaArrayParametersRect(QWidget *parent):
+    QDialog(parent),
+    ui(new Ui::AntennaArrayParametersRect)
+
+{
+    PARAM_WINDOW_FLAG = false;
+    ui->setupUi(this);
+    ui->sizeXBox->selectAll();
+}
+
+
+void AntennaArrayParametersRect::arrCapacity(QVector<int> & Ar,
                   const QVector<int> & Ar1) {
     if (numRow & 1) // Нечетное число рядов
     {
@@ -20,7 +32,7 @@ void Antenna_Array_Parameters::arrCapacity(QVector<int> & Ar,
     }
 }
 
- int Antenna_Array_Parameters::maxCapacity(int i)
+ int AntennaArrayParametersRect::maxCapacity(int i)
  {
 
      size_t n = 0;
@@ -45,7 +57,7 @@ void Antenna_Array_Parameters::arrCapacity(QVector<int> & Ar,
      return n;
  }
 
- void Antenna_Array_Parameters::slotMainToParamRect(double size_x1, double size_z1,
+ void AntennaArrayParametersRect::slotMainToParamRect(double size_x1, double size_z1,
                                                    double dist_x1, double dist_z1,
                                                    double rad_ant1, int num_row1)
  {
@@ -53,39 +65,29 @@ void Antenna_Array_Parameters::arrCapacity(QVector<int> & Ar,
      sizeX = size_x1; sizeZ = size_z1; distX = dist_x1;
      distZ = dist_z1; radAnt = rad_ant1; numRow = num_row1;
      PARAM_WINDOW_FLAG = true;
-     ui->doubleSpinBox->setValue(sizeX);
-     ui->doubleSpinBox_2->setValue(sizeZ);
-     ui->doubleSpinBox_3->setValue(distX);
-     ui->doubleSpinBox_4->setValue(distZ);
-     ui->doubleSpinBox_5->setValue(radAnt);
-     ui->spinBox->setValue(numRow);
+     ui->sizeXBox->setValue(sizeX);
+     ui->sizeZBox->setValue(sizeZ);
+     ui->distXBox->setValue(distX);
+     ui->distZBox->setValue(distZ);
+     ui->radAntBox->setValue(radAnt);
+     ui->numRowBox->setValue(numRow);
  }
 
 
-    //Конструктор//
-Antenna_Array_Parameters::Antenna_Array_Parameters(QWidget *parent)://, double & size x) :
-    QDialog(parent),
-    ui(new Ui::Antenna_Array_Parameters)
-
-{
-    PARAM_WINDOW_FLAG = false;
-    ui->setupUi(this);
-}
-
-Antenna_Array_Parameters::~Antenna_Array_Parameters()
+AntennaArrayParametersRect::~AntennaArrayParametersRect()
 {
     delete ui;
 }
 
 
-void Antenna_Array_Parameters::on_pushButton_clicked()
+void AntennaArrayParametersRect::on_pushButton_clicked()
 {
-    sizeX = ui->doubleSpinBox->value();
-    sizeZ = ui->doubleSpinBox_2->value();
-    distX = ui->doubleSpinBox_3->value();
-    distZ = ui->doubleSpinBox_4->value();
-    radAnt = ui->doubleSpinBox_5->value();
-    numRow = ui->spinBox->value();
+    sizeX = ui->sizeXBox->value();
+    sizeZ = ui->sizeZBox->value();
+    distX = ui->distXBox->value();
+    distZ = ui->distZBox->value();
+    radAnt = ui->radAntBox->value();
+    numRow = ui->numRowBox->value();
     qDebug()<<"size "<<sizeX<<Qt::endl;
     QVector<int> Arr(numRow);
     QVector<int> Arr1(numRow / 2 + numRow % 2);
@@ -100,7 +102,7 @@ void Antenna_Array_Parameters::on_pushButton_clicked()
 }
 
 
-void Antenna_Array_Parameters::on_pushButton_2_clicked()
+void AntennaArrayParametersRect::on_pushButton_2_clicked()
 {
     QWidget::close();
 }
