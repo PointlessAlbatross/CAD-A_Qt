@@ -5,10 +5,10 @@
 
 
 namespace Ui {
-class Select_weight;
+class SelectWeight;
 }
 
-class Select_weight : public QDialog
+class SelectWeight : public QDialog
 {
     Q_OBJECT
 
@@ -18,8 +18,8 @@ private:
 
 
 public:
-    explicit Select_weight(QWidget *parent = nullptr);
-    ~Select_weight();
+    explicit SelectWeight(QWidget *parent = nullptr);
+    ~SelectWeight();
 
 signals:
     void signalSelectWeightToArrange (double weigth, int i, int j);
@@ -32,7 +32,7 @@ private slots:
     void on_pushButton_2_clicked();
 
 private:
-    Ui::Select_weight *ui;
+    Ui::SelectWeight *ui;
 };
 
 #endif // SELECT_WEIGHT_H

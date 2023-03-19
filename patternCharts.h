@@ -17,16 +17,16 @@
 #include <QtCharts/QChartView>
 
 namespace Ui {
-class Pattern_charts;
+class PatternCharts;
 }
 
-class Pattern_charts : public QDialog
+class PatternCharts : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Pattern_charts(QWidget *parent = nullptr);
-    ~Pattern_charts();
+    explicit PatternCharts(QWidget *parent = nullptr);
+    ~PatternCharts();
 
 private:
 
@@ -69,7 +69,7 @@ public slots:
                              int rad_circ_scr_pix, int dist_hex_pix,
                              int overlay_type);
 private:
-    Ui::Pattern_charts *ui;
+    Ui::PatternCharts *ui;
 };
 
 #endif // PATTERN_CHARTS_H

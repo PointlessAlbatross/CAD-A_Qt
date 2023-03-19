@@ -2,19 +2,19 @@
 #include "ui_patternCharts.h"
 #include <QDebug>
 
-Pattern_charts::Pattern_charts(QWidget *parent) :
+PatternCharts::PatternCharts(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Pattern_charts)
+    ui(new Ui::PatternCharts)
 {
     ui->setupUi(this);
 }
 
-Pattern_charts::~Pattern_charts()
+PatternCharts::~PatternCharts()
 {
     delete ui;
 }
 
-double Pattern_charts::D(double theta, double phi)
+double PatternCharts::D(double theta, double phi)
 {
     if (overlayType == 0) // Четырехугольник
     {
@@ -40,7 +40,7 @@ double Pattern_charts::D(double theta, double phi)
     return 1;
 }
 //проблеммы с каналами
-std::complex<double> Pattern_charts::Dt(double theta, double phi)
+std::complex<double> PatternCharts::Dt(double theta, double phi)
 {
     double theta_t = M_PI_2, phi_t = 0;
     std::complex<double> i (0, 1); // Мнимая единица
@@ -60,7 +60,7 @@ std::complex<double> Pattern_charts::Dt(double theta, double phi)
     return D_numerator / D_denumerator;
 }
 
-void Pattern_charts::drawChart()
+void PatternCharts::drawChart()
 {
     for(int reg_chart = 1; reg_chart <= 2; reg_chart++)
     {
@@ -123,7 +123,7 @@ void Pattern_charts::drawChart()
     }
 }
 
-void Pattern_charts::drawPolarChart()
+void PatternCharts::drawPolarChart()
 {
     const qreal angularMin = 0;
     const qreal angularMax = 360;
@@ -173,7 +173,7 @@ void Pattern_charts::drawPolarChart()
 
 
 
-void Pattern_charts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1,
+void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1,
                          QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
                          double k1,
                          double size_x1, double size_z1, double dist_x1, double dist_z1,

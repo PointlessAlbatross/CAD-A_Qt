@@ -65,14 +65,14 @@ void MainWindow::on_action_triggered() // Растановка элементо�
     if (PARAM_WINDOW_FLAG) // наличие установленных параметров
     {
         qDebug() << "Вызов растановки " <<Qt::endl;
-        Arrangement_of_elements window;
-        connect(this, &MainWindow::signalMainToArrange, &window, &Arrangement_of_elements::slotMainToArrange);
+        ArrangementOfElements window;
+        connect(this, &MainWindow::signalMainToArrange, &window, &ArrangementOfElements::slotMainToArrange);
         emit signalMainToArrange(sizeX, sizeZ,
                                     distX, distZ,
                                     radCircScr, distHex,
                                     radAnt, num_row, Max_elem, CurrNumElem,  WeightCoef, SelectedElem,
                                     antennaType, overlayType);
-        connect(&window, &Arrangement_of_elements::signalArrangeToMain, this, &MainWindow::slotArrangeToMain);
+        connect(&window, &ArrangementOfElements::signalArrangeToMain, this, &MainWindow::slotArrangeToMain);
         window.setModal(true);
         window.exec();
     }
@@ -281,10 +281,10 @@ void MainWindow::slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot
 
 void MainWindow::on_action_2_triggered() // Рабочие параметры системы
 {
-    Operating_system_parameters window;
-    connect(this, &MainWindow::signalMainToOperatingSystemParameters, &window, &Operating_system_parameters::slotMainToOperatingSystemParameters);
+    OperatingSystemParameters window;
+    connect(this, &MainWindow::signalMainToOperatingSystemParameters, &window, &OperatingSystemParameters::slotMainToOperatingSystemParameters);
     emit signalMainToOperatingSystemParameters(duration, pressure, receivingFreq, radiationFreq);
-    connect(&window, &Operating_system_parameters::signalOperatingSystemParametersToMain, this, &MainWindow::slotOperatingSystemParametersToMain);
+    connect(&window, &OperatingSystemParameters::signalOperatingSystemParametersToMain, this, &MainWindow::slotOperatingSystemParametersToMain);
     window.setModal(true);
     window.exec();
 }
@@ -319,8 +319,8 @@ void MainWindow::on_antennaTypeAction_triggered()
 
 void MainWindow::on_charts_action_triggered()
 {
-    Pattern_charts window;
-    connect(this, &MainWindow::signalMainToCharts, &window, &Pattern_charts::slotMainToCharts);
+    PatternCharts window;
+    connect(this, &MainWindow::signalMainToCharts, &window, &PatternCharts::slotMainToCharts);
     emit signalMainToCharts(CurrNumElem, WeightCoef, ButtonPos, k,
                                sizeX, sizeZ, distX, distZ,
                                sizeXPix, sizeZPix,

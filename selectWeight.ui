@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Select_weight</class>
- <widget class="QDialog" name="Select_weight">
+ <class>SelectWeight</class>
+ <widget class="QDialog" name="SelectWeight">
   <property name="geometry">
    <rect>
     <x>0</x>

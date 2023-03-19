@@ -1,21 +1,21 @@
 #include "operatingSystemParameters.h"
 #include "ui_operatingSystemParameters.h"
 
-Operating_system_parameters::Operating_system_parameters(QWidget *parent) :
+OperatingSystemParameters::OperatingSystemParameters(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Operating_system_parameters)
+    ui(new Ui::OperatingSystemParameters)
 {
     ui->setupUi(this);
     ui->radiationFrequencyBox->setFocus();
     ui->radiationFrequencyBox->selectAll();
 }
 
-Operating_system_parameters::~Operating_system_parameters()
+OperatingSystemParameters::~OperatingSystemParameters()
 {
     delete ui;
 }
 
-void Operating_system_parameters::on_pushButton_clicked()
+void OperatingSystemParameters::on_pushButton_clicked()
 {
     emit signalOperatingSystemParametersToMain (ui->durationBox->value(), ui->pressureBox->value(),
                                                      ui->radiationFrequencyBox->value(), ui->receivingFrequencyBox->value());
@@ -23,12 +23,12 @@ void Operating_system_parameters::on_pushButton_clicked()
 }
 
 
-void Operating_system_parameters::on_pushButton_2_clicked()
+void OperatingSystemParameters::on_pushButton_2_clicked()
 {
     QWidget::close();
 }
 
-void Operating_system_parameters::slotMainToOperatingSystemParameters(int duration1, int pressure1, int radiation_freq1, int receiving_freq1)
+void OperatingSystemParameters::slotMainToOperatingSystemParameters(int duration1, int pressure1, int radiation_freq1, int receiving_freq1)
 {
     duration = duration1;
     pressure = pressure1;

@@ -4,16 +4,16 @@
 #include <QDialog>
 
 namespace Ui {
-class Operating_system_parameters;
+class OperatingSystemParameters;
 }
 
-class Operating_system_parameters : public QDialog
+class OperatingSystemParameters : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Operating_system_parameters(QWidget *parent = nullptr);
-    ~Operating_system_parameters();
+    explicit OperatingSystemParameters(QWidget *parent = nullptr);
+    ~OperatingSystemParameters();
 
     int duration;
     int pressure;
@@ -35,7 +35,7 @@ public slots:
                                                   int radiation_freq,int receiving_freq);
 
 private:
-    Ui::Operating_system_parameters *ui;
+    Ui::OperatingSystemParameters *ui;
 };
 
 #endif // OPERATING_SYSTEM_PARAMETERS_H

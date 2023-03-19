@@ -13,18 +13,18 @@
 
 
 namespace Ui {
-class Arrangement_of_elements;
+class ArrangementOfElements;
 }
-class Arrangement_of_elements : public QDialog
+class ArrangementOfElements : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Arrangement_of_elements(QWidget *parent = nullptr);
-    ~Arrangement_of_elements();
+    explicit ArrangementOfElements(QWidget *parent = nullptr);
+    ~ArrangementOfElements();
 
 private:
-    Ui::Arrangement_of_elements *ui;
+    Ui::ArrangementOfElements *ui;
     QGraphicsScene *scene;
 
     double scaleKoef = 20.0; // масштаб уменьшения

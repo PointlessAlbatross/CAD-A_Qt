@@ -7,9 +7,9 @@
 //#40cfff приемная
 //f4a900ff RGBA
 
-Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
+ArrangementOfElements::ArrangementOfElements(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Arrangement_of_elements)
+    ui(new Ui::ArrangementOfElements)
 {
     diamPix = 500 * scaleKoef; // число пикселей в диаметре
     groupNum = 1;
@@ -25,7 +25,7 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
 }
 
 
-bool Arrangement_of_elements::rectCheck(int x, int y, int vx, int vy)
+bool ArrangementOfElements::rectCheck(int x, int y, int vx, int vy)
 {
     return x >= vx and
            x <= vx + sizeXPix and
@@ -33,7 +33,7 @@ bool Arrangement_of_elements::rectCheck(int x, int y, int vx, int vy)
            y <= vy + sizeZPix;
 }
 
-void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
+void ArrangementOfElements::rectClick(QObject *watched, QEvent *event)
 {
     if(watched == scene){
              QGraphicsSceneMouseEvent *mouseSceneEvent;
@@ -53,15 +53,15 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
                                                   std::get<0>(ButtonPos[i][j]), std::get<1>(ButtonPos[i][j]))
                                        )
                                     {
-                                        Select_weight window;
-                                        connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
+                                        SelectWeight window;
+                                        connect(this, &ArrangementOfElements::signalArrangeToSelectWeight, &window, &SelectWeight::slotArrangeToSelectWeigth);
                                         if (!regime)
                                             emit signalArrangeToSelectWeight(WeightCoef[16][i][j], i, j, std::get<2>(ButtonPos[i][j]));
                                         else if(!antennaType)
                                             emit signalArrangeToSelectWeight(WeightCoef[0][i][j], i, j, std::get<2>(ButtonPos[i][j]));
                                         else
                                             emit signalArrangeToSelectWeight(WeightCoef[groupNum - 1][i][j], i, j, std::get<2>(ButtonPos[i][j]));
-                                        connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
+                                        connect(&window, &SelectWeight::signalSelectWeightToArrange, this, &ArrangementOfElements::slotSelectWeightToArrange);
                                         window.setModal(true);
                                         window.exec();
                                         i_fl = 1; //  флаги выхода из цикла
@@ -97,7 +97,7 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
 
 
 
-bool Arrangement_of_elements::hexCheck(int cx, int cy, int x, int y)
+bool ArrangementOfElements::hexCheck(int cx, int cy, int x, int y)
 {
     const int sides = 6;
     double angle = M_PI / 6.0; // 30 градусов в радиан
@@ -120,7 +120,7 @@ bool Arrangement_of_elements::hexCheck(int cx, int cy, int x, int y)
     return inside;
 }
 
-void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
+void ArrangementOfElements::hexClick(QObject *watched, QEvent *event)
 {
     if(watched == scene){
              QGraphicsSceneMouseEvent *mouseSceneEvent;
@@ -142,10 +142,10 @@ void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
                                     {
                                        qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
                                        qDebug() << WeightCoef[groupNum - 1] << Qt::endl;
-                                       Select_weight window;
-                                       connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
+                                       SelectWeight window;
+                                       connect(this, &ArrangementOfElements::signalArrangeToSelectWeight, &window, &SelectWeight::slotArrangeToSelectWeigth);
                                        emit signalArrangeToSelectWeight(WeightCoef[groupNum - 1][i][j], i, j, std::get<2>(ButtonPos[i][j]));
-                                       connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
+                                       connect(&window, &SelectWeight::signalSelectWeightToArrange, this, &ArrangementOfElements::slotSelectWeightToArrange);
                                        window.setModal(true);
                                        window.exec();
                                        i_fl = 1; //  флаги выхода из цикла
@@ -184,7 +184,7 @@ void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
 }
 
 
-bool Arrangement_of_elements::eventFilter(QObject *watched, QEvent *event)
+bool ArrangementOfElements::eventFilter(QObject *watched, QEvent *event)
 {
     if (!overlayType) // клик по прямоугольникам
         rectClick(watched, event);
@@ -194,7 +194,7 @@ bool Arrangement_of_elements::eventFilter(QObject *watched, QEvent *event)
 }
 
 
-void Arrangement_of_elements::hideReshapeButtons()
+void ArrangementOfElements::hideReshapeButtons()
 {
     if (numRow < 19)
     {
@@ -248,7 +248,7 @@ void Arrangement_of_elements::hideReshapeButtons()
     }
 }
 
-void Arrangement_of_elements::disabledGroupButton(bool b)
+void ArrangementOfElements::disabledGroupButton(bool b)
 {
     ui->groupNumButton_1->setDisabled(b);
     ui->groupNumButton_2->setDisabled(b);
@@ -268,7 +268,7 @@ void Arrangement_of_elements::disabledGroupButton(bool b)
     ui->groupNumButton_16->setDisabled(b);
 }
 
-void Arrangement_of_elements::wheelEvent(QWheelEvent *event)
+void ArrangementOfElements::wheelEvent(QWheelEvent *event)
 {
     // получаем указатель на элемент QGraphicsView из объекта ui
         QGraphicsView* graphicsView = ui->graphicsView;
@@ -291,7 +291,7 @@ void Arrangement_of_elements::wheelEvent(QWheelEvent *event)
         }
 }
 
-void Arrangement_of_elements::drawCirc()
+void ArrangementOfElements::drawCirc()
 {
     QPen pen;
     int width_pen = 4*scaleKoef;
@@ -301,7 +301,7 @@ void Arrangement_of_elements::drawCirc()
 }
 
 
-void Arrangement_of_elements::drawRect (int x, int z, int size_x_pix, int size_z_pix, int j, int i)
+void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_pix, int j, int i)
 {
     if (regime)
     {
@@ -337,7 +337,7 @@ void Arrangement_of_elements::drawRect (int x, int z, int size_x_pix, int size_z
 
 }
 
-void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j, int i)
+void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, int i)
 {
     if (regime)
     {
@@ -394,7 +394,7 @@ void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j,
 /*
  * Перирисовка сцены
 */
-void Arrangement_of_elements::redrawing()
+void ArrangementOfElements::redrawing()
 {
     if (!overlayType) // прямоугольная антенна
         redrawingRect();
@@ -403,7 +403,7 @@ void Arrangement_of_elements::redrawing()
 }
 
 
-void Arrangement_of_elements::redrawingRect()
+void ArrangementOfElements::redrawingRect()
 {
     int x, z, n;
     sizeXPix = int (sizeX / radAnt * (diamPix / 2));
@@ -583,7 +583,7 @@ void Arrangement_of_elements::redrawingRect()
 }
 
 
-void Arrangement_of_elements::redrawingHex()
+void ArrangementOfElements::redrawingHex()
 {
     int x, z, n;
     radCircScrPix = int (radCircScr / radAnt * (diamPix / 2));
@@ -692,7 +692,7 @@ void Arrangement_of_elements::redrawingHex()
 /*
   Слот
 */
-void Arrangement_of_elements::slotMainToArrange(double size_x1, double size_z1, double dist_x1, double dist_z1,
+void ArrangementOfElements::slotMainToArrange(double size_x1, double size_z1, double dist_x1, double dist_z1,
                                                    double rad_circ_scr1, double dist1,
                                                    double rad_ant1, int num_row1, QVector<int> Max_elem1, QVector<int> Curr_num_elem1,
                                                    std::array<QVector<QVector<double>>,17> Weight_coef1, std::array<QVector<QVector<bool>>, 16> Selected_elem1,
@@ -719,7 +719,7 @@ void Arrangement_of_elements::slotMainToArrange(double size_x1, double size_z1, 
     ui->radioButtonReceive->setChecked(true);
 }
 
-void Arrangement_of_elements::slotSelectWeightToArrange(double weight1, int i, int j)
+void ArrangementOfElements::slotSelectWeightToArrange(double weight1, int i, int j)
 {
     if(!regime) // режим излучения
         WeightCoef[16][i][j] = weight1;
@@ -730,13 +730,13 @@ void Arrangement_of_elements::slotSelectWeightToArrange(double weight1, int i, i
 }
 
 
-Arrangement_of_elements::~Arrangement_of_elements()
+ArrangementOfElements::~ArrangementOfElements()
 {
     delete ui;
 }
 
 //режим приема
-void Arrangement_of_elements::on_radioButtonReceive_clicked(bool checked)
+void ArrangementOfElements::on_radioButtonReceive_clicked(bool checked)
 {
     if (checked){
         QWidget clear;
@@ -750,7 +750,7 @@ void Arrangement_of_elements::on_radioButtonReceive_clicked(bool checked)
 }
 
 //режим передачи
-void Arrangement_of_elements::on_radioButtonRadiation_clicked(bool checked)
+void ArrangementOfElements::on_radioButtonRadiation_clicked(bool checked)
 {
     if (checked){
         QWidget clear;
@@ -760,78 +760,78 @@ void Arrangement_of_elements::on_radioButtonRadiation_clicked(bool checked)
     }
 }
 
-void Arrangement_of_elements::on_ButtonPlus_1_clicked()
+void ArrangementOfElements::on_ButtonPlus_1_clicked()
 {
     reshapePlus(0);
 }
 
-void Arrangement_of_elements::on_ButtonMinus_1_clicked()
+void ArrangementOfElements::on_ButtonMinus_1_clicked()
 {
     reshapeMinus(0);
 }
 
-void Arrangement_of_elements::on_ButtonPlus_2_clicked()
+void ArrangementOfElements::on_ButtonPlus_2_clicked()
 {
     reshapePlus(1);
 }
 
-void Arrangement_of_elements::on_ButtonMinus_2_clicked()
+void ArrangementOfElements::on_ButtonMinus_2_clicked()
 {
     reshapeMinus(1);
 }
 
-void Arrangement_of_elements::on_ButtonPlus_3_clicked()
+void ArrangementOfElements::on_ButtonPlus_3_clicked()
 {
     reshapePlus(2);
 }
 
-void Arrangement_of_elements::on_ButtonMinus_3_clicked()
+void ArrangementOfElements::on_ButtonMinus_3_clicked()
 {
     reshapeMinus(2);
 }
 
-void Arrangement_of_elements::on_ButtonPlus_4_clicked()
+void ArrangementOfElements::on_ButtonPlus_4_clicked()
 {
     reshapePlus(3);
 }
 
-void Arrangement_of_elements::on_ButtonMinus_4_clicked()
+void ArrangementOfElements::on_ButtonMinus_4_clicked()
 {
     reshapeMinus(3);
 }
 
-void Arrangement_of_elements::on_ButtonPlus_5_clicked()
+void ArrangementOfElements::on_ButtonPlus_5_clicked()
 {
     reshapePlus(4);
 }
 
-void Arrangement_of_elements::on_ButtonMinus_5_clicked()
+void ArrangementOfElements::on_ButtonMinus_5_clicked()
 {
     reshapeMinus(4);
 }
 
-void Arrangement_of_elements::on_ButtonPlus_6_clicked()
+void ArrangementOfElements::on_ButtonPlus_6_clicked()
 {
     reshapePlus(5);
 }
 
-void Arrangement_of_elements::on_ButtonMinus_6_clicked()
+void ArrangementOfElements::on_ButtonMinus_6_clicked()
 {
     reshapeMinus(5);
 }
 
-void Arrangement_of_elements::on_ButtonPlus_7_clicked()
+void ArrangementOfElements::on_ButtonPlus_7_clicked()
 {
     reshapePlus(6);
 }
 
-void Arrangement_of_elements::on_ButtonMinus_7_clicked()
+void ArrangementOfElements::on_ButtonMinus_7_clicked()
 {
     reshapeMinus(6);
 }
 
 
-void Arrangement_of_elements::reshapePlus(int n)
+void ArrangementOfElements::reshapePlus(int n)
 {
     if (overlayType and (CurrNumElem[numRow / 2 - n] != 0
                           or ((numRow - n) % 2 == 0)))
@@ -927,7 +927,7 @@ void Arrangement_of_elements::reshapePlus(int n)
     }
 }
 
-void Arrangement_of_elements::reshapeMinus(int n)
+void ArrangementOfElements::reshapeMinus(int n)
 {
     if (overlayType and CurrNumElem[numRow / 2 - n] != 1 // для шестиугольных элементов
             and CurrNumElem[numRow / 2 + n] != 1)
@@ -1013,7 +1013,7 @@ void Arrangement_of_elements::reshapeMinus(int n)
 }
 
 
-void Arrangement_of_elements::on_groupNumButton_1_clicked()
+void ArrangementOfElements::on_groupNumButton_1_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_1->setDisabled(true);
@@ -1022,7 +1022,7 @@ void Arrangement_of_elements::on_groupNumButton_1_clicked()
 
 }
 
-void Arrangement_of_elements::on_groupNumButton_2_clicked()
+void ArrangementOfElements::on_groupNumButton_2_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_2->setDisabled(true);
@@ -1030,7 +1030,7 @@ void Arrangement_of_elements::on_groupNumButton_2_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_3_clicked()
+void ArrangementOfElements::on_groupNumButton_3_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_3->setDisabled(true);
@@ -1038,7 +1038,7 @@ void Arrangement_of_elements::on_groupNumButton_3_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_4_clicked()
+void ArrangementOfElements::on_groupNumButton_4_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_4->setDisabled(true);
@@ -1046,7 +1046,7 @@ void Arrangement_of_elements::on_groupNumButton_4_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_5_clicked()
+void ArrangementOfElements::on_groupNumButton_5_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_5->setDisabled(true);
@@ -1054,7 +1054,7 @@ void Arrangement_of_elements::on_groupNumButton_5_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_6_clicked()
+void ArrangementOfElements::on_groupNumButton_6_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_6->setDisabled(true);
@@ -1062,7 +1062,7 @@ void Arrangement_of_elements::on_groupNumButton_6_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_7_clicked()
+void ArrangementOfElements::on_groupNumButton_7_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_7->setDisabled(true);
@@ -1070,7 +1070,7 @@ void Arrangement_of_elements::on_groupNumButton_7_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_8_clicked()
+void ArrangementOfElements::on_groupNumButton_8_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_8->setDisabled(true);
@@ -1078,7 +1078,7 @@ void Arrangement_of_elements::on_groupNumButton_8_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_9_clicked()
+void ArrangementOfElements::on_groupNumButton_9_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_9->setDisabled(true);
@@ -1086,7 +1086,7 @@ void Arrangement_of_elements::on_groupNumButton_9_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_10_clicked()
+void ArrangementOfElements::on_groupNumButton_10_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_10->setDisabled(true);
@@ -1094,7 +1094,7 @@ void Arrangement_of_elements::on_groupNumButton_10_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_11_clicked()
+void ArrangementOfElements::on_groupNumButton_11_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_11->setDisabled(true);
@@ -1102,7 +1102,7 @@ void Arrangement_of_elements::on_groupNumButton_11_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_12_clicked()
+void ArrangementOfElements::on_groupNumButton_12_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_12->setDisabled(true);
@@ -1110,7 +1110,7 @@ void Arrangement_of_elements::on_groupNumButton_12_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_13_clicked()
+void ArrangementOfElements::on_groupNumButton_13_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_13->setDisabled(true);
@@ -1118,7 +1118,7 @@ void Arrangement_of_elements::on_groupNumButton_13_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_14_clicked()
+void ArrangementOfElements::on_groupNumButton_14_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_14->setDisabled(true);
@@ -1126,7 +1126,7 @@ void Arrangement_of_elements::on_groupNumButton_14_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_15_clicked()
+void ArrangementOfElements::on_groupNumButton_15_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_15->setDisabled(true);
@@ -1134,7 +1134,7 @@ void Arrangement_of_elements::on_groupNumButton_15_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_groupNumButton_16_clicked()
+void ArrangementOfElements::on_groupNumButton_16_clicked()
 {
     disabledGroupButton(false);
     ui->groupNumButton_16->setDisabled(true);
@@ -1142,7 +1142,7 @@ void Arrangement_of_elements::on_groupNumButton_16_clicked()
     redrawing();
 }
 
-void Arrangement_of_elements::on_saveButton_clicked()
+void ArrangementOfElements::on_saveButton_clicked()
 {
     emit signalArrangeToMain(CurrNumElem, WeightCoef, ButtonPos,
                                 sizeXPix, sizeZPix, distXPix, distXPix,

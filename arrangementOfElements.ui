@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Arrangement_of_elements</class>
- <widget class="QDialog" name="Arrangement_of_elements">
+ <class>ArrangementOfElements</class>
+ <widget class="QDialog" name="ArrangementOfElements">
   <property name="geometry">
    <rect>
     <x>0</x>
