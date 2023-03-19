@@ -14,6 +14,8 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     diamPix = 500 * scaleKoef; // число пикселей в диаметре
     channelNum = 1;
     ui->setupUi(this);
+    ui->ChannelNumButton_1->setDisabled(true);
+    selectedChanelNum = 1;
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
     scene->setBackgroundBrush(Qt::white);
@@ -22,6 +24,14 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     ui->graphicsView->scale(1 / (scaleKoef), 1 / (scaleKoef)); // начальный масштаб
 }
 
+
+bool Arrangement_of_elements::rectCheck(int x, int y, int vx, int vy)
+{
+    return x >= vx and
+           x <= vx + sizeXPix and
+           y >= vy and
+           y <= vy + sizeZPix;
+}
 
 void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
 {
@@ -38,36 +48,33 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
                              {
                                 if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::RightButton)
                                 {
-                                    if      (
-                                            mouseSceneEvent->scenePos().x() >= std::get<0>(ButtonPos[i][j]) and
-                                            mouseSceneEvent->scenePos().x() <= std::get<0>(ButtonPos[i][j]) + sizeXPix and
-                                            mouseSceneEvent->scenePos().y() >= std::get<1>(ButtonPos[i][j]) and
-                                            mouseSceneEvent->scenePos().y() <= std::get<1>(ButtonPos[i][j]) + sizeZPix
-                                            )
+                                    if (
+                                        rectCheck(mouseSceneEvent->scenePos().x(), mouseSceneEvent->scenePos().y(),
+                                                  std::get<0>(ButtonPos[i][j]), std::get<1>(ButtonPos[i][j]))
+                                       )
                                     {
-                                       qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
-                                       qDebug() << WeightCoef << Qt::endl;
-                                       Select_weight window;
-                                       connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
-                                       emit signalArrangeToSelectWeight(WeightCoef[i][j], i, j, std::get<2>(ButtonPos[i][j]));
-                                       connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
-                                       window.setModal(true);
-                                       window.exec();
-                                       i_fl = 1; //  флаги выхода из цикла
-                                       j_fl = 1;
+                                        Select_weight window;
+                                        connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
+                                        if (!regime)
+                                            emit signalArrangeToSelectWeight(WeightCoef[16][i][j], i, j, std::get<2>(ButtonPos[i][j]));
+                                        else if(regime)
+                                            emit signalArrangeToSelectWeight(WeightCoef[channelNum - 1][i][j], i, j, std::get<2>(ButtonPos[i][j]));
+                                        connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
+                                        window.setModal(true);
+                                        window.exec();
+                                        i_fl = 1; //  флаги выхода из цикла
+                                        j_fl = 1;
                                     }
                                 }
                                 if (static_cast<QGraphicsSceneMouseEvent*>(event)->button() == Qt::LeftButton)
                                 {
-                                    if (mouseSceneEvent->scenePos().x() >= std::get<0>(ButtonPos[i][j]) and
-                                        mouseSceneEvent->scenePos().x() <= std::get<0>(ButtonPos[i][j]) + sizeXPix and
-                                        mouseSceneEvent->scenePos().y() >= std::get<1>(ButtonPos[i][j]) and
-                                        mouseSceneEvent->scenePos().y() <= std::get<1>(ButtonPos[i][j]) + sizeZPix)
+                                    if (rectCheck(mouseSceneEvent->scenePos().x(), mouseSceneEvent->scenePos().y(),
+                                        std::get<0>(ButtonPos[i][j]), std::get<1>(ButtonPos[i][j]))
+                                       )
                                     {
                                         if (regime)
                                         {
-                                            qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
-                                            qDebug() << SelectedElem[channelNum - 1][i][j] << Qt::endl;
+
                                             if(!SelectedElem[channelNum - 1][i][j])
                                                SelectedElem[channelNum - 1][i][j] = true;
                                             else
@@ -85,6 +92,7 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
                  }
     }
 }
+
 
 
 bool Arrangement_of_elements::hexCheck(int cx, int cy, int x, int y)
@@ -131,10 +139,10 @@ void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
                                       )
                                     {
                                        qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
-                                       qDebug() << WeightCoef << Qt::endl;
+                                       qDebug() << WeightCoef[channelNum - 1] << Qt::endl;
                                        Select_weight window;
                                        connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
-                                       emit signalArrangeToSelectWeight(WeightCoef[i][j], i, j, std::get<2>(ButtonPos[i][j]));
+                                       emit signalArrangeToSelectWeight(WeightCoef[channelNum - 1][i][j], i, j, std::get<2>(ButtonPos[i][j]));
                                        connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
                                        window.setModal(true);
                                        window.exec();
@@ -685,10 +693,11 @@ void Arrangement_of_elements::redrawingHex()
 void Arrangement_of_elements::slotMainToArrange(double size_x1, double size_z1, double dist_x1, double dist_z1,
                                                    double rad_circ_scr1, double dist1,
                                                    double rad_ant1, int num_row1, QVector<int> Max_elem1, QVector<int> Curr_num_elem1,
-                                                   QVector<QVector<double>> Weight_coef1, std::array<QVector<QVector<bool>>, 16> Selected_elem1,
-                                                   int overlay_type1)
+                                                   std::array<QVector<QVector<double>>,17> Weight_coef1, std::array<QVector<QVector<bool>>, 16> Selected_elem1,
+                                                   int antenna_type, int overlay_type)
 {
-    overlayType = overlay_type1;
+    antennaType = antenna_type;
+    overlayType = overlay_type;
     sizeX = size_x1; sizeZ = size_z1; distX = dist_x1;
     distZ = dist_z1; radAnt = rad_ant1; numRow = num_row1;
     radCircScr = rad_circ_scr1; distHex = dist1;
@@ -705,12 +714,15 @@ void Arrangement_of_elements::slotMainToArrange(double size_x1, double size_z1, 
     // Изначальное отображение сцены
     regime = true;
     redrawing();
-    ui->radioButton->setChecked(true);
+    ui->radioButtonReceive->setChecked(true);
 }
 
 void Arrangement_of_elements::slotSelectWeightToArrange(double weight1, int i, int j)
 {
-    WeightCoef[i][j] = weight1;
+    if(!regime)
+        WeightCoef[16][i][j] = weight1;
+    else if (regime)
+        WeightCoef[channelNum - 1][i][j] = weight1;
 }
 
 
@@ -719,18 +731,22 @@ Arrangement_of_elements::~Arrangement_of_elements()
     delete ui;
 }
 
-void Arrangement_of_elements::on_radioButton_clicked(bool checked)
+//режим приема
+void Arrangement_of_elements::on_radioButtonReceive_clicked(bool checked)
 {
     if (checked){
         QWidget clear;
         regime = true;
         redrawing();
         disabledChannelButton(false);
+
+        channelNum = 1;
+        ui->ChannelNumButton_1->setDisabled(true);
     }
 }
 
-
-void Arrangement_of_elements::on_radioButton_2_clicked(bool checked)
+//режим передачи
+void Arrangement_of_elements::on_radioButtonRadiation_clicked(bool checked)
 {
     if (checked){
         QWidget clear;
@@ -827,9 +843,11 @@ void Arrangement_of_elements::reshapePlus(int n)
             if (n)
             {
                 ButtonPos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
-                WeightCoef[numRow / 2 + n].push_back(1);
+                for (int i = 0; i < 17; i++)
+                    WeightCoef[i][numRow / 2 + n].push_back(1);
                 ButtonPos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
-                WeightCoef[numRow / 2 + n].push_back(1);
+                for (int i = 0; i < 17; i++)
+                    WeightCoef[i][numRow / 2 + n].push_back(1);
                 for (unsigned int i = 0; i < SelectedElem.size(); i++)
                 {
                     SelectedElem[i][numRow / 2 + n].push_back(false);
@@ -837,9 +855,11 @@ void Arrangement_of_elements::reshapePlus(int n)
                 }
             }
             ButtonPos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
-            WeightCoef[numRow / 2 - n].push_back(1);
+            for (int i = 0; i < 17; i++)
+                WeightCoef[i][numRow / 2 - n].push_back(1);
             ButtonPos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
-            WeightCoef[numRow / 2 - n].push_back(1);
+            for (int i = 0; i < 17; i++)
+                WeightCoef[i][numRow / 2 - n].push_back(1);
             for (unsigned int i = 0; i < SelectedElem.size(); i++)
             {
                 SelectedElem[i][numRow / 2 - n].push_back(false);
@@ -864,12 +884,14 @@ void Arrangement_of_elements::reshapePlus(int n)
                 if (n)
                 {
                     ButtonPos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
-                    WeightCoef[numRow / 2 + n].push_back(1);
+                    for (int i = 0; i < 17; i++)
+                        WeightCoef[i][numRow / 2 + n].push_back(1);
                     for (unsigned int i = 0; i < SelectedElem.size(); i++)
                         SelectedElem[i][numRow / 2 + n].push_back(false);
                 }
                 ButtonPos[numRow / 2 - n].push_back(std::make_tuple(0, 0, 0));
-                WeightCoef[numRow / 2 - n].push_back(1);
+                for (int i = 0; i < 17; i++)
+                    WeightCoef[i][numRow / 2 - n].push_back(1);
                 for (unsigned int i = 0; i < SelectedElem.size(); i++)
                     SelectedElem[i][numRow / 2 - n].push_back(false);
             }
@@ -885,11 +907,13 @@ void Arrangement_of_elements::reshapePlus(int n)
                     CurrNumElem[numRow / 2 - n - 1] += 1;
                     scene->clear();
                     ButtonPos[numRow / 2 + n].push_back(std::make_tuple(0, 0, 0));
-                    WeightCoef[numRow / 2 + n].push_back(1);
+                    for (int i = 0; i < 17; i++)
+                        WeightCoef[i][numRow / 2 + n].push_back(1);
                     for (unsigned int i = 0; i < SelectedElem.size(); i++)
                         SelectedElem[i][numRow / 2 + n].push_back(false);
                     ButtonPos[numRow / 2 - n - 1].push_back(std::make_tuple(0, 0, 0));
-                    WeightCoef[numRow / 2 - n - 1].push_back(1);
+                    for (int i = 0; i < 17; i++)
+                        WeightCoef[i][numRow / 2 - n - 1].push_back(1);
                     for (unsigned int i = 0; i < SelectedElem.size(); i++)
                         SelectedElem[i][numRow / 2 - n - 1].push_back(false);
                     drawCirc();

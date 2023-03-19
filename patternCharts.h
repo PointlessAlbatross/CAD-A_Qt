@@ -31,7 +31,7 @@ public:
 private:
 
     QVector<int> CurrNumElem;
-    QVector<QVector<double> > WeightCoef;
+    std::array<QVector<QVector<double>>, 17>  WeightCoef;
     QVector<QVector<QPair<double,double>>> CenterPos;
     QVector<QVector<std::tuple<int, int, int> > > ButtonPos;
     int overlayType;
@@ -60,7 +60,7 @@ private:
     void drawPolarChart();
 
 public slots:
-    void slotMainToCharts(QVector<int> Curr_num_elem, QVector<QVector<double> > Weight_coef,
+    void slotMainToCharts(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef,
                              QVector<QVector<std::tuple<int, int, int> > > Button_pos,
                              double k,
                              double size_x, double size_z, double dist_x, double dist_z,

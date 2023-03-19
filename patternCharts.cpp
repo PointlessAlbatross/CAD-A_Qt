@@ -39,7 +39,7 @@ double Pattern_charts::D(double theta, double phi)
     }
     return 1;
 }
-
+//проблеммы с каналами
 std::complex<double> Pattern_charts::Dt(double theta, double phi)
 {
     double theta_t = M_PI_2, phi_t = 0;
@@ -50,11 +50,11 @@ std::complex<double> Pattern_charts::Dt(double theta, double phi)
         for(int b = 0; b < CenterPos[a].size(); b++)
         {
                 //[1] Числитель
-                D_numerator += (WeightCoef[a][b] * exp( (1.0*i) * k * (CenterPos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
+                D_numerator += (WeightCoef[0][a][b] * exp( (1.0*i) * k * (CenterPos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
                                                    + CenterPos[a][b].second * (cos (theta) - cos(theta_t))) ) *
                          D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
                 //[2] Знаменатель
-                D_denumerator += WeightCoef[a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2;
+                D_denumerator += WeightCoef[0][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2;
         }
     }
     return D_numerator / D_denumerator;
@@ -173,7 +173,7 @@ void Pattern_charts::drawPolarChart()
 
 
 
-void Pattern_charts::slotMainToCharts(QVector<int> Curr_num_elem1, QVector<QVector<double> > Weight_coef1,
+void Pattern_charts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1,
                          QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
                          double k1,
                          double size_x1, double size_z1, double dist_x1, double dist_z1,

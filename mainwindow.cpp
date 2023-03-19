@@ -15,25 +15,42 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-
-    q = 0;
+    //Предустановленные параметры коррект элем
+    q = 1;
     q1 = 0;
-    freq = 0;       // f
-    deltaFreq = 0;  // delta_f
-    capacity_0 = 0; // C0
-    capacity = 0;   // C
-    resistance = 0; // R
-    inductance = 0; // L
+    freq = 15000;       // f
+    deltaFreq = 30000;  // delta_f
+    capacity_0 = 570; // C0
+    capacity = 240;   // C
+    resistance = 7.3; // R
+    inductance = 460; // L
 
-    ui->setupUi(this);
-    PARAM_WINDOW_FLAG = false;
-    overlayType = 0;
-    ui->action_3->setText("Вид накладки:  4-угольники");
+    //Предустановленные 4угольн элем
+    sizeX = 0.05;
+    sizeZ = 0.05;
+    distX = 0.005;
+    distZ = 0.005;
+
+    //Предустановленные 6угольн элем
+    radCircScr = 0.02;
+    distHex = 0.005;
+
+    radAnt = 0.2;
+    num_row = 5;
+
     duration = 1;
     pressure = 1;
     radiationFreq = 20550;
     receivingFreq = 20000;
     k = radiationFreq * 2 * M_PI / 1500;
+
+
+    ui->setupUi(this);
+    PARAM_WINDOW_FLAG = false;
+    antennaType = 0;
+    ui->antennaTypeAction->setText("Тип антенны:  Амплитудная");
+    overlayType = 0;
+    ui->overlayAction->setText("Вид накладки:  4-угольники");
 }
 
 
@@ -54,7 +71,7 @@ void MainWindow::on_action_triggered() // Растановка элементо�
                                     distX, distZ,
                                     radCircScr, distHex,
                                     radAnt, num_row, Max_elem, CurrNumElem,  WeightCoef, SelectedElem,
-                                    overlayType);
+                                    antennaType, overlayType);
         connect(&window, &Arrangement_of_elements::signalArrangeToMain, this, &MainWindow::slotArrangeToMain);
         window.setModal(true);
         window.exec();
@@ -104,13 +121,19 @@ void MainWindow::slotParamRectToMain(double size_x1, double size_z1,
     distZ = dist_z1; radAnt = rad_ant1; num_row = num_row1;
     PARAM_WINDOW_FLAG = true; Max_elem = Max_elem1;
     CurrNumElem = Max_elem1;
-    WeightCoef.resize(num_row);
-    for (int i = 0; i < num_row; i++)
-        WeightCoef[i].resize(Max_elem[i]);
-    for (int i = 0; i < WeightCoef.size(); i++)
+    for (int i = 0; i < 17; i++)
     {
-        for (int j = 0; j < WeightCoef[i].size(); j++)
-            WeightCoef[i][j] = 1;
+        WeightCoef[i].resize(num_row);
+        for (int j = 0; j < num_row; j++)
+            WeightCoef[i][j].resize(Max_elem[j]);
+    }
+    for (int k = 0; k < 17; k++)
+    {
+        for (int i = 0; i < WeightCoef[k].size(); i++)
+        {
+            for (int j = 0; j < WeightCoef[k][i].size(); j++)
+                WeightCoef[k][i][j] = 1;
+        }
     }
     for (unsigned int i = 0; i < SelectedElem.size(); i++)
     {
@@ -126,13 +149,16 @@ void MainWindow::slotParamHexToMain(double rad_circ_scr_1, double distHex_1, dou
     radAnt = rad_ant_1; num_row = num_row_1;
     PARAM_WINDOW_FLAG = true; Max_elem = Max_elem_1;
     CurrNumElem = Max_elem_1;
-    WeightCoef.resize(num_row);
-    for (int i = 0; i < num_row; i++)
-        WeightCoef[i].resize(Max_elem[i]);
-    for (int i = 0; i < WeightCoef.size(); i++)
+    for (int k = 0; k < 17; k++)
     {
-        for (int j = 0; j < WeightCoef[i].size(); j++)
-            WeightCoef[i][j] = 1;
+        WeightCoef[k].resize(num_row);
+        for (int i = 0; i < num_row; i++)
+            WeightCoef[k][i].resize(Max_elem[i]);
+        for (int i = 0; i < WeightCoef[k].size(); i++)
+        {
+            for (int j = 0; j < WeightCoef[k][i].size(); j++)
+                WeightCoef[k][i][j] = 1;
+        }
     }
     for (unsigned int i = 0; i < SelectedElem.size(); i++)
     {
@@ -152,7 +178,7 @@ void MainWindow::slotOperatingSystemParametersToMain(int duration1, int pressure
     qDebug() <<"k = " << k << Qt::endl;
 }
 
-void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, QVector<QVector<double> > Weight_coef1, QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
+void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
                                       int size_x_pix1, int size_z_pix1, int dist_x_pix1, int dist_z_pix1,
                                       int rad_circ_scr_pix1, int dist_hex_pix1)
 {
@@ -179,14 +205,18 @@ void MainWindow::slot_selectionOfCorrectiveElementsToMain_save(double qSlot, dou
     inductance = L;
 }
 
+// Расчет эквивалентных параметров
 void MainWindow::slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot, double q1Slot, double f,
                                                                     double delta_f, double C0, double C,
                                                                     double R, double L)
 {
-    // Расчет эквивалентных параметров
+
     double f0 = f - delta_f / 2.0;
     double f1 = f + delta_f / 2.0;
     double w_r = f0;
+    if(w_r == 0)
+        w_r += 1;
+
     auto k0Fn = [R, C0, L, C](double w)
     {
         double b = R * w * C0;
@@ -195,14 +225,24 @@ void MainWindow::slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot
         return pow(a, 2) + pow(b, 2);
     };
     double abs_k0Max = k0Fn(w_r);
+
     for (double w = f0; w < f1; w += delta_f / 100.0)
     {
+        bool fl = false;
+        if(w == 0)
+        {
+            w += 1;
+            fl = true;
+        }
         if (k0Fn(w)>abs_k0Max)
         {
             abs_k0Max = k0Fn(w);
             w_r = w;
         }
+        if (fl)
+            w -= 1;
     }
+
     double abs_Z0 = 1 / (w_r * C0);
     auto kFn = [R, C0, L, C, qSlot, q1Slot, abs_Z0] (double w)
     {
@@ -213,13 +253,28 @@ void MainWindow::slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot
         double B = b - 1 / (abs_Z0 * (pow(qSlot, 2) + pow(q1Slot, 2)))*(R*q1Slot - X*qSlot);
         return pow(A, 2) + pow(B, 2);
     };
-    for (double w = f0; w < f1; w += delta_f / 100.0)
+    QVector<double> w_ar;
+    for (double w = f0 * 2; w < f1; w += delta_f / 100.0)
     {
-        abs_K.push_back(20*log10(kFn(w)/k0Fn(w_r)));
-        abs_K0.push_back(20*log10(k0Fn(w)/k0Fn(w_r)));
+        bool fl = false;
+        if(w == 0)
+        {
+            w += 1;
+            fl = true;
+        }
+
+        abs_K.push_back(round(20*log10(kFn(w)/k0Fn(w_r)) * 100)/100);
+        abs_K0.push_back(round(20*log10(k0Fn(w)/k0Fn(w_r)) * 100)/100);
+        if (fl)
+            w -= 1;
+        w_ar.push_back(w);
     }
+    qDebug() << w_ar <<Qt::endl;
     qDebug() << abs_K <<Qt::endl;
     qDebug() << abs_K0 <<Qt::endl;
+    qDebug() << k0Fn(w_r) <<Qt::endl;
+    qDebug() << w_r <<Qt::endl;
+    qDebug() << abs_k0Max <<Qt::endl;
 }
 
 
@@ -234,20 +289,33 @@ void MainWindow::on_action_2_triggered() // Рабочие параметры с
     window.exec();
 }
 
-void MainWindow::on_action_3_triggered()
+void MainWindow::on_overlayAction_triggered()
 {
     if (!overlayType)
     {
-        ui->action_3->setText("Вид накладки:  6-угольники");
+        ui->overlayAction->setText("Вид накладки:  6-угольники");
         overlayType = 1;
     }
     else
     {
-        ui->action_3->setText("Вид накладки:  4-угольники");
+        ui->overlayAction->setText("Вид накладки:  4-угольники");
         overlayType = 0;
     }
 }
 
+void MainWindow::on_antennaTypeAction_triggered()
+{
+    if (!antennaType)
+    {
+        ui->antennaTypeAction->setText("Тип антенны:  Фазовая");
+        antennaType = 1;
+    }
+    else
+    {
+        ui->antennaTypeAction->setText("Тип антенны:  Амплитудная");
+        antennaType = 0;
+    }
+}
 
 void MainWindow::on_charts_action_triggered()
 {
@@ -274,4 +342,7 @@ void MainWindow::on_corrective_action_triggered()
     window.setModal(true);
     window.exec();
 }
+
+
+
 

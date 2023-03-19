@@ -33,7 +33,8 @@
     <property name="title">
      <string>Данные</string>
     </property>
-    <addaction name="action_3"/>
+    <addaction name="antennaTypeAction"/>
+    <addaction name="overlayAction"/>
     <addaction name="separator"/>
     <addaction name="antenna_array"/>
     <addaction name="action_2"/>
@@ -133,9 +134,12 @@
     <string>Рабочие параметры системы</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="overlayAction">
    <property name="text">
-    <string>Тип антенны</string>
+    <string>Вид накладки</string>
+   </property>
+   <property name="toolTip">
+    <string>Вид накладки</string>
    </property>
   </action>
   <action name="charts_action">
@@ -146,6 +150,11 @@
   <action name="corrective_action">
    <property name="text">
     <string>Подбор корректирующих элементов</string>
+   </property>
+  </action>
+  <action name="antennaTypeAction">
+   <property name="text">
+    <string>Тип антенны</string>
    </property>
   </action>
  </widget>

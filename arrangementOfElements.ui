@@ -222,14 +222,14 @@
    <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout1">
      <item>
-      <widget class="QRadioButton" name="radioButton">
+      <widget class="QRadioButton" name="radioButtonReceive">
        <property name="text">
         <string>Приемная антенна</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radioButton_2">
+      <widget class="QRadioButton" name="radioButtonRadiation">
        <property name="text">
         <string>Излучающая антенна</string>
        </property>
