@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     ui->setupUi(this);
-    PARAM_WINDOW_FLAG = false;
+    PARAM_WINDOW_FLAG = true;
     antennaType = 0;
     ui->antennaTypeAction->setText("Тип антенны:  Амплитудная");
     overlayType = 0;

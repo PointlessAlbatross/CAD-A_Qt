@@ -12,9 +12,9 @@ Arrangement_of_elements::Arrangement_of_elements(QWidget *parent) :
     ui(new Ui::Arrangement_of_elements)
 {
     diamPix = 500 * scaleKoef; // число пикселей в диаметре
-    channelNum = 1;
+    groupNum = 1;
     ui->setupUi(this);
-    ui->ChannelNumButton_1->setDisabled(true);
+    ui->groupNumButton_1->setDisabled(true);
     selectedChanelNum = 1;
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
@@ -57,8 +57,10 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
                                         connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
                                         if (!regime)
                                             emit signalArrangeToSelectWeight(WeightCoef[16][i][j], i, j, std::get<2>(ButtonPos[i][j]));
-                                        else if(regime)
-                                            emit signalArrangeToSelectWeight(WeightCoef[channelNum - 1][i][j], i, j, std::get<2>(ButtonPos[i][j]));
+                                        else if(!antennaType)
+                                            emit signalArrangeToSelectWeight(WeightCoef[0][i][j], i, j, std::get<2>(ButtonPos[i][j]));
+                                        else
+                                            emit signalArrangeToSelectWeight(WeightCoef[groupNum - 1][i][j], i, j, std::get<2>(ButtonPos[i][j]));
                                         connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
                                         window.setModal(true);
                                         window.exec();
@@ -75,10 +77,10 @@ void Arrangement_of_elements::rectClick(QObject *watched, QEvent *event)
                                         if (regime)
                                         {
 
-                                            if(!SelectedElem[channelNum - 1][i][j])
-                                               SelectedElem[channelNum - 1][i][j] = true;
+                                            if(!SelectedElem[groupNum - 1][i][j])
+                                               SelectedElem[groupNum - 1][i][j] = true;
                                             else
-                                               SelectedElem[channelNum - 1][i][j] = false;
+                                               SelectedElem[groupNum - 1][i][j] = false;
                                             scene->clear();
                                             drawCirc();
                                             redrawing();
@@ -139,10 +141,10 @@ void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
                                       )
                                     {
                                        qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
-                                       qDebug() << WeightCoef[channelNum - 1] << Qt::endl;
+                                       qDebug() << WeightCoef[groupNum - 1] << Qt::endl;
                                        Select_weight window;
                                        connect(this, &Arrangement_of_elements::signalArrangeToSelectWeight, &window, &Select_weight::slotArrangeToSelectWeigth);
-                                       emit signalArrangeToSelectWeight(WeightCoef[channelNum - 1][i][j], i, j, std::get<2>(ButtonPos[i][j]));
+                                       emit signalArrangeToSelectWeight(WeightCoef[groupNum - 1][i][j], i, j, std::get<2>(ButtonPos[i][j]));
                                        connect(&window, &Select_weight::signalSelectWeightToArrange, this, &Arrangement_of_elements::slotSelectWeightToArrange);
                                        window.setModal(true);
                                        window.exec();
@@ -160,13 +162,13 @@ void Arrangement_of_elements::hexClick(QObject *watched, QEvent *event)
                                         if (regime)
                                         {
                                             qDebug()<< i + 1 << " " << j + 1 << " " << std::get<2>(ButtonPos[i][j]) <<Qt::endl;
-                                            qDebug() << SelectedElem[channelNum - 1][i][j] << Qt::endl;
+                                            qDebug() << SelectedElem[groupNum - 1][i][j] << Qt::endl;
                                             qDebug() << "координаты выбранного элемента" <<std::get<0>(ButtonPos[i][j])<<std::get<1>(ButtonPos[i][j]) << Qt::endl;
                                             qDebug() << "rad_src_pix" <<radCircScrPix << Qt::endl;
-                                            if(!SelectedElem[channelNum - 1][i][j])
-                                               SelectedElem[channelNum - 1][i][j] = true;
+                                            if(!SelectedElem[groupNum - 1][i][j])
+                                               SelectedElem[groupNum - 1][i][j] = true;
                                             else
-                                               SelectedElem[channelNum - 1][i][j] = false;
+                                               SelectedElem[groupNum - 1][i][j] = false;
                                             scene->clear();
                                             drawCirc();
                                             redrawing();
@@ -246,24 +248,24 @@ void Arrangement_of_elements::hideReshapeButtons()
     }
 }
 
-void Arrangement_of_elements::disabledChannelButton(bool b)
+void Arrangement_of_elements::disabledGroupButton(bool b)
 {
-    ui->ChannelNumButton_1->setDisabled(b);
-    ui->ChannelNumButton_2->setDisabled(b);
-    ui->ChannelNumButton_3->setDisabled(b);
-    ui->ChannelNumButton_4->setDisabled(b);
-    ui->ChannelNumButton_5->setDisabled(b);
-    ui->ChannelNumButton_6->setDisabled(b);
-    ui->ChannelNumButton_7->setDisabled(b);
-    ui->ChannelNumButton_8->setDisabled(b);
-    ui->ChannelNumButton_9->setDisabled(b);
-    ui->ChannelNumButton_10->setDisabled(b);
-    ui->ChannelNumButton_11->setDisabled(b);
-    ui->ChannelNumButton_12->setDisabled(b);
-    ui->ChannelNumButton_13->setDisabled(b);
-    ui->ChannelNumButton_14->setDisabled(b);
-    ui->ChannelNumButton_15->setDisabled(b);
-    ui->ChannelNumButton_16->setDisabled(b);
+    ui->groupNumButton_1->setDisabled(b);
+    ui->groupNumButton_2->setDisabled(b);
+    ui->groupNumButton_3->setDisabled(b);
+    ui->groupNumButton_4->setDisabled(b);
+    ui->groupNumButton_5->setDisabled(b);
+    ui->groupNumButton_6->setDisabled(b);
+    ui->groupNumButton_7->setDisabled(b);
+    ui->groupNumButton_8->setDisabled(b);
+    ui->groupNumButton_9->setDisabled(b);
+    ui->groupNumButton_10->setDisabled(b);
+    ui->groupNumButton_11->setDisabled(b);
+    ui->groupNumButton_12->setDisabled(b);
+    ui->groupNumButton_13->setDisabled(b);
+    ui->groupNumButton_14->setDisabled(b);
+    ui->groupNumButton_15->setDisabled(b);
+    ui->groupNumButton_16->setDisabled(b);
 }
 
 void Arrangement_of_elements::wheelEvent(QWheelEvent *event)
@@ -303,7 +305,7 @@ void Arrangement_of_elements::drawRect (int x, int z, int size_x_pix, int size_z
 {
     if (regime)
     {
-        if (SelectedElem[channelNum - 1][j][i])
+        if (SelectedElem[groupNum - 1][j][i])
         {
             QPen pen(Qt::black);
             pen.setWidth(int (scaleKoef));
@@ -339,7 +341,7 @@ void Arrangement_of_elements::drawHex(int x, int y, int rad_circ_scr_pix, int j,
 {
     if (regime)
     {
-        if (SelectedElem[channelNum - 1][j][i])
+        if (SelectedElem[groupNum - 1][j][i])
         {
             QPen pen(Qt::black);
             pen.setWidth(int (scaleKoef));
@@ -719,10 +721,12 @@ void Arrangement_of_elements::slotMainToArrange(double size_x1, double size_z1, 
 
 void Arrangement_of_elements::slotSelectWeightToArrange(double weight1, int i, int j)
 {
-    if(!regime)
+    if(!regime) // режим излучения
         WeightCoef[16][i][j] = weight1;
-    else if (regime)
-        WeightCoef[channelNum - 1][i][j] = weight1;
+    else if (antennaType == 0) // амплитудная антенна
+        WeightCoef[0][i][j] = weight1;
+    else
+        WeightCoef[groupNum - 1][i][j] = weight1;
 }
 
 
@@ -738,10 +742,10 @@ void Arrangement_of_elements::on_radioButtonReceive_clicked(bool checked)
         QWidget clear;
         regime = true;
         redrawing();
-        disabledChannelButton(false);
+        disabledGroupButton(false);
 
-        channelNum = 1;
-        ui->ChannelNumButton_1->setDisabled(true);
+        groupNum = 1;
+        ui->groupNumButton_1->setDisabled(true);
     }
 }
 
@@ -752,7 +756,7 @@ void Arrangement_of_elements::on_radioButtonRadiation_clicked(bool checked)
         QWidget clear;
         regime = false;
         redrawing();
-        disabledChannelButton(true);
+        disabledGroupButton(true);
     }
 }
 
@@ -1009,132 +1013,132 @@ void Arrangement_of_elements::reshapeMinus(int n)
 }
 
 
-void Arrangement_of_elements::on_ChannelNumButton_1_clicked()
+void Arrangement_of_elements::on_groupNumButton_1_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_1->setDisabled(true);
-    channelNum = 1;
+    disabledGroupButton(false);
+    ui->groupNumButton_1->setDisabled(true);
+    groupNum = 1;
     redrawing();
 
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_2_clicked()
+void Arrangement_of_elements::on_groupNumButton_2_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_2->setDisabled(true);
-    channelNum = 2;
+    disabledGroupButton(false);
+    ui->groupNumButton_2->setDisabled(true);
+    groupNum = 2;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_3_clicked()
+void Arrangement_of_elements::on_groupNumButton_3_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_3->setDisabled(true);
-    channelNum = 3;
+    disabledGroupButton(false);
+    ui->groupNumButton_3->setDisabled(true);
+    groupNum = 3;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_4_clicked()
+void Arrangement_of_elements::on_groupNumButton_4_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_4->setDisabled(true);
-    channelNum = 4;
+    disabledGroupButton(false);
+    ui->groupNumButton_4->setDisabled(true);
+    groupNum = 4;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_5_clicked()
+void Arrangement_of_elements::on_groupNumButton_5_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_5->setDisabled(true);
-    channelNum = 5;
+    disabledGroupButton(false);
+    ui->groupNumButton_5->setDisabled(true);
+    groupNum = 5;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_6_clicked()
+void Arrangement_of_elements::on_groupNumButton_6_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_6->setDisabled(true);
-    channelNum = 6;
+    disabledGroupButton(false);
+    ui->groupNumButton_6->setDisabled(true);
+    groupNum = 6;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_7_clicked()
+void Arrangement_of_elements::on_groupNumButton_7_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_7->setDisabled(true);
-    channelNum = 7;
+    disabledGroupButton(false);
+    ui->groupNumButton_7->setDisabled(true);
+    groupNum = 7;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_8_clicked()
+void Arrangement_of_elements::on_groupNumButton_8_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_8->setDisabled(true);
-    channelNum = 8;
+    disabledGroupButton(false);
+    ui->groupNumButton_8->setDisabled(true);
+    groupNum = 8;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_9_clicked()
+void Arrangement_of_elements::on_groupNumButton_9_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_9->setDisabled(true);
-    channelNum = 9;
+    disabledGroupButton(false);
+    ui->groupNumButton_9->setDisabled(true);
+    groupNum = 9;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_10_clicked()
+void Arrangement_of_elements::on_groupNumButton_10_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_10->setDisabled(true);
-    channelNum = 10;
+    disabledGroupButton(false);
+    ui->groupNumButton_10->setDisabled(true);
+    groupNum = 10;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_11_clicked()
+void Arrangement_of_elements::on_groupNumButton_11_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_11->setDisabled(true);
-    channelNum = 11;
+    disabledGroupButton(false);
+    ui->groupNumButton_11->setDisabled(true);
+    groupNum = 11;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_12_clicked()
+void Arrangement_of_elements::on_groupNumButton_12_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_12->setDisabled(true);
-    channelNum = 12;
+    disabledGroupButton(false);
+    ui->groupNumButton_12->setDisabled(true);
+    groupNum = 12;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_13_clicked()
+void Arrangement_of_elements::on_groupNumButton_13_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_13->setDisabled(true);
-    channelNum = 13;
+    disabledGroupButton(false);
+    ui->groupNumButton_13->setDisabled(true);
+    groupNum = 13;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_14_clicked()
+void Arrangement_of_elements::on_groupNumButton_14_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_14->setDisabled(true);
-    channelNum = 14;
+    disabledGroupButton(false);
+    ui->groupNumButton_14->setDisabled(true);
+    groupNum = 14;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_15_clicked()
+void Arrangement_of_elements::on_groupNumButton_15_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_15->setDisabled(true);
-    channelNum = 15;
+    disabledGroupButton(false);
+    ui->groupNumButton_15->setDisabled(true);
+    groupNum = 15;
     redrawing();
 }
 
-void Arrangement_of_elements::on_ChannelNumButton_16_clicked()
+void Arrangement_of_elements::on_groupNumButton_16_clicked()
 {
-    disabledChannelButton(false);
-    ui->ChannelNumButton_16->setDisabled(true);
-    channelNum = 16;
+    disabledGroupButton(false);
+    ui->groupNumButton_16->setDisabled(true);
+    groupNum = 16;
     redrawing();
 }
 

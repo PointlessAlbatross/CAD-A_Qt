@@ -240,7 +240,7 @@
    <item row="1" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_1">
+      <widget class="QPushButton" name="groupNumButton_1">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -253,7 +253,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_2">
+      <widget class="QPushButton" name="groupNumButton_2">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -266,7 +266,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_3">
+      <widget class="QPushButton" name="groupNumButton_3">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -279,7 +279,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_4">
+      <widget class="QPushButton" name="groupNumButton_4">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -292,7 +292,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_5">
+      <widget class="QPushButton" name="groupNumButton_5">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -305,7 +305,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_6">
+      <widget class="QPushButton" name="groupNumButton_6">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -318,7 +318,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_7">
+      <widget class="QPushButton" name="groupNumButton_7">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -331,7 +331,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_8">
+      <widget class="QPushButton" name="groupNumButton_8">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -344,7 +344,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_9">
+      <widget class="QPushButton" name="groupNumButton_9">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -357,7 +357,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_10">
+      <widget class="QPushButton" name="groupNumButton_10">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -370,7 +370,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_11">
+      <widget class="QPushButton" name="groupNumButton_11">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -383,7 +383,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_12">
+      <widget class="QPushButton" name="groupNumButton_12">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -396,7 +396,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_13">
+      <widget class="QPushButton" name="groupNumButton_13">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -409,7 +409,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_14">
+      <widget class="QPushButton" name="groupNumButton_14">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -422,7 +422,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_15">
+      <widget class="QPushButton" name="groupNumButton_15">
        <property name="maximumSize">
         <size>
          <width>28</width>
@@ -435,7 +435,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ChannelNumButton_16">
+      <widget class="QPushButton" name="groupNumButton_16">
        <property name="maximumSize">
         <size>
          <width>28</width>

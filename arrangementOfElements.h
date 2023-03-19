@@ -53,7 +53,7 @@ private:
     int distHexPix;
 
     int numRow;
-    int channelNum;
+    int groupNum;
 
     QVector<int> MaxElem;
     QVector<int> CurrNumElem;
@@ -76,7 +76,7 @@ private:
     void reshapePlus(int n);
     void reshapeMinus(int n);
     void hideReshapeButtons();
-    void disabledChannelButton(bool b);
+    void disabledGroupButton(bool b);
     bool eventFilter(QObject *watched, QEvent *event);
     void rectClick(QObject *watched, QEvent *event);
     bool rectCheck(int x, int y, int getx, int gety);
@@ -117,22 +117,22 @@ private slots:
     void on_ButtonMinus_7_clicked();
 
 
-    void on_ChannelNumButton_1_clicked();
-    void on_ChannelNumButton_2_clicked();
-    void on_ChannelNumButton_3_clicked();
-    void on_ChannelNumButton_4_clicked();
-    void on_ChannelNumButton_5_clicked();
-    void on_ChannelNumButton_6_clicked();
-    void on_ChannelNumButton_7_clicked();
-    void on_ChannelNumButton_8_clicked();
-    void on_ChannelNumButton_9_clicked();
-    void on_ChannelNumButton_10_clicked();
-    void on_ChannelNumButton_11_clicked();
-    void on_ChannelNumButton_12_clicked();
-    void on_ChannelNumButton_13_clicked();
-    void on_ChannelNumButton_14_clicked();
-    void on_ChannelNumButton_15_clicked();
-    void on_ChannelNumButton_16_clicked();
+    void on_groupNumButton_1_clicked();
+    void on_groupNumButton_2_clicked();
+    void on_groupNumButton_3_clicked();
+    void on_groupNumButton_4_clicked();
+    void on_groupNumButton_5_clicked();
+    void on_groupNumButton_6_clicked();
+    void on_groupNumButton_7_clicked();
+    void on_groupNumButton_8_clicked();
+    void on_groupNumButton_9_clicked();
+    void on_groupNumButton_10_clicked();
+    void on_groupNumButton_11_clicked();
+    void on_groupNumButton_12_clicked();
+    void on_groupNumButton_13_clicked();
+    void on_groupNumButton_14_clicked();
+    void on_groupNumButton_15_clicked();
+    void on_groupNumButton_16_clicked();
     void on_saveButton_clicked();
 };
 
