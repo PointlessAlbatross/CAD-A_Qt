@@ -11,6 +11,7 @@ SOURCES += \
     antennaArrayParametersHex.cpp \
     antennaArrayParametersRect.cpp \
     arrangementOfElements.cpp \
+    cadAMath.cpp \
     main.cpp \
     mainwindow.cpp \
     operatingSystemParameters.cpp \
@@ -21,6 +22,7 @@ HEADERS += \
     antennaArrayParametersHex.h \
     antennaArrayParametersRect.h \
     arrangementOfElements.h \
+    cadAMath.h \
     mainwindow.h \
     operatingSystemParameters.h \
     patternCharts.h \
