@@ -1,13 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "operatingSystemParameters.h"
-#include "arrangementOfElements.h"
-#include "antennaArrayParametersRect.h"
-#include "antennaArrayParametersHex.h"
-#include "selectionOfCorrectiveElements.h"
-#include "patternCharts.h"
-#include <QMessageBox>
-#include <QDebug>
+
 
 
     //Конструктор//
@@ -333,12 +326,12 @@ void MainWindow::on_charts_action_triggered()
 
 void MainWindow::on_corrective_action_triggered()
 {
-    selectionOfCorrectiveElements window;
-    connect(this, &MainWindow::signal_mainToSelectionOfCorrectiveElements, &window, &selectionOfCorrectiveElements::slot_mainToSelectionOfCorrectiveElements);
+    SelectionOfCorrectiveElements window;
+    connect(this, &MainWindow::signal_mainToSelectionOfCorrectiveElements, &window, &SelectionOfCorrectiveElements::slot_mainToSelectionOfCorrectiveElements);
     emit signal_mainToSelectionOfCorrectiveElements(q, q1, freq, deltaFreq, capacity_0,
                                                     capacity, resistance, inductance);
-    connect(&window, &selectionOfCorrectiveElements::signal_selectionOfCorrectiveElementsToMain_save, this, &MainWindow::slot_selectionOfCorrectiveElementsToMain_save);
-    connect(&window, &selectionOfCorrectiveElements::signal_selectionOfCorrectiveElementsToMain_calculate, this, &MainWindow::slot_selectionOfCorrectiveElementsToMain_calculate);
+    connect(&window, &SelectionOfCorrectiveElements::signal_selectionOfCorrectiveElementsToMain_save, this, &MainWindow::slot_selectionOfCorrectiveElementsToMain_save);
+    connect(&window, &SelectionOfCorrectiveElements::signal_selectionOfCorrectiveElementsToMain_calculate, this, &MainWindow::slot_selectionOfCorrectiveElementsToMain_calculate);
     window.setModal(true);
     window.exec();
 }
@@ -383,5 +376,31 @@ void MainWindow::on_powerDiffuseInterf_triggered()
     double R1 = Hpa / cos(THETA0);
 
     */
+}
+
+
+
+
+
+void MainWindow::on_workingEnvironmentSettingsAction_triggered()
+{
+    /*
+    SelectionOfCorrectiveElements window;
+    connect(this, &MainWindow::signal_mainToSelectionOfCorrectiveElements, &window, &SelectionOfCorrectiveElements::slot_mainToSelectionOfCorrectiveElements);
+    emit signal_mainToSelectionOfCorrectiveElements(q, q1, freq, deltaFreq, capacity_0,
+                                                    capacity, resistance, inductance);
+    connect(&window, &SelectionOfCorrectiveElements::signal_SelectionOfCorrectiveElementsToMain_save, this, &MainWindow::slot_SelectionOfCorrectiveElementsToMain_save);
+    connect(&window, &SelectionOfCorrectiveElements::signal_SelectionOfCorrectiveElementsToMain_calculate, this, &MainWindow::slot_SelectionOfCorrectiveElementsToMain_calculate);
+    window.setModal(true);
+    window.exec();
+    */
+}
+
+
+
+
+void MainWindow::on_carrierParametersAction_triggered()
+{
+
 }
 

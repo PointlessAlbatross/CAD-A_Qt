@@ -1,5 +1,5 @@
-#ifndef CARRIERPARAMETERS_H
-#define CARRIERPARAMETERS_H
+#ifndef CARRIER_PARAMETERS_H
+#define CARRIER_PARAMETERS_H
 
 #include <QDialog>
 
@@ -19,4 +19,4 @@ private:
     Ui::CarrierParameters *ui;
 };
 
-#endif // CARRIERPARAMETERS_H
+#endif // CARRIER_PARAMETERS_H

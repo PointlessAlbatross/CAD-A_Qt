@@ -4,16 +4,16 @@
 #include <QDialog>
 
 namespace Ui {
-class selectionOfCorrectiveElements;
+class SelectionOfCorrectiveElements;
 }
 
-class selectionOfCorrectiveElements : public QDialog
+class SelectionOfCorrectiveElements : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit selectionOfCorrectiveElements(QWidget *parent = nullptr);
-    ~selectionOfCorrectiveElements();
+    explicit SelectionOfCorrectiveElements(QWidget *parent = nullptr);
+    ~SelectionOfCorrectiveElements();
 
 private slots:
 
@@ -25,7 +25,7 @@ private slots:
     void on_calculateButton_clicked();
 
 private:
-    Ui::selectionOfCorrectiveElements *ui;
+    Ui::SelectionOfCorrectiveElements *ui;
 
     double q;
     double q1;

@@ -2,11 +2,23 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
 #include <antennaArrayParametersRect.h>
 #include <antennaArrayParametersHex.h>
+#include "operatingSystemParameters.h"
+#include "arrangementOfElements.h"
+#include "antennaArrayParametersRect.h"
+#include "antennaArrayParametersHex.h"
+#include "selectionOfCorrectiveElements.h"
+#include "patternCharts.h"
+#include "workingEnvironmentSettings.h"
+#include "carrierParameters.h"
+
 #include <array>
 #include <functional>
 #include "cadAMath.h"
+#include <QMessageBox>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -92,6 +104,11 @@ private slots:
     void on_elemTurbulentInterf_triggered();
 
     void on_powerDiffuseInterf_triggered();
+
+    void on_workingEnvironmentSettingsAction_triggered();
+
+
+    void on_carrierParametersAction_triggered();
 
 signals:
     void signalMainToParamRect(double size_x, double size_z,

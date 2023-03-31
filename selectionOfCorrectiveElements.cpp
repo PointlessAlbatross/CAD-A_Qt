@@ -1,9 +1,9 @@
 #include "selectionOfCorrectiveElements.h"
 #include "ui_selectionOfCorrectiveElements.h"
 
-selectionOfCorrectiveElements::selectionOfCorrectiveElements(QWidget *parent) :
+SelectionOfCorrectiveElements::SelectionOfCorrectiveElements(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::selectionOfCorrectiveElements)
+    ui(new Ui::SelectionOfCorrectiveElements)
 {
     ui->setupUi(this);
     // выделение верхнего виджета
@@ -11,17 +11,17 @@ selectionOfCorrectiveElements::selectionOfCorrectiveElements(QWidget *parent) :
     ui->qBox->selectAll();
 }
 
-selectionOfCorrectiveElements::~selectionOfCorrectiveElements()
+SelectionOfCorrectiveElements::~SelectionOfCorrectiveElements()
 {
     delete ui;
 }
 
-void selectionOfCorrectiveElements::on_cancelButton_clicked()
+void SelectionOfCorrectiveElements::on_cancelButton_clicked()
 {
     QWidget::close();
 }
 
-void selectionOfCorrectiveElements::slot_mainToSelectionOfCorrectiveElements(double qSlot, double q1Slot,
+void SelectionOfCorrectiveElements::slot_mainToSelectionOfCorrectiveElements(double qSlot, double q1Slot,
                                                                              double f, double delta_f,
                                                                              double C0, double C,
                                                                              double R, double L)
@@ -37,7 +37,7 @@ void selectionOfCorrectiveElements::slot_mainToSelectionOfCorrectiveElements(dou
 }
 
 
-void selectionOfCorrectiveElements::on_saveButton_clicked()
+void SelectionOfCorrectiveElements::on_saveButton_clicked()
 {
     emit signal_selectionOfCorrectiveElementsToMain_save(ui->qBox->value(), ui->q1Box->value(), ui->freqBox->value(),
                                                          ui->deltaFreqBox->value(), ui->capacityC0Box->value(), ui->capacityCBox->value(),
@@ -46,7 +46,7 @@ void selectionOfCorrectiveElements::on_saveButton_clicked()
 }
 
 
-void selectionOfCorrectiveElements::on_calculateButton_clicked()
+void SelectionOfCorrectiveElements::on_calculateButton_clicked()
 {
     emit signal_selectionOfCorrectiveElementsToMain_calculate(ui->qBox->value(), ui->q1Box->value(), ui->freqBox->value(),
                                                          ui->deltaFreqBox->value(), ui->capacityC0Box->value(), ui->capacityCBox->value(),
