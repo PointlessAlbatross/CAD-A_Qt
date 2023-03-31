@@ -71,6 +71,7 @@
     <addaction name="corrective_action"/>
     <addaction name="separator"/>
     <addaction name="menu_6"/>
+    <addaction name="powerDiffuseInterf"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -168,6 +169,11 @@
   <action name="elemTurbulentInterf">
    <property name="text">
     <string>По элементам</string>
+   </property>
+  </action>
+  <action name="powerDiffuseInterf">
+   <property name="text">
+    <string>Рассеянная помеха</string>
    </property>
   </action>
  </widget>

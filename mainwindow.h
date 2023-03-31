@@ -91,6 +91,8 @@ private slots:
 
     void on_elemTurbulentInterf_triggered();
 
+    void on_powerDiffuseInterf_triggered();
+
 signals:
     void signalMainToParamRect(double size_x, double size_z,
                 double dist_x, double dist_z,

@@ -381,6 +381,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         1/R2 * pow(10, -0.1*beta(f)*R);
     }
     double R1 = Hpa / cos(THETA0);
+
     */
 }
 

@@ -39,7 +39,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>Rn / |Z0| (q1)</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rn / |Z0| (q1)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
