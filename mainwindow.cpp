@@ -346,3 +346,41 @@ void MainWindow::on_corrective_action_triggered()
 
 
 
+
+void MainWindow::on_elemTurbulentInterf_triggered()
+{
+    /*
+    int quantityElem = 0;
+    for (int i = 0; i < ButtonPos.size(); i++)
+    {
+       quantityElem += ButtonPos[i].size();
+    }
+    double S;
+    if (overlayType == 0) // прямоугольники
+        S = sizeX*sizeZ;
+    else
+        S = 3/2*sqrt(3)*pow(radCircScr,2);
+    double q = 1.0;
+    ElemetTurbPower.resize(ButtonPos.size()*ButtonPos.size());
+    for (int i = 0; i < ButtonPos.size(); i++)
+    {
+        for (int j = 0; j < ButtonPos[i].size(); j++)
+        {
+           ElemetTurbPower[i+j] = q * radAnt / (4*pi*pow(S, 2));
+        }
+    }*/
+}
+
+
+void MainWindow::on_powerDiffuseInterf_triggered()
+{
+    /*
+    double R2 = Hpa / abs(cos(THETA));
+    auto Hd = [R2] (R, f)
+    {
+        1/R2 * pow(10, -0.1*beta(f)*R);
+    }
+    double R1 = Hpa / cos(THETA0);
+    */
+}
+

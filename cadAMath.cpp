@@ -1,12 +1,12 @@
 #include "cadAMath.h"
 
-cadAMath::cadAMath()
+CadAMath::CadAMath()
 {
 
 }
 
 
-double cadAMath::simpson(std::function<double (double)> f, double a, double b, int n)
+double CadAMath::simpson(std::function<double (double)> f, double a, double b, int n)
 {
     double h = (b - a) / n;
 
@@ -23,7 +23,7 @@ double cadAMath::simpson(std::function<double (double)> f, double a, double b, i
         return integral;
 }
 
-double cadAMath::simpson2(std::function<double (double, double)> f, double a1, double b1, double a2, double b2, int n1, int n2)
+double CadAMath::simpson2(std::function<double (double, double)> f, double a1, double b1, double a2, double b2, int n1, int n2)
 {
     double h1 = (b1 - a1) / n1;
     double h2 = (b2 - a2) / n2;
@@ -46,7 +46,7 @@ double cadAMath::simpson2(std::function<double (double, double)> f, double a1, d
     return (b1 - a1) * (b2 - a2) * sum / (n1 * n2);
 }
 
-double cadAMath::simpson3(std::function<double (double, double, double)> f, double a1, double b1, double a2, double b2, double a3, double b3, int n1, int n2, int n3)
+double CadAMath::simpson3(std::function<double (double, double, double)> f, double a1, double b1, double a2, double b2, double a3, double b3, int n1, int n2, int n3)
 {
     double h1 = (b1 - a1) / (2.0 * n1);
     double h2 = (b2 - a2) / (2.0 * n2);
@@ -86,7 +86,7 @@ double cadAMath::simpson3(std::function<double (double, double, double)> f, doub
     return (h1 * h2 * h3 / 27.0) * sum;
 }
 
-double cadAMath::romberg(std::function<double(double)> f, double a, double b, int n)
+double CadAMath::romberg(std::function<double(double)> f, double a, double b, int n)
 {
         double h[n+1], R[n+1][n+1];
         h[0] = b - a;
@@ -107,7 +107,7 @@ double cadAMath::romberg(std::function<double(double)> f, double a, double b, in
         return R[n][n];
     }
 
-double cadAMath::romberg2(std::function<double(double, double)> f, double a1, double b1, double a2, double b2, int n, int m)
+double CadAMath::romberg2(std::function<double(double, double)> f, double a1, double b1, double a2, double b2, int n, int m)
 {
     double h1 = (b1 - a1) / (1 << (n - 1));
     double h2 = (b2 - a2) / (1 << (m - 1));
@@ -142,7 +142,7 @@ double cadAMath::romberg2(std::function<double(double, double)> f, double a1, do
     return R[n-1][m-1];
 }
 
-double cadAMath::romberg3(const std::function<double(double, double, double)> f,
+double CadAMath::romberg3(const std::function<double(double, double, double)> f,
                           double a1, double b1,
                           double a2, double b2,
                           double a3, double b3, int n1, int n2, int n3)
@@ -230,58 +230,4 @@ double monteCarlo3(std::function<double(double, double, double)> f,
         sum += f(x1, x2, x3);
     }
     return sum * (b1 - a1) * (b2 - a2) * (b3 - a3) / N;
-}
-
-
-
-double monteCarlo4(std::function<double(double, double, double, double)> f,
-                   double a1, double b1,
-                   double a2, double b2,
-                   double a3, double b3,
-                   double a4, double b4, int N)
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist1(a1, b1);
-    std::uniform_real_distribution<> dist2(a2, b2);
-    std::uniform_real_distribution<> dist3(a3, b3);
-    std::uniform_real_distribution<> dist4(a4, b4);
-
-    double sum = 0;
-    for (int i = 0; i < N; ++i)
-    {
-        double x1 = dist1(gen);
-        double x2 = dist2(gen);
-        double x3 = dist3(gen);
-        double x4 = dist4(gen);
-        sum += f(x1, x2, x3, x4);
-    }
-    return sum * (b1 - a1) * (b2 - a2) * (b3 - a3) * (b4 - a4) / N;
-}
-
-double cadAMath::monteCarlo5(std::function<double (double, double, double, double, double)> f, double a1, double b1,
-                                                                                       double a2, double b2,
-                                                                                       double a3, double b3,
-                                                                                       double a4, double b4,
-                                                                                       double a5, double b5, int N)
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist1(a1, b1);
-    std::uniform_real_distribution<> dist2(a2, b2);
-    std::uniform_real_distribution<> dist3(a3, b3);
-    std::uniform_real_distribution<> dist4(a4, b4);
-    std::uniform_real_distribution<> dist5(a5, b5);
-
-    double sum = 0;
-    for (int i = 0; i < N; ++i)
-    {
-        double x1 = dist1(gen);
-        double x2 = dist2(gen);
-        double x3 = dist3(gen);
-        double x4 = dist4(gen);
-        double x5 = dist5(gen);
-        sum += f(x1, x2, x3, x4, x5);
-    }
-    return sum * (b1 - a1) * (b2 - a2) * (b3 - a3) * (b4 - a4) * (b5 - a5) / N;
 }

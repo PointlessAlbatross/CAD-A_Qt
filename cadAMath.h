@@ -7,10 +7,10 @@
 #include <QtMath>
 #include <random>
 
-class cadAMath
+class CadAMath
 {
 public:
-    cadAMath();
+    CadAMath();
 
     double monteCarlo(std::function<double(double)> f,
                        double a, double b, int N);

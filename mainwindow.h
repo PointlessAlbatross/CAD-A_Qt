@@ -6,6 +6,7 @@
 #include <antennaArrayParametersHex.h>
 #include <array>
 #include <functional>
+#include "cadAMath.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    CadAMath m_cadAMath;
 
 private:
     Ui::MainWindow *ui;
@@ -56,6 +58,8 @@ private:
     std::array<QVector<QVector<double>>, 17> WeightCoef;
     QVector<QVector<std::tuple<int, int, int> > > ButtonPos;
 
+    QVector<double> ElemetTurbPower;
+
 
     bool PARAM_WINDOW_FLAG;
 
@@ -84,6 +88,8 @@ private slots:
     void on_corrective_action_triggered();
 
     void on_antennaTypeAction_triggered();
+
+    void on_elemTurbulentInterf_triggered();
 
 signals:
     void signalMainToParamRect(double size_x, double size_z,
