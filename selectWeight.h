@@ -27,9 +27,9 @@ signals:
 public slots:
    void slotArrangeToSelectWeigth (double weigth, int i, int j, int n);
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButtonSave_clicked();
 
-    void on_pushButton_2_clicked();
+    void on_pushButtonCancel_clicked();
 
 private:
     Ui::SelectWeight *ui;

@@ -12,3 +12,14 @@ WorkingEnvironmentSettings::~WorkingEnvironmentSettings()
 {
     delete ui;
 }
+
+void WorkingEnvironmentSettings::slot_mainToWorkingEnvironmentSettings()
+{
+
+}
+
+void WorkingEnvironmentSettings::on_pushButtonSave_clicked()
+{
+
+}
+

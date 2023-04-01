@@ -14,6 +14,14 @@ class WorkingEnvironmentSettings : public QDialog
 public:
     explicit WorkingEnvironmentSettings(QWidget *parent = nullptr);
     ~WorkingEnvironmentSettings();
+signals:
+    void signal_workingEnvironmentSettingsToMain();
+
+
+public slots:
+    void slot_mainToWorkingEnvironmentSettings();
+private slots:
+    void on_pushButtonSave_clicked();
 
 private:
     Ui::WorkingEnvironmentSettings *ui;

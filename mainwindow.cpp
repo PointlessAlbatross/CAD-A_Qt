@@ -18,6 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
     resistance = 7.3; // R
     inductance = 460; // L
 
+    //
+    HSub = 100; // Глубина хода
+    LSub = 7; // Расстояние между источником шума и антенной
+    speed = 20; // Скорость хода
+
     //Предустановленные 4угольн элем
     sizeX = 0.05;
     sizeZ = 0.05;
@@ -272,6 +277,8 @@ void MainWindow::slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot
 
 
 
+
+
 void MainWindow::on_action_2_triggered() // Рабочие параметры системы
 {
     OperatingSystemParameters window;
@@ -379,28 +386,37 @@ void MainWindow::on_powerDiffuseInterf_triggered()
 }
 
 
-
-
-
 void MainWindow::on_workingEnvironmentSettingsAction_triggered()
 {
-    /*
-    SelectionOfCorrectiveElements window;
-    connect(this, &MainWindow::signal_mainToSelectionOfCorrectiveElements, &window, &SelectionOfCorrectiveElements::slot_mainToSelectionOfCorrectiveElements);
-    emit signal_mainToSelectionOfCorrectiveElements(q, q1, freq, deltaFreq, capacity_0,
-                                                    capacity, resistance, inductance);
-    connect(&window, &SelectionOfCorrectiveElements::signal_SelectionOfCorrectiveElementsToMain_save, this, &MainWindow::slot_SelectionOfCorrectiveElementsToMain_save);
-    connect(&window, &SelectionOfCorrectiveElements::signal_SelectionOfCorrectiveElementsToMain_calculate, this, &MainWindow::slot_SelectionOfCorrectiveElementsToMain_calculate);
+    WorkingEnvironmentSettings window;
+    connect(this, &MainWindow::signal_mainToWorkingEnvironmentSettings, &window, &WorkingEnvironmentSettings::slot_mainToWorkingEnvironmentSettings);
+    emit signal_mainToWorkingEnvironmentSettings();
+    connect(&window, &WorkingEnvironmentSettings::signal_workingEnvironmentSettingsToMain, this, &MainWindow::slot_workingEnvironmentSettingsToMain);
     window.setModal(true);
     window.exec();
-    */
+
 }
 
+void MainWindow::slot_workingEnvironmentSettingsToMain()
+{
+
+}
 
 
 
 void MainWindow::on_carrierParametersAction_triggered()
 {
-
+    CarrierParameters window;
+    connect(this, &MainWindow::signal_mainToCarrierParameters, &window, &CarrierParameters::slot_mainToCarrierParameters);
+    emit signal_mainToCarrierParameters(HSub, LSub, speed);
+    connect(&window, &CarrierParameters::signal_carrierParametersToMain, this, &MainWindow::slot_carrierParametersToMain);
+    window.setModal(true);
+    window.exec();
 }
 
+void MainWindow::slot_carrierParametersToMain(double HSub1, double LSub1, double speed1)
+{
+    HSub = HSub1;
+    LSub = LSub1;
+    speed = speed1;
+}

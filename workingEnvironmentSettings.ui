@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="capacityC0Box">
+      <widget class="QDoubleSpinBox" name="depthBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>
@@ -38,7 +38,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="capacityC0Box_2">
+      <widget class="QDoubleSpinBox" name="windBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>
@@ -52,7 +52,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QDoubleSpinBox" name="capacityC0Box_3">
+      <widget class="QDoubleSpinBox" name="salinityBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>
@@ -66,7 +66,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QDoubleSpinBox" name="capacityC0Box_4">
+      <widget class="QDoubleSpinBox" name="tempBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>
@@ -84,7 +84,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="capacityC0Box_5">
+      <widget class="QDoubleSpinBox" name="volumetricDispersionBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>
@@ -95,7 +95,7 @@
    <item row="2" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="0" column="0">
-      <widget class="QLabel" name="label_10">
+      <widget class="QLabel" name="surfReflBox">
        <property name="text">
         <string>Коэф. зеркального отражения поверх.:</string>
        </property>
@@ -116,7 +116,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="capacityC0Box_7">
+      <widget class="QDoubleSpinBox" name="botReflBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>
@@ -195,14 +195,14 @@
    <item row="4" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="pushButtonSave">
        <property name="text">
         <string>Сохранить</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="pushButtonCancel">
        <property name="text">
         <string>Отменить</string>
        </property>

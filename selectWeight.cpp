@@ -25,14 +25,14 @@ void SelectWeight::slotArrangeToSelectWeigth(double weigth1, int i1, int j1, int
     ui->label_num->setText(QString::number(i+1) + "." + QString::number(j+1) + "  (" + QString::number(n) + ")");
 }
 
-void SelectWeight::on_pushButton_clicked()
+void SelectWeight::on_pushButtonSave_clicked()
 {
     emit signalSelectWeightToArrange(ui->weightBox->value(), i, j);
     QWidget::close();
 }
 
 
-void SelectWeight::on_pushButton_2_clicked()
+void SelectWeight::on_pushButtonCancel_clicked()
 {
     QWidget::close();
 }

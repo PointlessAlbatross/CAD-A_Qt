@@ -87,6 +87,10 @@ private:
     QVector<double> abs_K;
     QVector<double> abs_K0;
 
+    double HSub;
+    double LSub;
+    double speed;
+
 
 private slots:
     void on_action_triggered();
@@ -132,6 +136,11 @@ signals:
                                int overlay_type);
     void signal_mainToSelectionOfCorrectiveElements(double qSignal, double q1Signal, double f, double delta_f,
                                                     double C0, double C, double R, double L);
+
+    void signal_mainToWorkingEnvironmentSettings();
+
+    void signal_mainToCarrierParameters(double HSub, double LSub, double speed);
+
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
               double dist_x, double dist_z,
@@ -149,6 +158,10 @@ public slots:
                                                         double C0, double C, double R, double L);
     void slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot, double q1Slot, double f, double delta_f,
                                                             double C0, double C, double R, double L);
+
+    void slot_workingEnvironmentSettingsToMain();
+
+    void slot_carrierParametersToMain(double HSub1, double LSub1, double speed1);
 
 };
 #endif // MAINWINDOW_H
