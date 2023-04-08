@@ -27,7 +27,7 @@ private:
     Ui::ArrangementOfElements *ui;
     QGraphicsScene *scene;
 
-    double scaleKoef = 20.0; // масштаб уменьшения
+    double scaleKoef = 10.0; // масштаб уменьшения
 
     int antennaType;
     int overlayType;
@@ -60,6 +60,7 @@ private:
     std::array<QVector<QVector<double>>, 17> WeightCoef;
     QVector <QVector<std::tuple<int, int, int>>> ButtonPos;
     std::array<QVector<QVector<bool>>, 16> SelectedElem;
+    QVector<QVector<QPair<double,double>>> CenterPos;
 
     int selectedChanelNum;
 
@@ -85,7 +86,7 @@ private:
     void wheelEvent(QWheelEvent* event);
 signals:
     void signalArrangeToSelectWeight (double, int, int, int);
-    void signalArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef, QVector <QVector<std::tuple<int, int, int>>> Button_pos,
+    void signalArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,
                                 int size_x_pix, int size_z_pix, int dist_x_pix, int dist_z_pix,
                                 int rad_circ_scr_pix, int dist_hex_pix);
 

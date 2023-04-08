@@ -33,7 +33,6 @@ private:
     QVector<int> CurrNumElem;
     std::array<QVector<QVector<double>>, 17>  WeightCoef;
     QVector<QVector<QPair<double,double>>> CenterPos;
-    QVector<QVector<std::tuple<int, int, int> > > ButtonPos;
     int overlayType;
 
     double k;
@@ -44,8 +43,6 @@ private:
 
     double radCircScr;
     double distHex;
-    int radCircScrPix;
-    int distHexPix;
 
     double theta;
     double theta_t;
@@ -61,12 +58,10 @@ private:
 
 public slots:
     void slotMainToCharts(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef,
-                             QVector<QVector<std::tuple<int, int, int> > > Button_pos,
+                             QVector<QVector<QPair<double,double>>> Center_pos,
                              double k,
                              double size_x, double size_z, double dist_x, double dist_z,
-                             int size_x_pix, int size_z_pix,
                              double rad_circ_scr, double dist_hex,
-                             int rad_circ_scr_pix, int dist_hex_pix,
                              int overlay_type);
 private:
     Ui::PatternCharts *ui;

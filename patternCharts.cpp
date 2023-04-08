@@ -174,66 +174,25 @@ void PatternCharts::drawPolarChart()
 
 
 void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1,
-                         QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
+                         QVector<QVector<QPair<double,double>>> Center_pos1,
                          double k1,
                          double size_x1, double size_z1, double dist_x1, double dist_z1,
-                         int size_x_pix1, int size_z_pix1, double rad_circ_scr1, double dist_hex1, int rad_circ_scr_pix1, int dist_hex_pix1,
+                         double rad_circ_scr1, double dist_hex1,
                          int overlay_type1)
 {
-
+    CenterPos = Center_pos1;
     overlayType = overlay_type1;
-    double scale_koef;
-    if (overlay_type1 == 0)
-        scale_koef = size_x1 / size_x_pix1 ;
-    else
-        scale_koef = rad_circ_scr1 / rad_circ_scr_pix1 ;
-    radCircScr = rad_circ_scr1;
-    distHex = dist_hex1;
     CurrNumElem = Curr_num_elem1;
     WeightCoef = Weight_coef1;
     k = k1;
 
-    if (overlay_type1 != 0)
-    {
-        ButtonPos = Button_pos1;
-        qDebug() << "Button_pos" <<Qt::endl;
-        CenterPos.resize(Button_pos1.size());
-        for (int i = 0; i < Button_pos1.size(); i++)
-        {
-            CenterPos[i].resize(Button_pos1[i].size());
-            for (int j = 0; j < Button_pos1[i].size(); j++)
-            {
-                CenterPos[i][j].first = std::get<0>(Button_pos1[i][j]) ;
-                CenterPos[i][j].second = -(std::get<1>(Button_pos1[i][j]));
-                CenterPos[i][j].first = round(CenterPos[i][j].first * scale_koef * 100)/100;
-                CenterPos[i][j].second = round(CenterPos[i][j].second * scale_koef * 100)/100;
-            }
-        }
-    }
+    radCircScr = rad_circ_scr1;
+    distHex = dist_hex1;
 
     sizeX = size_x1;
     sizeZ = size_z1;
     distX = dist_x1;
     distZ = dist_z1;
-    radCircScrPix = rad_circ_scr_pix1;
-    distHexPix = dist_hex_pix1;
-    if (overlay_type1 == 0)
-    {
-        CenterPos.resize(Button_pos1.size());
-        for (int i = 0; i < Button_pos1.size(); i++)
-        {
-            CenterPos[i].resize(Button_pos1[i].size());
-            for (int j = 0; j < Button_pos1[i].size(); j++)
-            {
-                CenterPos[i][j].first = (std::get<0>(Button_pos1[i][j]) + double(size_x_pix1) / 2) * scale_koef;
-                CenterPos[i][j].second = -(std::get<1>(Button_pos1[i][j]) + double(size_z_pix1) / 2) * scale_koef;
-                CenterPos[i][j].first = round(CenterPos[i][j].first * 100)/100;
-                CenterPos[i][j].second = round(CenterPos[i][j].second * 100)/100;
-            }
-        }
-        qDebug() << "Center_pos" <<Qt::endl;
-        qDebug() << CenterPos <<Qt::endl;
-    }
 
     drawChart();
     //drawPolarChart();

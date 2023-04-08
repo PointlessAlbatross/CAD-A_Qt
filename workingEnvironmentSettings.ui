@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="depthBox">
+      <widget class="QDoubleSpinBox" name="depthSeaBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>
@@ -84,7 +84,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="volumetricDispersionBox">
+      <widget class="QDoubleSpinBox" name="volumeDispBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>
@@ -95,14 +95,14 @@
    <item row="2" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="0" column="0">
-      <widget class="QLabel" name="surfReflBox">
+      <widget class="QLabel" name="label_16">
        <property name="text">
         <string>Коэф. зеркального отражения поверх.:</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="capacityC0Box_6">
+      <widget class="QDoubleSpinBox" name="surfReflBox">
        <property name="maximum">
         <double>100000.000000000000000</double>
        </property>

@@ -68,7 +68,8 @@ private:
     std::array<QVector<QVector<bool>>, 16> SelectedElem;
     QVector<int> CurrNumElem;
     std::array<QVector<QVector<double>>, 17> WeightCoef;
-    QVector<QVector<std::tuple<int, int, int> > > ButtonPos;
+    //QVector<QVector<std::tuple<int, int, int> > > ButtonPos;
+    QVector<QVector<QPair<double,double>>> CenterPos;
 
     QVector<double> ElemetTurbPower;
 
@@ -90,6 +91,15 @@ private:
     double HSub;
     double LSub;
     double speed;
+
+    double depthSea;
+    double windSpeed;
+    double salinity;
+    double tempWater;
+    double volumeDisp;
+    double surfReflCoef;
+    double botReflCoef;
+
 
 
 private slots:
@@ -127,17 +137,19 @@ signals:
                 double rad_ant, int num_row, QVector<int> Max_elem, QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef,
                 std::array<QVector<QVector<bool>>, 16> Selected_elem,
                                  int antenna_type, int overlay_type);
-    void signalMainToCharts(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef, QVector<QVector<std::tuple<int, int, int> > > Button_pos,
+    void signalMainToCharts(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,
                                double k,
                                double size_x, double size_z, double dist_x, double dist_z,
-                               int size_x_pix, int size_z_pix,
                                double rad_circ_scr, double dist_hex,
-                               int rad_circ_scr_pix, int dist_hex_pix,
                                int overlay_type);
     void signal_mainToSelectionOfCorrectiveElements(double qSignal, double q1Signal, double f, double delta_f,
                                                     double C0, double C, double R, double L);
 
-    void signal_mainToWorkingEnvironmentSettings();
+    void signal_mainToWorkingEnvironmentSettings(double depthSea1, double windSpeed1,
+                                                 double salinity1, double tempWater1,
+                                                 double volumeDisp1,
+                                                 double surfReflCoef1, double botReflCoef1
+                                                 );
 
     void signal_mainToCarrierParameters(double HSub, double LSub, double speed);
 
@@ -151,15 +163,17 @@ public slots:
               QVector<int> Max_elem);
     void slotOperatingSystemParametersToMain(int duration, int pressure, int receiving_freq,
                                                   int radiation_freq);
-    void slotArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef, QVector <QVector<std::tuple<int, int, int>>> Button_pos,
-                              int size_x_pix, int size_z_pix, int dist_x_pix, int dist_z_pix,
-                              int rad_circ_scr_pix, int dist_hex_pix);
+    void slotArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos);
     void slot_selectionOfCorrectiveElementsToMain_save(double qSlot, double q1Slot, double f, double delta_f,
                                                         double C0, double C, double R, double L);
     void slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot, double q1Slot, double f, double delta_f,
                                                             double C0, double C, double R, double L);
 
-    void slot_workingEnvironmentSettingsToMain();
+    void slot_workingEnvironmentSettingsToMain(double depthSea1, double windSpeed1,
+                                               double salinity1, double tempWater1,
+                                               double volumeDisp1,
+                                               double surfReflCoef1, double botReflCoef1
+                                               );
 
     void slot_carrierParametersToMain(double HSub1, double LSub1, double speed1);
 

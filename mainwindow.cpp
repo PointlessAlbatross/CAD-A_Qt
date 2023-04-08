@@ -23,6 +23,15 @@ MainWindow::MainWindow(QWidget *parent)
     LSub = 7; // Расстояние между источником шума и антенной
     speed = 20; // Скорость хода
 
+    //
+    depthSea = 400;
+    windSpeed = 10;
+    salinity = 32;
+    tempWater = 4;
+    volumeDisp = -7;
+    surfReflCoef = 0.9;
+    botReflCoef = 0.5;
+
     //Предустановленные 4угольн элем
     sizeX = 0.05;
     sizeZ = 0.05;
@@ -176,19 +185,11 @@ void MainWindow::slotOperatingSystemParametersToMain(int duration1, int pressure
     qDebug() <<"k = " << k << Qt::endl;
 }
 
-void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<std::tuple<int, int, int> > > Button_pos1,
-                                      int size_x_pix1, int size_z_pix1, int dist_x_pix1, int dist_z_pix1,
-                                      int rad_circ_scr_pix1, int dist_hex_pix1)
+void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<QPair<double,double>>> Center_pos1)
 {
     CurrNumElem = Curr_num_elem1;
     WeightCoef = Weight_coef1;
-    ButtonPos = Button_pos1;
-    sizeXPix = size_x_pix1;
-    sizeZPix = size_z_pix1;
-    distXPix = dist_x_pix1;
-    distZPix = dist_z_pix1;
-    radCircScrPix = rad_circ_scr_pix1;
-    distHexPix = dist_hex_pix1;
+    CenterPos = Center_pos1;
 }
 
 void MainWindow::slot_selectionOfCorrectiveElementsToMain_save(double qSlot, double q1Slot, double f, double delta_f, double C0, double C, double R, double L)
@@ -321,11 +322,9 @@ void MainWindow::on_charts_action_triggered()
 {
     PatternCharts window;
     connect(this, &MainWindow::signalMainToCharts, &window, &PatternCharts::slotMainToCharts);
-    emit signalMainToCharts(CurrNumElem, WeightCoef, ButtonPos, k,
+    emit signalMainToCharts(CurrNumElem, WeightCoef, CenterPos, k,
                                sizeX, sizeZ, distX, distZ,
-                               sizeXPix, sizeZPix,
-                               radCircScr, distHex,
-                               radCircScrPix, distHexPix, overlayType);
+                               radCircScr, distHex, overlayType);
     window.setModal(true);
     window.exec();
 }
@@ -351,9 +350,9 @@ void MainWindow::on_elemTurbulentInterf_triggered()
 {
     /*
     int quantityElem = 0;
-    for (int i = 0; i < ButtonPos.size(); i++)
+    for (int i = 0; i < CenterPos.size(); i++)
     {
-       quantityElem += ButtonPos[i].size();
+       quantityElem += CenterPos[i].size();
     }
     double S;
     if (overlayType == 0) // прямоугольники
@@ -361,10 +360,10 @@ void MainWindow::on_elemTurbulentInterf_triggered()
     else
         S = 3/2*sqrt(3)*pow(radCircScr,2);
     double q = 1.0;
-    ElemetTurbPower.resize(ButtonPos.size()*ButtonPos.size());
-    for (int i = 0; i < ButtonPos.size(); i++)
+    ElemetTurbPower.resize(CenterPos.size()*CenterPos.size());
+    for (int i = 0; i < CenterPos.size(); i++)
     {
-        for (int j = 0; j < ButtonPos[i].size(); j++)
+        for (int j = 0; j < CenterPos[i].size(); j++)
         {
            ElemetTurbPower[i+j] = q * radAnt / (4*pi*pow(S, 2));
         }
@@ -375,13 +374,20 @@ void MainWindow::on_elemTurbulentInterf_triggered()
 void MainWindow::on_powerDiffuseInterf_triggered()
 {
     /*
-    double R2 = Hpa / abs(cos(THETA));
-    auto Hd = [R2] (R, f)
+    auto Peng = [](theta, phi)
     {
-        1/R2 * pow(10, -0.1*beta(f)*R);
-    }
-    double R1 = Hpa / cos(THETA0);
+        return 1;
+    };
 
+    auto R2 = [Hpa](theta)
+    {return Hpa / abs(cos(theta));};
+    auto R1 = [Hpa](theta)
+    {return Hpa / cos(theta0);};
+
+    auto Hd = [] (R, f)
+    {
+        return 1/(R*R) * pow(10, -0.1*beta(f)*R);
+    };
     */
 }
 
@@ -390,16 +396,27 @@ void MainWindow::on_workingEnvironmentSettingsAction_triggered()
 {
     WorkingEnvironmentSettings window;
     connect(this, &MainWindow::signal_mainToWorkingEnvironmentSettings, &window, &WorkingEnvironmentSettings::slot_mainToWorkingEnvironmentSettings);
-    emit signal_mainToWorkingEnvironmentSettings();
+    emit signal_mainToWorkingEnvironmentSettings(depthSea, windSpeed, salinity, tempWater,
+                                                 volumeDisp, surfReflCoef, botReflCoef);
     connect(&window, &WorkingEnvironmentSettings::signal_workingEnvironmentSettingsToMain, this, &MainWindow::slot_workingEnvironmentSettingsToMain);
     window.setModal(true);
     window.exec();
 
 }
 
-void MainWindow::slot_workingEnvironmentSettingsToMain()
+void MainWindow::slot_workingEnvironmentSettingsToMain(double depthSea1, double windSpeed1,
+                                                       double salinity1, double tempWater1,
+                                                       double volumeDisp1,
+                                                       double surfReflCoef1, double botReflCoef1
+                                                       )
 {
-
+    depthSea = depthSea1;
+    windSpeed = windSpeed1;
+    salinity = salinity1;
+    tempWater = tempWater1;
+    volumeDisp = volumeDisp1;
+    surfReflCoef = surfReflCoef1;
+    botReflCoef = botReflCoef1;
 }
 
 

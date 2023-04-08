@@ -396,6 +396,9 @@ void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, i
 */
 void ArrangementOfElements::redrawing()
 {
+    for (int i = 0; i < ButtonPos.size(); i++)
+        qDebug() << ButtonPos[i].size() <<" ";
+    qDebug() <<Qt::endl;
     if (!overlayType) // прямоугольная антенна
         redrawingRect();
     else if (overlayType) // шестиугольная антенна
@@ -1144,7 +1147,48 @@ void ArrangementOfElements::on_groupNumButton_16_clicked()
 
 void ArrangementOfElements::on_saveButton_clicked()
 {
-    emit signalArrangeToMain(CurrNumElem, WeightCoef, ButtonPos,
+    double scaleKoef1;
+    if (overlayType == 0)
+        scaleKoef1 = sizeX / sizeXPix ;
+    else
+        scaleKoef1 = radCircScr / radCircScrPix ;
+
+    if (overlayType != 0)
+    {
+        CenterPos.resize(ButtonPos.size());
+        for (int i = 0; i < ButtonPos.size(); i++)
+        {
+            CenterPos[i].resize(ButtonPos[i].size());
+            for (int j = 0; j < ButtonPos[i].size(); j++)
+            {
+                CenterPos[i][j].first = std::get<0>(ButtonPos[i][j]) ;
+                CenterPos[i][j].second = -(std::get<1>(ButtonPos[i][j]));
+                CenterPos[i][j].first = round(CenterPos[i][j].first * scaleKoef1 * 100)/100;
+                CenterPos[i][j].second = round(CenterPos[i][j].second * scaleKoef1 * 100)/100;
+            }
+        }
+        qDebug() << "Center_pos" <<Qt::endl;
+        qDebug() << CenterPos <<Qt::endl;
+    }
+    if (overlayType == 0)
+    {
+        CenterPos.resize(ButtonPos.size());
+        for (int i = 0; i < ButtonPos.size(); i++)
+        {
+            CenterPos[i].resize(ButtonPos[i].size());
+            for (int j = 0; j < ButtonPos[i].size(); j++)
+            {
+                CenterPos[i][j].first = (std::get<0>(ButtonPos[i][j]) + double(sizeXPix) / 2) * scaleKoef1;
+                CenterPos[i][j].second = -(std::get<1>(ButtonPos[i][j]) + double(sizeZPix) / 2) * scaleKoef1;
+                CenterPos[i][j].first = round(CenterPos[i][j].first * 100)/100;
+                CenterPos[i][j].second = round(CenterPos[i][j].second * 100)/100;
+            }
+        }
+        qDebug() << "Center_pos" <<Qt::endl;
+        qDebug() << CenterPos <<Qt::endl;
+    }
+
+    emit signalArrangeToMain(CurrNumElem, WeightCoef, CenterPos,
                                 sizeXPix, sizeZPix, distXPix, distXPix,
                                 radCircScrPix, distHexPix);
     QWidget::close();
