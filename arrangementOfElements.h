@@ -11,7 +11,6 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
-
 namespace Ui {
 class ArrangementOfElements;
 }
@@ -58,7 +57,7 @@ private:
     QVector<int> MaxElem;
     QVector<int> CurrNumElem;
     std::array<QVector<QVector<double>>, 17> WeightCoef;
-    QVector <QVector<std::tuple<int, int, int>>> ButtonPos;
+    QVector <QVector<std::tuple<int, int, int>>> ButtonPos; // x,y,n
     std::array<QVector<QVector<bool>>, 16> SelectedElem;
     QVector<QVector<QPair<double,double>>> CenterPos;
 

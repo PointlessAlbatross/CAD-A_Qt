@@ -396,9 +396,6 @@ void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, i
 */
 void ArrangementOfElements::redrawing()
 {
-    for (int i = 0; i < ButtonPos.size(); i++)
-        qDebug() << ButtonPos[i].size() <<" ";
-    qDebug() <<Qt::endl;
     if (!overlayType) // прямоугольная антенна
         redrawingRect();
     else if (overlayType) // шестиугольная антенна
@@ -681,16 +678,6 @@ void ArrangementOfElements::redrawingHex()
             n++;
         }
     }
-
-    qDebug() << "Button_pos" <<Qt::endl;
-    for (int i = 0; i < ButtonPos.size(); i++)
-    {
-        for (int j = 0; j < ButtonPos[i].size(); j++)
-        {
-            qDebug() << std::get<0>(ButtonPos[i][j]) << std::get<1>(ButtonPos[i][j]) << " ";
-        }
-        qDebug() <<Qt::endl;
-    }
 }
 /*
   Слот
@@ -837,7 +824,7 @@ void ArrangementOfElements::on_ButtonMinus_7_clicked()
 void ArrangementOfElements::reshapePlus(int n)
 {
     if (overlayType and (CurrNumElem[numRow / 2 - n] != 0
-                          or ((numRow - n) % 2 == 0)))
+                          or ((numRow - n) % 2 == 0)))   // для шестиугольных элементов
     {
 
         if((CurrNumElem[numRow / 2 - n] < MaxElem[numRow / 2 - n]) and
@@ -877,9 +864,9 @@ void ArrangementOfElements::reshapePlus(int n)
         redrawing();
 
     }
-    else
+    else  // для четырехугольных элементов
     {
-        if (numRow & 1)
+        if (numRow % 2 == 1) // нечетное число рядов
         {
             if((CurrNumElem[numRow / 2 - n] < MaxElem[numRow / 2 - n]) and
                     (CurrNumElem[numRow / 2 + n] < MaxElem[numRow / 2 + n]))
@@ -905,7 +892,7 @@ void ArrangementOfElements::reshapePlus(int n)
             drawCirc();
             redrawing();
         }
-        else
+        else  // четное число рядов
             {
                 if((CurrNumElem[numRow / 2 + n] < MaxElem[numRow / 2 + n]) and
                         (CurrNumElem[numRow / 2 - n - 1] < MaxElem[numRow / 2 - n - 1]))
@@ -946,8 +933,11 @@ void ArrangementOfElements::reshapeMinus(int n)
                 {
                     ButtonPos[numRow / 2 + n].pop_back();
                     ButtonPos[numRow / 2 + n].pop_back();
-                    WeightCoef[numRow / 2 + n].pop_back();
-                    WeightCoef[numRow / 2 + n].pop_back();
+                    for (int i = 0; i < 17; i++)
+                    {
+                        WeightCoef[i][numRow / 2 + n].pop_back();
+                        WeightCoef[i][numRow / 2 + n].pop_back();
+                    }
                     for (unsigned int i = 0; i < SelectedElem.size(); i++)
                     {
                         SelectedElem[i][numRow / 2 + n].pop_back();
@@ -956,8 +946,11 @@ void ArrangementOfElements::reshapeMinus(int n)
                 }
                 ButtonPos[numRow / 2 - n].pop_back();
                 ButtonPos[numRow / 2 - n].pop_back();
-                WeightCoef[numRow / 2 - n].pop_back();
-                WeightCoef[numRow / 2 - n].pop_back();
+                for (int i = 0; i < 17; i++)
+                {
+                    WeightCoef[i][numRow / 2 - n].pop_back();
+                    WeightCoef[i][numRow / 2 - n].pop_back();
+                }
                 for (unsigned int i = 0; i < SelectedElem.size(); i++)
                 {
                     SelectedElem[i][numRow / 2 - n].pop_back();
@@ -969,7 +962,7 @@ void ArrangementOfElements::reshapeMinus(int n)
     }
     else // для чутырехугольных элементов
     {
-        if (numRow & 1)
+        if (numRow % 2 == 1) // нечетное число рядов
         {
             if((CurrNumElem[numRow / 2 - n] > 0) and
                     (CurrNumElem[numRow / 2 + n] > 0))
@@ -981,19 +974,21 @@ void ArrangementOfElements::reshapeMinus(int n)
                 if (n)
                 {
                     ButtonPos[numRow / 2 + n].pop_back();
-                    WeightCoef[numRow / 2 + n].pop_back();
+                    for (int i = 0; i < 17; i++)
+                        WeightCoef[i][numRow / 2 + n].pop_back();
                     for (unsigned int i = 0; i < SelectedElem.size(); i++)
                         SelectedElem[i][numRow / 2 + n].pop_back();
                 }
                 ButtonPos[numRow / 2 - n].pop_back();
-                WeightCoef[numRow / 2 - n].pop_back();
+                for (int i = 0; i < 17; i++)
+                    WeightCoef[i][numRow / 2 - n].pop_back();
                 for (unsigned int i = 0; i < SelectedElem.size(); i++)
                     SelectedElem[i][numRow / 2 - n].pop_back();
                 drawCirc();
                 redrawing();
             }
         }
-        else
+        else // четное число рядов
         {
             if((CurrNumElem[numRow / 2 + n] > 0) and
                     (CurrNumElem[numRow / 2 - n - 1] > 0))
@@ -1003,6 +998,11 @@ void ArrangementOfElements::reshapeMinus(int n)
                 scene->clear();
                 ButtonPos[numRow / 2 + n].pop_back();
                 ButtonPos[numRow / 2 - n - 1].pop_back();
+                for (int i = 0; i < 17; i++)
+                {
+                    WeightCoef[i][numRow / 2 + n].pop_back();
+                    WeightCoef[i][numRow / 2 - n - 1].pop_back();
+                }
                 for (unsigned int i = 0; i < SelectedElem.size(); i++)
                 {
                     SelectedElem[i][numRow / 2 + n].pop_back();
@@ -1167,8 +1167,6 @@ void ArrangementOfElements::on_saveButton_clicked()
                 CenterPos[i][j].second = round(CenterPos[i][j].second * scaleKoef1 * 100)/100;
             }
         }
-        qDebug() << "Center_pos" <<Qt::endl;
-        qDebug() << CenterPos <<Qt::endl;
     }
     if (overlayType == 0)
     {
@@ -1184,10 +1182,11 @@ void ArrangementOfElements::on_saveButton_clicked()
                 CenterPos[i][j].second = round(CenterPos[i][j].second * 100)/100;
             }
         }
-        qDebug() << "Center_pos" <<Qt::endl;
-        qDebug() << CenterPos <<Qt::endl;
+
     }
 
+    qDebug() << "Center_pos" <<Qt::endl;
+    qDebug() << CenterPos <<Qt::endl;
     emit signalArrangeToMain(CurrNumElem, WeightCoef, CenterPos,
                                 sizeXPix, sizeZPix, distXPix, distXPix,
                                 radCircScrPix, distHexPix);
