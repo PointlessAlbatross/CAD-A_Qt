@@ -442,7 +442,13 @@ void MainWindow::on_powerDiffuseInterf_triggered()
     auto Ps_unint = [Hd, R1, R2, beta, this] (double theta, double phi) ->double
     {
         return this->noiseEng * pow(D(theta, phi), 2) * Hd(R1(theta), this->freq) * Hd(R2(theta), this->freq) *
-                this->surfReflCoef * this->HSub * this->HSub*sin(theta) / pow(cos(theta), 3);
+                this->surfReflCoef * pow(this->HSub, 2) *sin(theta) / pow(cos(theta), 3);
+    };
+
+    auto Pb_unint = [Hd, R1, R2, beta, this] (double theta, double phi) ->double
+    {
+        return this->noiseEng * pow(D(theta, phi), 2) * Hd(R1(theta), this->freq) * Hd(R2(theta), this->freq) *
+                this->botReflCoef * pow(this->depthSea - this->HSub, 2)*sin(theta) / abs(pow(cos(theta), 3));
     };
 
     QElapsedTimer timer;
@@ -450,9 +456,18 @@ void MainWindow::on_powerDiffuseInterf_triggered()
 
     auto Psurf = m_cadAMath.monteCarlo2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000000);
     qint64 elapsed = timer.elapsed();
-    qDebug() <<"Elapsed time:"<<elapsed<<"ms";
     qDebug() <<"плотность мощности рассеянной помехи";
-    qDebug() << Psurf;
+    qDebug() <<"Elapsed time:"<<elapsed<<"ms";
+    qDebug() << "Поверхность:"<<Psurf<<Qt::endl;
+
+    timer.start();
+
+    auto Pbot = m_cadAMath.monteCarlo2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000000);
+    elapsed = timer.elapsed();
+    qDebug() <<"Elapsed time:"<<elapsed<<"ms";
+    qDebug() << "Дно:"<<Pbot;
+
+
 
 }
 
