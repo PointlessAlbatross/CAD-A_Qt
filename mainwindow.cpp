@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "cadAMath.h"
 
 
 
@@ -342,7 +343,51 @@ void MainWindow::on_corrective_action_triggered()
     window.exec();
 }
 
+double MainWindow::D(double theta, double phi)
+{
+    if (overlayType == 0) // Четырехугольник
+    {
+        double a;
+        if (phi != 0)
+           a = sin( k * (sizeX+distX) / 2 * sin(theta) * sin (phi) )/ (k*(sizeX+distX) / 2 * (sin(theta) * sin (phi)));
+        else
+           a = 1;
+        double b = sin ( k * (sizeZ+distZ) / 2 * cos (theta)) / (k * (sizeZ+distZ) / 2 * cos (theta));
+        return a * b;
+    }
+    else if (overlayType != 0)  // Шестиугольник
+    {
+        double a1,b1;
+        if (phi != 0)
+        {
+            a1 = 2 * j1(k * (sqrt(3)*radCircScr+distHex)/2 * sqrt(pow(sin(theta)*sin(phi), 2)+pow(cos(theta), 2)));
+            b1 = k * (sqrt(3)*radCircScr+distHex)/2 * sqrt(pow(sin(theta) * sin(phi), 2) + pow(cos(theta), 2));
+            return a1/b1;
+        }
 
+    }
+    return 1;
+}
+//проблеммы с каналами
+std::complex<double> MainWindow::Dt(double theta, double phi)
+{
+    double theta_t = M_PI_2, phi_t = 0;
+    std::complex<double> i (0, 1); // Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0;
+    for (int a = 0; a < CenterPos.size(); a++)
+    {
+        for(int b = 0; b < CenterPos[a].size(); b++)
+        {
+                //[1] Числитель
+                D_numerator += (WeightCoef[0][a][b] * exp( (1.0*i) * k * (CenterPos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
+                                                   + CenterPos[a][b].second * (cos (theta) - cos(theta_t))) ) *
+                         D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
+                //[2] Знаменатель
+                D_denumerator += WeightCoef[0][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2;
+        }
+    }
+    return D_numerator / D_denumerator;
+}
 
 
 
@@ -373,22 +418,41 @@ void MainWindow::on_elemTurbulentInterf_triggered()
 
 void MainWindow::on_powerDiffuseInterf_triggered()
 {
-    /*
-    auto Peng = [](theta, phi)
+    auto Peng = []()
     {
         return 1;
     };
 
-    auto R2 = [Hpa](theta)
-    {return Hpa / abs(cos(theta));};
-    auto R1 = [Hpa](theta)
-    {return Hpa / cos(theta0);};
-
-    auto Hd = [] (R, f)
+    auto m_s = []()
     {
-        return 1/(R*R) * pow(10, -0.1*beta(f)*R);
+        return 1;
     };
-    */
+    auto beta = [] (double freq)
+    {
+        return 1;
+    };
+
+    auto R2 = [this](double theta)
+    {return this->HSub / abs(cos(theta));};
+
+    auto R1 = [this](double theta)
+    {return sqrt(pow((this->HSub *tan(theta)+this->LSub), 2)+pow(this->HSub, 2));};
+
+    auto Hd = [beta] (double R, double freq)
+    {
+        return 1/(R*R) * pow(10, -0.1*beta(freq)*R);
+    };
+
+    auto Ps_unint = [Peng, Hd, R1, R2, m_s, beta, this] (double theta, double phi) ->double
+    {
+        return Peng() * pow(D(theta, phi), 2) * Hd(R1(theta), this->freq) * Hd(R2(theta), this->freq) *
+                m_s() * this->HSub * this->HSub*sin(theta) / pow(cos(theta), 3);
+    };
+
+    auto Psurf = m_cadAMath.monteCarlo2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000000);
+    qDebug() << "плотность мощности рассеянной помехи";
+    qDebug() << Psurf;
+
 }
 
 

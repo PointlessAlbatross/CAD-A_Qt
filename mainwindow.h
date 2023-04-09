@@ -102,6 +102,9 @@ private:
 
 
 
+    std::complex<double> Dt(double theta, double phi);
+    double D(double theta, double phi);
+
 private slots:
     void on_action_triggered();
     void on_antenna_array_triggered();

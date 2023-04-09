@@ -178,7 +178,7 @@ double CadAMath::romberg3(const std::function<double(double, double, double)> f,
         return R[n1][n2][n3];
 }
 
-double monteCarlo(std::function<double(double)> f,
+double CadAMath::monteCarlo(std::function<double(double)> f,
                    double a, double b, int N)
 {
     std::random_device rd;
@@ -193,7 +193,7 @@ double monteCarlo(std::function<double(double)> f,
     return sum * (b - a) / N;
 }
 
-double monteCarlo2(std::function<double(double, double)> f,
+double CadAMath::monteCarlo2(std::function<double(double, double)> f,
                    double a1, double b1,
                    double a2, double b2,int N)
 {
@@ -211,7 +211,7 @@ double monteCarlo2(std::function<double(double, double)> f,
     return sum * (b1 - a1) * (b2 - a2) / N;
 }
 
-double monteCarlo3(std::function<double(double, double, double)> f,
+double CadAMath::monteCarlo3(std::function<double(double, double, double)> f,
                    double a1, double b1,
                    double a2, double b2,
                    double a3, double b3,int N)

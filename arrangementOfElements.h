@@ -26,7 +26,7 @@ private:
     Ui::ArrangementOfElements *ui;
     QGraphicsScene *scene;
 
-    double scaleKoef = 10.0; // масштаб уменьшения
+    double scaleKoef = 20.0; // масштаб уменьшения
 
     int antennaType;
     int overlayType;
