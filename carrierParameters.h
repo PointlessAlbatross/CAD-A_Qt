@@ -16,10 +16,10 @@ public:
     ~CarrierParameters();
 
 public slots:
-    void slot_mainToCarrierParameters(double HSub1, double LSub1, double speed1);
+    void slot_mainToCarrierParameters(double HSub1, double LSub1, double speed1, double noise1);
 
 signals:
-    void signal_carrierParametersToMain(double HSub1, double LSub1, double speed1);
+    void signal_carrierParametersToMain(double HSub1, double LSub1, double speed1, double noise1);
 
 private slots:
     void on_pushButtonCancel_clicked();

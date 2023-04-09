@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     HSub = 100; // Глубина хода
     LSub = 7; // Расстояние между источником шума и антенной
     speed = 20; // Скорость хода
+    noiseEng = 1; // Шум движителя
 
     //
     depthSea = 400;
@@ -415,42 +416,42 @@ void MainWindow::on_elemTurbulentInterf_triggered()
     }*/
 }
 
+//Мощность рассеянной помехи
 
 void MainWindow::on_powerDiffuseInterf_triggered()
 {
-    auto Peng = []()
-    {
-        return 1;
-    };
-
-    auto m_s = []()
-    {
-        return 1;
-    };
     auto beta = [] (double freq)
     {
         return 1;
     };
 
     auto R2 = [this](double theta)
-    {return this->HSub / abs(cos(theta));};
-
+    {
+        return this->HSub / abs(cos(theta));
+    };
     auto R1 = [this](double theta)
-    {return sqrt(pow((this->HSub *tan(theta)+this->LSub), 2)+pow(this->HSub, 2));};
+    {
+        return sqrt(pow((this->HSub *tan(theta)+this->LSub), 2)+pow(this->HSub, 2));
+    };
 
     auto Hd = [beta] (double R, double freq)
     {
         return 1/(R*R) * pow(10, -0.1*beta(freq)*R);
     };
 
-    auto Ps_unint = [Peng, Hd, R1, R2, m_s, beta, this] (double theta, double phi) ->double
+    auto Ps_unint = [Hd, R1, R2, beta, this] (double theta, double phi) ->double
     {
-        return Peng() * pow(D(theta, phi), 2) * Hd(R1(theta), this->freq) * Hd(R2(theta), this->freq) *
-                m_s() * this->HSub * this->HSub*sin(theta) / pow(cos(theta), 3);
+        return this->noiseEng * pow(D(theta, phi), 2) * Hd(R1(theta), this->freq) * Hd(R2(theta), this->freq) *
+                this->surfReflCoef * this->HSub * this->HSub*sin(theta) / pow(cos(theta), 3);
     };
 
+    QElapsedTimer timer;
+    timer.start();
+
     auto Psurf = m_cadAMath.monteCarlo2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000000);
-    qDebug() << "плотность мощности рассеянной помехи";
+    qint64 elapsed = timer.elapsed();
+    qDebug() <<"Elapsed time:"<<elapsed<<"ms";
+    qDebug() <<"плотность мощности рассеянной помехи";
     qDebug() << Psurf;
 
 }
@@ -489,15 +490,16 @@ void MainWindow::on_carrierParametersAction_triggered()
 {
     CarrierParameters window;
     connect(this, &MainWindow::signal_mainToCarrierParameters, &window, &CarrierParameters::slot_mainToCarrierParameters);
-    emit signal_mainToCarrierParameters(HSub, LSub, speed);
+    emit signal_mainToCarrierParameters(HSub, LSub, speed, noiseEng);
     connect(&window, &CarrierParameters::signal_carrierParametersToMain, this, &MainWindow::slot_carrierParametersToMain);
     window.setModal(true);
     window.exec();
 }
 
-void MainWindow::slot_carrierParametersToMain(double HSub1, double LSub1, double speed1)
+void MainWindow::slot_carrierParametersToMain(double HSub1, double LSub1, double speed1, double noiseEng1)
 {
     HSub = HSub1;
     LSub = LSub1;
     speed = speed1;
+    noiseEng = noiseEng1;
 }

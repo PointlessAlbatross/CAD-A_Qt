@@ -19,6 +19,7 @@
 #include "cadAMath.h"
 #include <QMessageBox>
 #include <QDebug>
+#include <QElapsedTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -91,6 +92,7 @@ private:
     double HSub;
     double LSub;
     double speed;
+    double noiseEng;
 
     double depthSea;
     double windSpeed;
@@ -154,7 +156,7 @@ signals:
                                                  double surfReflCoef1, double botReflCoef1
                                                  );
 
-    void signal_mainToCarrierParameters(double HSub, double LSub, double speed);
+    void signal_mainToCarrierParameters(double HSub, double LSub, double speed, double noiseEng);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
@@ -178,7 +180,7 @@ public slots:
                                                double surfReflCoef1, double botReflCoef1
                                                );
 
-    void slot_carrierParametersToMain(double HSub1, double LSub1, double speed1);
+    void slot_carrierParametersToMain(double HSub1, double LSub1, double speed1, double noiseEng1);
 
 };
 #endif // MAINWINDOW_H
