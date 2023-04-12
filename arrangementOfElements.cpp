@@ -406,10 +406,10 @@ void ArrangementOfElements::redrawing()
 void ArrangementOfElements::redrawingRect()
 {
     int x, z, n;
-    sizeXPix = int (sizeX / radAnt * (diamPix / 2));
-    sizeZPix = int (sizeZ / radAnt * (diamPix / 2));
-    distXPix = int (distX / radAnt * (diamPix / 2));
-    distZPix = int (distZ / radAnt * (diamPix / 2));
+    sizeXPix = int (sizeX / radAnt * (diamPix / 2.0));
+    sizeZPix = int (sizeZ / radAnt * (diamPix / 2.0));
+    distXPix = int (distX / radAnt * (diamPix / 2.0));
+    distZPix = int (distZ / radAnt * (diamPix / 2.0));
     if (numRow & 1) // нечетное число рядов
     {
     z = -sizeZPix * 3 / 2 - distZPix;
@@ -586,8 +586,8 @@ void ArrangementOfElements::redrawingRect()
 void ArrangementOfElements::redrawingHex()
 {
     int x, z, n;
-    radCircScrPix = int (radCircScr / radAnt * (diamPix / 2));
-    distHexPix = int (distHex / radAnt * (diamPix / 2));
+    radCircScrPix = int (radCircScr / radAnt * (diamPix / 2.0));
+    distHexPix = int (distHex / radAnt * (diamPix / 2.0));
     x = 0;
 
     // нижняя половина
@@ -1176,8 +1176,8 @@ void ArrangementOfElements::on_saveButton_clicked()
             CenterPos[i].resize(ButtonPos[i].size());
             for (int j = 0; j < ButtonPos[i].size(); j++)
             {
-                CenterPos[i][j].first = (std::get<0>(ButtonPos[i][j]) + double(sizeXPix) / 2) * scaleKoef1;
-                CenterPos[i][j].second = -(std::get<1>(ButtonPos[i][j]) + double(sizeZPix) / 2) * scaleKoef1;
+                CenterPos[i][j].first = (std::get<0>(ButtonPos[i][j]) + double(sizeXPix) / 2.0) * scaleKoef1;
+                CenterPos[i][j].second = -(std::get<1>(ButtonPos[i][j]) + double(sizeZPix) / 2.0) * scaleKoef1;
                 CenterPos[i][j].first = round(CenterPos[i][j].first * 100)/100;
                 CenterPos[i][j].second = round(CenterPos[i][j].second * 100)/100;
             }
@@ -1185,8 +1185,30 @@ void ArrangementOfElements::on_saveButton_clicked()
 
     }
 
-    qDebug() << "Center_pos" <<Qt::endl;
-    qDebug() << CenterPos <<Qt::endl;
+    if(antennaType == 1)
+    {
+        for (int grp = 0; grp < 16; grp++)
+        {
+            double YclNum = 0, Den = 0, ZclNum = 0;
+            for (int i = 0; i < CenterPos.size(); i++)
+            {
+                for (int j = 0; j < CenterPos[i].size(); j++)
+                {
+                    YclNum += WeightCoef[grp][i][j] * CenterPos[i][j].second * SelectedElem[grp][i][j];
+                    ZclNum += WeightCoef[grp][i][j] * CenterPos[i][j].first * SelectedElem[grp][i][j];
+                    Den += WeightCoef[grp][i][j] * SelectedElem[grp][i][j];
+                }
+            }
+        if (Den)
+        {
+            Centroids[grp].first = ZclNum / Den;
+            Centroids[grp].second = YclNum / Den;
+        }
+        qDebug() << Centroids[grp];
+        }
+        qDebug() << CenterPos;
+    }
+
     emit signalArrangeToMain(CurrNumElem, WeightCoef, CenterPos,
                                 sizeXPix, sizeZPix, distXPix, distXPix,
                                 radCircScrPix, distHexPix);

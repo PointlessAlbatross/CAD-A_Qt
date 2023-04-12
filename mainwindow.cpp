@@ -350,10 +350,10 @@ double MainWindow::D(double theta, double phi)
     {
         double a;
         if (phi != 0)
-           a = sin( k * (sizeX+distX) / 2 * sin(theta) * sin (phi) )/ (k*(sizeX+distX) / 2 * (sin(theta) * sin (phi)));
+           a = sin( k * (sizeX+distX) / 2 * sin(theta) * sin (phi) )/ (k*(sizeX+distX) / 2.0 * (sin(theta) * sin (phi)));
         else
            a = 1;
-        double b = sin ( k * (sizeZ+distZ) / 2 * cos (theta)) / (k * (sizeZ+distZ) / 2 * cos (theta));
+        double b = sin ( k * (sizeZ+distZ) / 2 * cos (theta)) / (k * (sizeZ+distZ) / 2.0 * cos (theta));
         return a * b;
     }
     else if (overlayType != 0)  // Шестиугольник
@@ -384,7 +384,7 @@ std::complex<double> MainWindow::Dt(double theta, double phi)
                                                    + CenterPos[a][b].second * (cos (theta) - cos(theta_t))) ) *
                          D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
                 //[2] Знаменатель
-                D_denumerator += WeightCoef[0][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2;
+                D_denumerator += WeightCoef[0][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
         }
     }
     return D_numerator / D_denumerator;
@@ -420,52 +420,68 @@ void MainWindow::on_elemTurbulentInterf_triggered()
 
 void MainWindow::on_powerDiffuseInterf_triggered()
 {
-    auto beta = [] (double freq)
+    qDebug() << "freq" << receivingFreq;
+    double Freq = receivingFreq;
+
+    //Найти ещё одну более подробную формулу
+    auto beta = [] (double f)
     {
-        return 1;
+        return 0.036*pow(f/1000.0, 1.5);
+    };
+    qDebug() << "beta" << beta(Freq);
+
+
+    auto R2 = [this](double theta, bool isSurf) -> double
+    {
+        if (isSurf)
+            return this->HSub / abs(cos(theta));
+        else
+            return (this->depthSea - this->HSub) / abs(cos(theta));
     };
 
-    auto R2 = [this](double theta)
+    auto R1 = [this](double theta, bool isSurf) -> double
     {
-        return this->HSub / abs(cos(theta));
-    };
-    auto R1 = [this](double theta)
-    {
-        return sqrt(pow((this->HSub *tan(theta)+this->LSub), 2)+pow(this->HSub, 2));
-    };
-
-    auto Hd = [beta] (double R, double freq)
-    {
-        return 1/(R*R) * pow(10, -0.1*beta(freq)*R);
+        if (isSurf)
+            return sqrt(pow((this->HSub *tan(theta)+this->LSub), 2)+pow(this->HSub, 2));
+        else
+            return sqrt(pow(((this->depthSea - this->HSub) *tan(theta)+this->LSub), 2)+pow((this->depthSea - this->HSub), 2));
     };
 
-    auto Ps_unint = [Hd, R1, R2, beta, this] (double theta, double phi) ->double
+    auto Hd = [beta] (double R, double f) -> double
     {
-        return this->noiseEng * pow(D(theta, phi), 2) * Hd(R1(theta), this->freq) * Hd(R2(theta), this->freq) *
+        return 1/(pow(R,2)) * pow(10, -0.1*beta(f)*R);
+    };
+
+    auto Ps_unint = [Freq, Hd, R1, R2, beta, this] (double phi, double theta) -> std::complex<double>
+    {
+        double r1 = R1(theta, true);
+        double r2 = R2(theta, true);
+        std::complex<double> D_t = Dt(theta, phi);
+        return pow(this->noiseEng, 2) * pow(D_t, 2) * Hd(r1, Freq) * Hd(r2, Freq) *
                 this->surfReflCoef * pow(this->HSub, 2) *sin(theta) / pow(cos(theta), 3);
     };
 
-    auto Pb_unint = [Hd, R1, R2, beta, this] (double theta, double phi) ->double
+    auto Pb_unint = [Freq, Hd, R1, R2, beta, this] (double phi, double theta) -> std::complex<double>
     {
-        return this->noiseEng * pow(D(theta, phi), 2) * Hd(R1(theta), this->freq) * Hd(R2(theta), this->freq) *
+        return pow(this->noiseEng, 2) * pow(Dt(theta, phi), 2) * Hd(R1(theta, false)/1000.0, Freq) * Hd(R2(theta, false)/1000.0, Freq) *
                 this->botReflCoef * pow(this->depthSea - this->HSub, 2)*sin(theta) / abs(pow(cos(theta), 3));
     };
 
     QElapsedTimer timer;
     timer.start();
 
-    auto Psurf = m_cadAMath.monteCarlo2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000000);
+    auto Psurf = m_cadAMath.monteCarlo2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 100000);
     qint64 elapsed = timer.elapsed();
     qDebug() <<"плотность мощности рассеянной помехи";
     qDebug() <<"Elapsed time:"<<elapsed<<"ms";
-    qDebug() << "Поверхность:"<<Psurf<<Qt::endl;
+    qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
 
     timer.start();
 
-    auto Pbot = m_cadAMath.monteCarlo2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000000);
+    auto Pbot = m_cadAMath.monteCarlo2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 100000);
     elapsed = timer.elapsed();
     qDebug() <<"Elapsed time:"<<elapsed<<"ms";
-    qDebug() << "Дно:"<<Pbot;
+    qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
 
 
 

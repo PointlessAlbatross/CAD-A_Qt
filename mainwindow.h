@@ -15,6 +15,7 @@
 #include "carrierParameters.h"
 
 #include <array>
+#include <ccomplex>
 #include <functional>
 #include "cadAMath.h"
 #include <QMessageBox>

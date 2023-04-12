@@ -5,36 +5,36 @@ CadAMath::CadAMath()
 
 }
 
-
-double CadAMath::simpson(std::function<double (double)> f, double a, double b, int n)
+/*
+CadAMath::simpson(std::function<double (double)> f, double a, double b, int n)
 {
     double h = (b - a) / n;
 
         // Вычисляем значение функции на узлах
-        double x0 = f(a);
-        double xn = f(b);
-        double xi = 0.0;
+        T x0 = f(a);
+        T xn = f(b);
+        T xi = 0.0;
         for (int i = 1; i < n; ++i) {
             xi += f(a + i * h);
         }
 
         // Считаем интеграл методом Симпсона
-        double integral = h / 3 * (x0 + 4 * xi + 2 * xn);
+        T integral = h / 3 * (x0 + 4 * xi + 2 * xn);
         return integral;
 }
 
-double CadAMath::simpson2(std::function<double (double, double)> f, double a1, double b1, double a2, double b2, int n1, int n2)
+CadAMath::simpson2(std::function<double (double, double)> f, double a1, double b1, double a2, double b2, int n1, int n2)
 {
     double h1 = (b1 - a1) / n1;
     double h2 = (b2 - a2) / n2;
 
-    double sum = 0.0;
+    T sum = 0.0;
     for (int i = 0; i <= n1; i++) {
-        double x1 = a1 + i * h1;
+        T x1 = a1 + i * h1;
         for (int j = 0; j <= n2; j++) {
-            double x2 = a2 + j * h2;
+            T x2 = a2 + j * h2;
 
-            double w1 = 1.0, w2 = 1.0;
+            T w1 = 1.0, w2 = 1.0;
             if (i == 0 || i == n1) w1 = 1.0 / 3.0;
             if (j == 0 || j == n2) w2 = 1.0 / 3.0;
             if ((i == 0 || i == n1) && (j == 0 || j == n2)) w1 = w2 = 1.0 / 9.0;
@@ -46,7 +46,7 @@ double CadAMath::simpson2(std::function<double (double, double)> f, double a1, d
     return (b1 - a1) * (b2 - a2) * sum / (n1 * n2);
 }
 
-double CadAMath::simpson3(std::function<double (double, double, double)> f, double a1, double b1, double a2, double b2, double a3, double b3, int n1, int n2, int n3)
+CadAMath::simpson3(std::function<double (double, double, double)> f, double a1, double b1, double a2, double b2, double a3, double b3, int n1, int n2, int n3)
 {
     double h1 = (b1 - a1) / (2.0 * n1);
     double h2 = (b2 - a2) / (2.0 * n2);
@@ -55,16 +55,19 @@ double CadAMath::simpson3(std::function<double (double, double, double)> f, doub
     double x2 = a2;
     double x3 = a3;
 
-    double sum = 0.0;
+    T sum = 0.0;
     for (int i = 0; i <= 2 * n1; i++) {
         x2 = a2;
         for (int j = 0; j <= 2 * n2; j++) {
             x3 = a3;
             for (int k = 0; k <= 2 * n3; k++) {
                 double coef1 = 1.0;
-                if (i == 0 || i == 2 * n1) coef1 = 1.0;
-                else if (i % 2 == 0) coef1 = 2.0;
-                else coef1 = 4.0;
+                if (i == 0 or i == 2 * n1)
+                    coef1 = 1.0;
+                else if (i % 2 == 0)
+                    coef1 = 2.0;
+                else
+                    coef1 = 4.0;
 
                 double coef2 = 1.0;
                 if (j == 0 || j == 2 * n2) coef2 = 1.0;
@@ -86,9 +89,9 @@ double CadAMath::simpson3(std::function<double (double, double, double)> f, doub
     return (h1 * h2 * h3 / 27.0) * sum;
 }
 
-double CadAMath::romberg(std::function<double(double)> f, double a, double b, int n)
+T CadAMath::romberg(std::function<T(double)> f, double a, double b, int n)
 {
-        double h[n+1], R[n+1][n+1];
+        T h[n+1], R[n+1][n+1];
         h[0] = b - a;
         R[0][0] = 0.5 * h[0] * (f(a) + f(b));
 
@@ -106,13 +109,13 @@ double CadAMath::romberg(std::function<double(double)> f, double a, double b, in
 
         return R[n][n];
     }
-
-double CadAMath::romberg2(std::function<double(double, double)> f, double a1, double b1, double a2, double b2, int n, int m)
+template <typename T>
+T CadAMath::romberg2(std::function<T(double, double)> f, double a1, double b1, double a2, double b2, int n, int m)
 {
     double h1 = (b1 - a1) / (1 << (n - 1));
     double h2 = (b2 - a2) / (1 << (m - 1));
 
-    QVector<QVector<double>> R(n, QVector<double>(m));
+    QVector<QVector<T>> R(n, QVector<T>(m));
     R[0][0] = 0.5 * (f(a1, a2) + f(b1, b2)) * h1 * h2;
 
     for (int i = 1; i < n; ++i) {
@@ -141,13 +144,13 @@ double CadAMath::romberg2(std::function<double(double, double)> f, double a1, do
 
     return R[n-1][m-1];
 }
-
-double CadAMath::romberg3(const std::function<double(double, double, double)> f,
+template <typename T>
+T CadAMath::romberg3(const std::function<T(double, double, double)> f,
                           double a1, double b1,
                           double a2, double b2,
                           double a3, double b3, int n1, int n2, int n3)
 {
-    QVector<QVector<QVector<double>>> R(n1 + 1, QVector<QVector<double>>(n2 + 1, QVector<double>(n3 + 1)));
+    QVector<QVector<QVector<T>>> R(n1 + 1, QVector<QVector<T>>(n2 + 1, QVector<T>(n3 + 1)));
         for (int i = 0; i <= n1; i++) {
             for (int j = 0; j <= n2; j++) {
                 for (int k = 0; k <= n3; k++) {
@@ -158,7 +161,7 @@ double CadAMath::romberg3(const std::function<double(double, double, double)> f,
                     if (i == 0 && j == 0 && k == 0) {
                         R[i][j][k] = (b1 - a1) * (b2 - a2) * (b3 - a3) * f(a1, a2, a3);
                     } else {
-                        double sum = 0.0;
+                        T sum = 0.0;
                         for (int l = 0; l < pow(2, i - 1); l++) {
                             for (int m = 0; m < pow(2, j - 1); m++) {
                                 for (int o = 0; o < pow(2, k - 1); o++) {
@@ -177,6 +180,7 @@ double CadAMath::romberg3(const std::function<double(double, double, double)> f,
 
         return R[n1][n2][n3];
 }
+*/
 
 double CadAMath::monteCarlo(std::function<double(double)> f,
                    double a, double b, int N)
@@ -193,7 +197,7 @@ double CadAMath::monteCarlo(std::function<double(double)> f,
     return sum * (b - a) / N;
 }
 
-double CadAMath::monteCarlo2(std::function<double(double, double)> f,
+std::complex<double> CadAMath::monteCarlo2(std::function<std::complex<double>(double, double)> f,
                    double a1, double b1,
                    double a2, double b2,int N)
 {
@@ -201,14 +205,14 @@ double CadAMath::monteCarlo2(std::function<double(double, double)> f,
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dist1(a1, b1);
     std::uniform_real_distribution<> dist2(a2, b2);
-    double sum = 0;
+    std::complex<double>  sum = 0;
     for (int i = 0; i < N; ++i)
     {
         double x1 = dist1(gen);
         double x2 = dist2(gen);
         sum += f(x1, x2);
     }
-    return sum * (b1 - a1) * (b2 - a2) / N;
+    return sum * (b1 - a1) * (b2 - a2) / double(N);
 }
 
 double CadAMath::monteCarlo3(std::function<double(double, double, double)> f,

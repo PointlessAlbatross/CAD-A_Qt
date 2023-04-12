@@ -60,6 +60,7 @@ private:
     QVector <QVector<std::tuple<int, int, int>>> ButtonPos; // x,y,n
     std::array<QVector<QVector<bool>>, 16> SelectedElem;
     QVector<QVector<QPair<double,double>>> CenterPos;
+    std::array<QPair<double, double>, 16> Centroids;
 
     int selectedChanelNum;
 
