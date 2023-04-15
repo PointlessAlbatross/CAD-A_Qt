@@ -39,8 +39,9 @@
     <addaction name="antenna_array"/>
     <addaction name="action_2"/>
     <addaction name="workingEnvironmentSettingsAction"/>
-    <addaction name="separator"/>
     <addaction name="carrierParametersAction"/>
+    <addaction name="paramChanelAction"/>
+    <addaction name="separator"/>
     <addaction name="action"/>
     <addaction name="separator"/>
    </widget>
@@ -186,6 +187,11 @@
   <action name="carrierParametersAction">
    <property name="text">
     <string>Параметры носителя</string>
+   </property>
+  </action>
+  <action name="paramChanelAction">
+   <property name="text">
+    <string>Определение каналов</string>
    </property>
   </action>
  </widget>

@@ -534,3 +534,9 @@ void MainWindow::slot_carrierParametersToMain(double HSub1, double LSub1, double
     speed = speed1;
     noiseEng = noiseEng1;
 }
+
+void MainWindow::on_paramChanelAction_triggered()
+{
+
+}
+

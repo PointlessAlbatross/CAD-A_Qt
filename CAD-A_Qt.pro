@@ -13,6 +13,7 @@ SOURCES += \
     arrangementOfElements.cpp \
     cadAMath.cpp \
     carrierParameters.cpp \
+    channelParameters.cpp \
     main.cpp \
     mainwindow.cpp \
     operatingSystemParameters.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     arrangementOfElements.h \
     cadAMath.h \
     carrierParameters.h \
+    channelParameters.h \
     mainwindow.h \
     operatingSystemParameters.h \
     patternCharts.h \
@@ -38,6 +40,7 @@ FORMS += \
     antennaArrayParametersRect.ui \
     arrangementOfElements.ui \
     carrierParameters.ui \
+    channelParameters.ui \
     mainwindow.ui \
     operatingSystemParameters.ui \
     patternCharts.ui \

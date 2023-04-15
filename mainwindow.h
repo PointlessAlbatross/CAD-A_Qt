@@ -130,6 +130,8 @@ private slots:
 
     void on_carrierParametersAction_triggered();
 
+    void on_paramChanelAction_triggered();
+
 signals:
     void signalMainToParamRect(double size_x, double size_z,
                 double dist_x, double dist_z,
