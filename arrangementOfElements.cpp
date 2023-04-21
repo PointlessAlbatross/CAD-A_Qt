@@ -1185,7 +1185,7 @@ void ArrangementOfElements::on_saveButton_clicked()
 
     }
 
-    if(antennaType == 1)
+    if(antennaType == 1) // фазовая антенна
     {
         for (int grp = 0; grp < 16; grp++)
         {
@@ -1203,15 +1203,17 @@ void ArrangementOfElements::on_saveButton_clicked()
         {
             Centroids[grp].first = ZclNum / Den;
             Centroids[grp].second = YclNum / Den;
+            Arr_ZclNum[grp] = ZclNum;
+            Arr_YclNum[grp] = YclNum;
+            Arr_Denum[grp] = Den;
         }
         qDebug() << Centroids[grp];
         }
         qDebug() << CenterPos;
     }
 
-    emit signalArrangeToMain(CurrNumElem, WeightCoef, CenterPos,
-                                sizeXPix, sizeZPix, distXPix, distXPix,
-                                radCircScrPix, distHexPix);
+    emit signalArrangeToMain(CurrNumElem, WeightCoef, CenterPos, Centroids,
+                             Arr_ZclNum, Arr_YclNum, Arr_Denum);
     QWidget::close();
 }
 

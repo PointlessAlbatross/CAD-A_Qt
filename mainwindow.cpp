@@ -52,7 +52,11 @@ MainWindow::MainWindow(QWidget *parent)
     radiationFreq = 20550;
     receivingFreq = 20000;
     k = radiationFreq * 2 * M_PI / 1500;
-
+    for (unsigned int i = 0; i < TableChannel.size(); i++)
+    {
+        for (unsigned int j = 0; j < TableChannel[i].size(); j++)
+            TableChannel[i][j] = false;
+    }
 
     ui->setupUi(this);
     PARAM_WINDOW_FLAG = true;
@@ -187,11 +191,19 @@ void MainWindow::slotOperatingSystemParametersToMain(int duration1, int pressure
     qDebug() <<"k = " << k << Qt::endl;
 }
 
-void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<QPair<double,double>>> Center_pos1)
+void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<QPair<double,double>>> Center_pos1,
+                                   std::array<QPair<double, double>, 16> Centroids1,
+                                   std::array<double,16> Arr_ZclNum1, std::array<double,16> Arr_YclNum1, std::array<double,16> Arr_Denum1)
 {
     CurrNumElem = Curr_num_elem1;
     WeightCoef = Weight_coef1;
     CenterPos = Center_pos1;
+    Centroids = Centroids1;
+    Arr_ZclNum = Arr_ZclNum1;
+    Arr_YclNum = Arr_YclNum1;
+    Arr_Denum = Arr_Denum1;
+
+
 }
 
 void MainWindow::slot_selectionOfCorrectiveElementsToMain_save(double qSlot, double q1Slot, double f, double delta_f, double C0, double C, double R, double L)
@@ -535,8 +547,44 @@ void MainWindow::slot_carrierParametersToMain(double HSub1, double LSub1, double
     noiseEng = noiseEng1;
 }
 
+void MainWindow::slot_channelParametersToMain(std::array<std::array<bool, 16>, 30> Table)
+{
+    for (unsigned int i = 0; i < TableChannel.size(); i++)
+    {
+        for (unsigned int j = 0; j < TableChannel[i].size(); j++)
+            TableChannel[i][j] = Table[i][j];
+    }
+
+
+    for (int chn = 0; chn < 30; chn++)
+    {
+        double Z_CL = 0, Y_CL = 0;
+        int N = 0;
+        for (int grp = 0; grp < 16; grp++)
+        {
+            Z_CL += Centroids[grp].first * TableChannel[chn][grp];
+            Y_CL += Centroids[grp].second * TableChannel[chn][grp];
+            N += TableChannel[chn][grp];
+        }
+        if (N > 0)
+        {
+            SubarrayCenter[chn].first = Z_CL / N;
+            SubarrayCenter[chn].second = Y_CL / N;
+        }
+    }
+
+}
+
 void MainWindow::on_paramChanelAction_triggered()
 {
-
+    if(antennaType == 1) // фазовая антенна
+    {
+        ChannelParameters window;
+        connect(this, &MainWindow::signal_mainToChannelParameters, &window, &ChannelParameters::slot_mainToChannelParameters);
+        emit signal_mainToChannelParameters(TableChannel);
+        connect(&window, &ChannelParameters::signal_channelParametersToMain, this, &MainWindow::slot_channelParametersToMain);
+        window.setModal(true);
+        window.exec();
+    }
 }
 

@@ -13,6 +13,7 @@
 #include "patternCharts.h"
 #include "workingEnvironmentSettings.h"
 #include "carrierParameters.h"
+#include "channelParameters.h"
 
 #include <array>
 #include <ccomplex>
@@ -72,6 +73,8 @@ private:
     std::array<QVector<QVector<double>>, 17> WeightCoef;
     //QVector<QVector<std::tuple<int, int, int> > > ButtonPos;
     QVector<QVector<QPair<double,double>>> CenterPos;
+    std::array<QPair<double, double>, 16> Centroids;
+    std::array<QPair<double, double>, 30> SubarrayCenter;
 
     QVector<double> ElemetTurbPower;
 
@@ -103,7 +106,11 @@ private:
     double surfReflCoef;
     double botReflCoef;
 
+    std::array<std::array<bool, 16>, 30> TableChannel;
 
+    std::array<double,16> Arr_ZclNum;
+    std::array<double,16> Arr_YclNum;
+    std::array<double,16> Arr_Denum;
 
     std::complex<double> Dt(double theta, double phi);
     double D(double theta, double phi);
@@ -160,6 +167,7 @@ signals:
                                                  );
 
     void signal_mainToCarrierParameters(double HSub, double LSub, double speed, double noiseEng);
+    void signal_mainToChannelParameters(std::array<std::array<bool, 16>, 30> Table);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
@@ -171,7 +179,9 @@ public slots:
               QVector<int> Max_elem);
     void slotOperatingSystemParametersToMain(int duration, int pressure, int receiving_freq,
                                                   int radiation_freq);
-    void slotArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos);
+    void slotArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,
+                           std::array<QPair<double, double>, 16> Centroids,
+                           std::array<double,16> Arr_ZclNum, std::array<double,16> Arr_YclNum, std::array<double,16> Arr_Denum);
     void slot_selectionOfCorrectiveElementsToMain_save(double qSlot, double q1Slot, double f, double delta_f,
                                                         double C0, double C, double R, double L);
     void slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot, double q1Slot, double f, double delta_f,
@@ -184,6 +194,7 @@ public slots:
                                                );
 
     void slot_carrierParametersToMain(double HSub1, double LSub1, double speed1, double noiseEng1);
+    void slot_channelParametersToMain(std::array<std::array<bool, 16>, 30> Table);
 
 };
 #endif // MAINWINDOW_H
