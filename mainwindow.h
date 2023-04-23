@@ -14,6 +14,7 @@
 #include "workingEnvironmentSettings.h"
 #include "carrierParameters.h"
 #include "channelParameters.h"
+#include "reverberationParameters.h"
 
 #include <array>
 #include <ccomplex>
@@ -59,7 +60,8 @@ private:
     int radCircScrPix;
     int distHexPix;
 
-    int duration;
+    int impulseType;
+    int pulseDuration;
     int pressure;
     int radiationFreq;
     int receivingFreq;
@@ -115,6 +117,17 @@ private:
     std::complex<double> Dt(double theta, double phi);
     double D(double theta, double phi);
 
+    double reverbDist1;
+    double reverbDist2;
+    double reverbDist3;
+    double reverbFreq1;
+    double reverbFreq2;
+    double reverbFreq3;
+    int reverbChannel1;
+    int reverbChannel2;
+    std::array<bool, 4> ReverbChecks;
+    int numDot;
+
 private slots:
     void on_action_triggered();
     void on_antenna_array_triggered();
@@ -138,6 +151,10 @@ private slots:
     void on_carrierParametersAction_triggered();
 
     void on_paramChanelAction_triggered();
+
+    void on_actionRevervPowFreq_triggered();
+
+    void on_actionRevervPowTime_triggered();
 
 signals:
     void signalMainToParamRect(double size_x, double size_z,
@@ -168,6 +185,8 @@ signals:
 
     void signal_mainToCarrierParameters(double HSub, double LSub, double speed, double noiseEng);
     void signal_mainToChannelParameters(std::array<std::array<bool, 16>, 30> Table);
+    void signal_mainToReverberationParameters1(double param1, double param2, double param3, int channel1, int numDot, int typeReverb);
+    void signal_mainToReverberationParameters2(double param1, double param2, double param3, int channel1, int channel2, int numDot, int typeReverb);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
@@ -195,6 +214,8 @@ public slots:
 
     void slot_carrierParametersToMain(double HSub1, double LSub1, double speed1, double noiseEng1);
     void slot_channelParametersToMain(std::array<std::array<bool, 16>, 30> Table);
+    void slot_reverberationParametersToMain1();
+    void slot_reverberationParametersToMain2();
 
 };
 #endif // MAINWINDOW_H

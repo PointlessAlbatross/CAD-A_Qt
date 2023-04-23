@@ -69,12 +69,34 @@
      </property>
      <addaction name="elemTurbulentInterf"/>
     </widget>
+    <widget class="QMenu" name="menu_7">
+     <property name="title">
+      <string>Реверберационная помеха</string>
+     </property>
+     <widget class="QMenu" name="menu_10">
+      <property name="title">
+       <string>Мощности</string>
+      </property>
+      <addaction name="actionRevervPowFreq"/>
+      <addaction name="actionRevervPowTime"/>
+     </widget>
+     <widget class="QMenu" name="menu_11">
+      <property name="title">
+       <string>Корреляция</string>
+      </property>
+      <addaction name="actionRevervCrelFreq"/>
+      <addaction name="actionRevervCrelTime"/>
+     </widget>
+     <addaction name="menu_10"/>
+     <addaction name="menu_11"/>
+    </widget>
     <addaction name="separator"/>
     <addaction name="menu_8"/>
     <addaction name="corrective_action"/>
     <addaction name="separator"/>
     <addaction name="menu_6"/>
     <addaction name="powerDiffuseInterf"/>
+    <addaction name="menu_7"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -192,6 +214,26 @@
   <action name="paramChanelAction">
    <property name="text">
     <string>Определение каналов</string>
+   </property>
+  </action>
+  <action name="actionRevervPowFreq">
+   <property name="text">
+    <string>Частотная зависимость</string>
+   </property>
+  </action>
+  <action name="actionRevervPowTime">
+   <property name="text">
+    <string>Временная зависимость</string>
+   </property>
+  </action>
+  <action name="actionRevervCrelFreq">
+   <property name="text">
+    <string>Частотная зависимость</string>
+   </property>
+  </action>
+  <action name="actionRevervCrelTime">
+   <property name="text">
+    <string>Временная зависимость</string>
    </property>
   </action>
  </widget>

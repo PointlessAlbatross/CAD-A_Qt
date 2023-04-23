@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>495</width>
-    <height>207</height>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,6 +53,31 @@
     </layout>
    </item>
    <item row="1" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QRadioButton" name="rectRadioButton">
+       <property name="text">
+        <string>Прямоугольный импульс</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="unitRadioButton">
+       <property name="text">
+        <string>Трапециидальный импульс</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="trapezRadioButton">
+       <property name="text">
+        <string>Единичный спектр</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="label_3">
@@ -62,7 +87,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QSpinBox" name="durationBox">
+      <widget class="QSpinBox" name="pulseDurationBox">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -72,13 +97,30 @@
       </widget>
      </item>
      <item row="1" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Длительность фронта,  мс  :</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="durationBox_2">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Излучаемое давление, Па  :</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="1">
       <widget class="QSpinBox" name="pressureBox">
        <property name="minimum">
         <number>1</number>
@@ -90,7 +132,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
       <widget class="QPushButton" name="pushButton">

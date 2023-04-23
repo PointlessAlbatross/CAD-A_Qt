@@ -47,7 +47,8 @@ MainWindow::MainWindow(QWidget *parent)
     radAnt = 0.2;
     num_row = 5;
 
-    duration = 1;
+    impulseType = 1;
+    pulseDuration = 1;
     pressure = 1;
     radiationFreq = 20550;
     receivingFreq = 20000;
@@ -57,6 +58,18 @@ MainWindow::MainWindow(QWidget *parent)
         for (unsigned int j = 0; j < TableChannel[i].size(); j++)
             TableChannel[i][j] = false;
     }
+
+    reverbDist1 = 0;
+    reverbDist2 = 5000;
+    reverbDist3 = 500;
+    reverbFreq1 = 20000; //частота расчета1
+    reverbFreq2 = 21100; //частота расчета2
+    reverbFreq3 = 20550; //частота расчета3
+    reverbChannel1 = 1;
+    reverbChannel2 = 2;
+    ReverbChecks = {true, true, true, true};
+    numDot = 100;
+
 
     ui->setupUi(this);
     PARAM_WINDOW_FLAG = true;
@@ -181,9 +194,9 @@ void MainWindow::slotParamHexToMain(double rad_circ_scr_1, double distHex_1, dou
     }
 }
 
-void MainWindow::slotOperatingSystemParametersToMain(int duration1, int pressure1, int receiving_freq1, int radiation_freq1)
+void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int pressure1, int receiving_freq1, int radiation_freq1)
 {
-    duration = duration1;
+    pulseDuration = pulseDuration1;
     pressure = pressure1;
     receivingFreq = receiving_freq1;
     radiationFreq = radiation_freq1;
@@ -298,7 +311,7 @@ void MainWindow::on_action_2_triggered() // Рабочие параметры с
 {
     OperatingSystemParameters window;
     connect(this, &MainWindow::signalMainToOperatingSystemParameters, &window, &OperatingSystemParameters::slotMainToOperatingSystemParameters);
-    emit signalMainToOperatingSystemParameters(duration, pressure, receivingFreq, radiationFreq);
+    emit signalMainToOperatingSystemParameters(pulseDuration, pressure, receivingFreq, radiationFreq);
     connect(&window, &OperatingSystemParameters::signalOperatingSystemParametersToMain, this, &MainWindow::slotOperatingSystemParametersToMain);
     window.setModal(true);
     window.exec();
@@ -575,6 +588,7 @@ void MainWindow::slot_channelParametersToMain(std::array<std::array<bool, 16>, 3
 
 }
 
+
 void MainWindow::on_paramChanelAction_triggered()
 {
     if(antennaType == 1) // фазовая антенна
@@ -586,5 +600,36 @@ void MainWindow::on_paramChanelAction_triggered()
         window.setModal(true);
         window.exec();
     }
+}
+
+void MainWindow::slot_reverberationParametersToMain1()
+{
+
+}
+
+void MainWindow::slot_reverberationParametersToMain2()
+{
+
+}
+
+void MainWindow::on_actionRevervPowFreq_triggered() //Реверберационная->мощности->частотная
+{
+    ReverberationParameters window;
+    connect(this, &MainWindow::signal_mainToReverberationParameters1, &window, &ReverberationParameters::slot_mainToReverberationParameters1);
+    emit signal_mainToReverberationParameters1(reverbFreq1, reverbFreq2, reverbDist3, reverbChannel1, numDot, 1);
+    connect(&window, &ReverberationParameters::signal_reverberationParametersToMain1, this, &MainWindow::slot_reverberationParametersToMain1);
+    window.setModal(true);
+    window.exec();
+}
+
+
+void MainWindow::on_actionRevervPowTime_triggered() //Реверберационная->мощности->временная
+{
+    ReverberationParameters window;
+    connect(this, &MainWindow::signal_mainToReverberationParameters1, &window, &ReverberationParameters::slot_mainToReverberationParameters1);
+    emit signal_mainToReverberationParameters1(reverbFreq3, reverbDist1, reverbDist2, reverbChannel1, numDot, 2);
+    connect(&window, &ReverberationParameters::signal_reverberationParametersToMain1, this, &MainWindow::slot_reverberationParametersToMain1);
+    window.setModal(true);
+    window.exec();
 }
 

@@ -17,7 +17,7 @@ OperatingSystemParameters::~OperatingSystemParameters()
 
 void OperatingSystemParameters::on_pushButton_clicked()
 {
-    emit signalOperatingSystemParametersToMain (ui->durationBox->value(), ui->pressureBox->value(),
+    emit signalOperatingSystemParametersToMain (ui->pulseDurationBox->value(), ui->pressureBox->value(),
                                                      ui->radiationFrequencyBox->value(), ui->receivingFrequencyBox->value());
     QWidget::close();
 }
@@ -28,13 +28,13 @@ void OperatingSystemParameters::on_pushButton_2_clicked()
     QWidget::close();
 }
 
-void OperatingSystemParameters::slotMainToOperatingSystemParameters(int duration1, int pressure1, int radiation_freq1, int receiving_freq1)
+void OperatingSystemParameters::slotMainToOperatingSystemParameters(int pulseDuration1, int pressure1, int radiation_freq1, int receiving_freq1)
 {
-    duration = duration1;
+    pulseDuration = pulseDuration1;
     pressure = pressure1;
     receivingFreq = receiving_freq1;
     radiationFreq = radiation_freq1;
-    ui->durationBox->setValue(duration);
+    ui->pulseDurationBox->setValue(pulseDuration);
     ui->pressureBox->setValue(pressure);
     ui->radiationFrequencyBox->setValue(radiationFreq);
     ui->receivingFrequencyBox->setValue(receivingFreq);

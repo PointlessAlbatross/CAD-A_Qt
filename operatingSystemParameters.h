@@ -15,10 +15,11 @@ public:
     explicit OperatingSystemParameters(QWidget *parent = nullptr);
     ~OperatingSystemParameters();
 
-    int duration;
+    int pulseDuration;
     int pressure;
     int radiationFreq;
     int receivingFreq;
+    int impulseType;
 
 private slots:
     void on_pushButton_clicked();
@@ -27,11 +28,11 @@ private slots:
 
 
 signals:
-    void signalOperatingSystemParametersToMain (int duration, int pressure,
+    void signalOperatingSystemParametersToMain (int pulseDuration, int pressure,
         int radiation_freq,int receiving_freq);
 
 public slots:
-   void slotMainToOperatingSystemParameters (int duration, int pressure,
+   void slotMainToOperatingSystemParameters (int pulseDuration, int pressure,
                                                   int radiation_freq,int receiving_freq);
 
 private:
