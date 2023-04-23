@@ -62,6 +62,7 @@ private:
 
     int impulseType;
     int pulseDuration;
+    int riseTime;
     int pressure;
     int radiationFreq;
     int receivingFreq;
@@ -128,6 +129,8 @@ private:
     std::array<bool, 4> ReverbChecks;
     int numDot;
 
+    double g(double f);
+
 private slots:
     void on_action_triggered();
     void on_antenna_array_triggered();
@@ -162,8 +165,8 @@ signals:
                 double rad_ant, int num_row);
     void signalMainToParamHex(double size_x, double dist,
                 double rad_ant, int num_row);
-    void signalMainToOperatingSystemParameters(int duration, int pressure, int receiving_freq,
-                                                    int radiation_freq);
+    void signalMainToOperatingSystemParameters(int pulseDuration, int riseTime, int pressure, int receiving_freq,
+                                                    int radiation_freq, int impulseType);
     void signalMainToArrange(double size_x, double size_z, double dist_x, double dist_z,
                 double rad_circ_scr, double dist,
                 double rad_ant, int num_row, QVector<int> Max_elem, QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef,
@@ -196,8 +199,8 @@ public slots:
     void slotParamHexToMain(double rad_circ_scr, double dist,
               double rad_ant, int num_row,
               QVector<int> Max_elem);
-    void slotOperatingSystemParametersToMain(int duration, int pressure, int receiving_freq,
-                                                  int radiation_freq);
+    void slotOperatingSystemParametersToMain(int duration, int riseTime, int pressure, int receiving_freq,
+                                                  int radiation_freq, int impulseType);
     void slotArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,
                            std::array<QPair<double, double>, 16> Centroids,
                            std::array<double,16> Arr_ZclNum, std::array<double,16> Arr_YclNum, std::array<double,16> Arr_Denum);

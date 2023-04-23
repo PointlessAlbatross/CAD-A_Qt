@@ -48,8 +48,9 @@ MainWindow::MainWindow(QWidget *parent)
     num_row = 5;
 
     impulseType = 1;
-    pulseDuration = 1;
-    pressure = 1;
+    pulseDuration = 50;
+    riseTime = 100;
+    pressure = 1000000;
     radiationFreq = 20550;
     receivingFreq = 20000;
     k = radiationFreq * 2 * M_PI / 1500;
@@ -194,9 +195,11 @@ void MainWindow::slotParamHexToMain(double rad_circ_scr_1, double distHex_1, dou
     }
 }
 
-void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int pressure1, int receiving_freq1, int radiation_freq1)
+void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int riseTime1, int pressure1, int receiving_freq1, int radiation_freq1, int impulseType1)
 {
+    impulseType = impulseType1;
     pulseDuration = pulseDuration1;
+    riseTime = riseTime1;
     pressure = pressure1;
     receivingFreq = receiving_freq1;
     radiationFreq = radiation_freq1;
@@ -311,7 +314,7 @@ void MainWindow::on_action_2_triggered() // Рабочие параметры с
 {
     OperatingSystemParameters window;
     connect(this, &MainWindow::signalMainToOperatingSystemParameters, &window, &OperatingSystemParameters::slotMainToOperatingSystemParameters);
-    emit signalMainToOperatingSystemParameters(pulseDuration, pressure, receivingFreq, radiationFreq);
+    emit signalMainToOperatingSystemParameters(pulseDuration, riseTime, pressure, receivingFreq, radiationFreq, impulseType);
     connect(&window, &OperatingSystemParameters::signalOperatingSystemParametersToMain, this, &MainWindow::slotOperatingSystemParametersToMain);
     window.setModal(true);
     window.exec();
@@ -394,6 +397,37 @@ double MainWindow::D(double theta, double phi)
     }
     return 1;
 }
+
+double MainWindow::g(double f) // спектр мощности излучаемого сигнала на частоте f;
+{
+    double ps = pressure; // излучаемое давление
+    double fs = radiationFreq; // частота излучения
+    double ts = pulseDuration; // длительность имульса
+    double tf = riseTime; // длительность фронта
+    double g1;
+    switch (impulseType)
+    {
+        case 1:
+            g1 = sin(M_PI * (f - fs) * ts) / (M_PI * (f - fs) * ts) *
+                (ps * sqrt(2)) * ts / 2.0;
+            break;
+        case 2:
+            g1 = sin (M_PI * (f - fs) * (ts - tf)) / (M_PI * (f - fs) * (ts - tf)) *
+                sin(M_PI * (f - fs) * ts) / (M_PI * (f - fs) * ts) *
+                (ps * sqrt(2)) * (ts - tf) / 2.0;
+            break;
+        case 3:
+            g1 = ps * sqrt(2);
+            break;
+        default:
+            break;
+    }
+    return g1;
+}
+
+
+
+
 //проблеммы с каналами
 std::complex<double> MainWindow::Dt(double theta, double phi)
 {
