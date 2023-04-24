@@ -208,16 +208,14 @@ void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int ris
 }
 
 void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<QPair<double,double>>> Center_pos1,
-                                   std::array<QPair<double, double>, 16> Centroids1,
-                                   std::array<double,16> Arr_ZclNum1, std::array<double,16> Arr_YclNum1, std::array<double,16> Arr_Denum1)
+                                   std::array<QPair<double, double>, 16> Centroids1,std::array<double,16> Arr_sensitivity, std::array<QVector<QVector<bool>>, 16> SelectedElem1)
 {
     CurrNumElem = Curr_num_elem1;
     WeightCoef = Weight_coef1;
     CenterPos = Center_pos1;
     Centroids = Centroids1;
-    Arr_ZclNum = Arr_ZclNum1;
-    Arr_YclNum = Arr_YclNum1;
-    Arr_Denum = Arr_Denum1;
+    Arr_sensitivityGroup = Arr_sensitivity;
+    SelectedElem = SelectedElem1;
 
 
 }
@@ -426,10 +424,23 @@ double MainWindow::g(double f) // спектр мощности излучаем
 }
 
 
+std::complex<double> MainWindow::DLt(double theta, double phi, int chn) //диаграмма направленности канала
+{
+    double theta_t = M_PI_2, phi_t = 0;
+    std::complex<double> i (0, 1); // Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0;
+    for (int grp = 0; grp < 16; grp++)
+    {
+        D_numerator += TableChannel[chn][grp] * Arr_sensitivityGroup[grp] *
+                exp((1.0*i) * k * (SubarrayCenter[chn].first * (sin(theta) * sin (phi) - sin(theta_t) * sin(phi_t)) +
+                                   SubarrayCenter[chn].second * (cos(theta) - cos (theta_t)) ) * DUt(theta, phi, grp));
+        D_denumerator += TableChannel[chn][grp] * Arr_sensitivityGroup[grp];
+    }
+    return D_numerator / D_denumerator;
+}
 
 
-//проблеммы с каналами
-std::complex<double> MainWindow::Dt(double theta, double phi)
+std::complex<double> MainWindow::DUt(double theta, double phi, int grp) //диаграмма направленности группы
 {
     double theta_t = M_PI_2, phi_t = 0;
     std::complex<double> i (0, 1); // Мнимая единица
@@ -439,11 +450,31 @@ std::complex<double> MainWindow::Dt(double theta, double phi)
         for(int b = 0; b < CenterPos[a].size(); b++)
         {
                 //[1] Числитель
-                D_numerator += (WeightCoef[0][a][b] * exp( (1.0*i) * k * (CenterPos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
+                D_numerator += (WeightCoef[grp][a][b]* SelectedElem[grp][a][b]* exp( (1.0*i) * k * ((CenterPos[a][b].first - Centroids[grp].first ) * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
+                                                   + (CenterPos[a][b].second - Centroids[grp].second) * (cos (theta) - cos(theta_t))) ) *
+                         D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
+                //[2] Знаменатель
+                D_denumerator += WeightCoef[grp][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
+        }
+    }
+    return D_numerator / D_denumerator;
+}
+
+std::complex<double> MainWindow::Dt(double theta, double phi, int grp)
+{
+    double theta_t = M_PI_2, phi_t = 0;
+    std::complex<double> i (0, 1); // Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0;
+    for (int a = 0; a < CenterPos.size(); a++)
+    {
+        for(int b = 0; b < CenterPos[a].size(); b++)
+        {
+                //[1] Числитель
+                D_numerator += (WeightCoef[grp][a][b] * exp( (1.0*i) * k * (CenterPos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
                                                    + CenterPos[a][b].second * (cos (theta) - cos(theta_t))) ) *
                          D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
                 //[2] Знаменатель
-                D_denumerator += WeightCoef[0][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
+                D_denumerator += WeightCoef[grp][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
         }
     }
     return D_numerator / D_denumerator;
@@ -515,14 +546,14 @@ void MainWindow::on_powerDiffuseInterf_triggered()
     {
         double r1 = R1(theta, true);
         double r2 = R2(theta, true);
-        std::complex<double> D_t = Dt(theta, phi);
+        std::complex<double> D_t = Dt(theta, phi, 0);
         return pow(this->noiseEng, 2) * pow(D_t, 2) * Hd(r1, Freq) * Hd(r2, Freq) *
                 this->surfReflCoef * pow(this->HSub, 2) *sin(theta) / pow(cos(theta), 3);
     };
 
     auto Pb_unint = [Freq, Hd, R1, R2, beta, this] (double phi, double theta) -> std::complex<double>
     {
-        return pow(this->noiseEng, 2) * pow(Dt(theta, phi), 2) * Hd(R1(theta, false)/1000.0, Freq) * Hd(R2(theta, false)/1000.0, Freq) *
+        return pow(this->noiseEng, 2) * pow(Dt(theta, phi, 0), 2) * Hd(R1(theta, false)/1000.0, Freq) * Hd(R2(theta, false)/1000.0, Freq) *
                 this->botReflCoef * pow(this->depthSea - this->HSub, 2)*sin(theta) / abs(pow(cos(theta), 3));
     };
 
@@ -602,22 +633,28 @@ void MainWindow::slot_channelParametersToMain(std::array<std::array<bool, 16>, 3
             TableChannel[i][j] = Table[i][j];
     }
 
-
     for (int chn = 0; chn < 30; chn++)
     {
-        double Z_CL = 0, Y_CL = 0;
-        int N = 0;
+        double Z_CL_num = 0, Y_CL_num = 0;
+        int Denum = 0;
         for (int grp = 0; grp < 16; grp++)
         {
-            Z_CL += Centroids[grp].first * TableChannel[chn][grp];
-            Y_CL += Centroids[grp].second * TableChannel[chn][grp];
-            N += TableChannel[chn][grp];
+            Z_CL_num += Centroids[grp].first * TableChannel[chn][grp] * Arr_sensitivityGroup[grp];
+            Y_CL_num += Centroids[grp].second * TableChannel[chn][grp] * Arr_sensitivityGroup[grp];
+            Denum += TableChannel[chn][grp] * Arr_sensitivityGroup[grp];
         }
-        if (N > 0)
+        if (Denum > 0)
         {
-            SubarrayCenter[chn].first = Z_CL / N;
-            SubarrayCenter[chn].second = Y_CL / N;
+            // координаты центра канала
+            SubarrayCenter[chn].first = Z_CL_num / Denum;
+            SubarrayCenter[chn].second = Y_CL_num / Denum;
         }
+    }
+    //debug
+    qDebug() << "channels";
+    for (int chn = 0; chn < 30; chn++)
+    {
+        qDebug() << SubarrayCenter[chn].first << SubarrayCenter[chn].second;
     }
 
 }

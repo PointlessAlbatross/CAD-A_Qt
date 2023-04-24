@@ -1203,8 +1203,6 @@ void ArrangementOfElements::on_saveButton_clicked()
         {
             Centroids[grp].first = ZclNum / Den;
             Centroids[grp].second = YclNum / Den;
-            Arr_ZclNum[grp] = ZclNum;
-            Arr_YclNum[grp] = YclNum;
             Arr_Denum[grp] = Den;
         }
         qDebug() << Centroids[grp];
@@ -1213,7 +1211,7 @@ void ArrangementOfElements::on_saveButton_clicked()
     }
 
     emit signalArrangeToMain(CurrNumElem, WeightCoef, CenterPos, Centroids,
-                             Arr_ZclNum, Arr_YclNum, Arr_Denum);
+                             Arr_Denum, SelectedElem);
     QWidget::close();
 }
 
