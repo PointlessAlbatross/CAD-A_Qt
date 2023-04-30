@@ -15,8 +15,14 @@ ReverberationParameters::~ReverberationParameters()
 
 
 //Мощности
-void ReverberationParameters::slot_mainToReverberationParameters1(double param1, double param2, double param3, int channel1, int numDot1, int typeReverb)
+void ReverberationParameters::slot_mainToReverberationParameters1(double param1, double param2, double param3, int channel1, int numDot1,
+                                                                  std::array<bool, 4> ReverbChecks1, int typeReverb)
 {
+    ReverbChecks = ReverbChecks1;
+    ui->surfCheckBox->setChecked(ReverbChecks1[0]);
+    ui->surroundCheckBox->setChecked(ReverbChecks1[1]);
+    ui->botCheckBox->setChecked(ReverbChecks1[2]);
+    ui->sumCheckBox->setChecked(ReverbChecks1[3]);
     switch (typeReverb) {
     case 1: //частотная
         reverbFreq1 = param1;
@@ -70,24 +76,18 @@ void ReverberationParameters::slot_mainToReverberationParameters1(double param1,
 }
 
 //Корреляция
-void ReverberationParameters::slot_mainToReverberationParameters2(double param1, double param2, double param3, int channel1, int channel2, int typeReverb)
+void ReverberationParameters::slot_mainToReverberationParameters2(double param1, double param2, double param3, int channel1, int channel2,
+                                                                  std::array<bool, 4> ReverbChecks1, int typeReverb)
 {
 
 }
 
 void ReverberationParameters::on_pushButtonSave_clicked()
 {
-    switch (REVERB_TYPE) {
-    case 1: //частотная
+    emit signal_reverberationParametersToMain1(ui->param1Box->value(), ui->param2Box->value(), ui->param2Box->value(),
+                                               ui->channel1Box->value(), ui->numDotBox->value(),
+                                               ReverbChecks, REVERB_TYPE, 0);
 
-        break;
-    case 2: //временная
-
-        break;
-
-    default:
-        break;
-    }
     QWidget::close();
 }
 
@@ -100,17 +100,33 @@ void ReverberationParameters::on_pushButtonCancel_clicked()
 
 void ReverberationParameters::on_pushButtonCompute_clicked()
 {
-    switch (REVERB_TYPE) {
-    case 1: //частотная
-
-        break;
-    case 2: //временная
-
-        break;
-
-    default:
-        break;
-    }
+    emit signal_reverberationParametersToMain1(ui->param1Box->value(), ui->param2Box->value(), ui->param2Box->value(),
+                                               ui->channel1Box->value(), ui->numDotBox->value(),
+                                               ReverbChecks, REVERB_TYPE, 1);
     QWidget::close();
+}
+
+
+void ReverberationParameters::on_surfCheckBox_stateChanged(int arg1)
+{
+    ReverbChecks[0] = arg1;
+}
+
+
+void ReverberationParameters::on_surroundCheckBox_stateChanged(int arg1)
+{
+    ReverbChecks[1] = arg1;
+}
+
+
+void ReverberationParameters::on_botCheckBox_stateChanged(int arg1)
+{
+    ReverbChecks[2] = arg1;
+}
+
+
+void ReverberationParameters::on_sumCheckBox_stateChanged(int arg1)
+{
+    ReverbChecks[3] = arg1;
 }
 

@@ -188,8 +188,8 @@ signals:
 
     void signal_mainToCarrierParameters(double HSub, double LSub, double speed, double noiseEng);
     void signal_mainToChannelParameters(std::array<std::array<bool, 16>, 30> Table);
-    void signal_mainToReverberationParameters1(double param1, double param2, double param3, int channel1, int numDot, int typeReverb);
-    void signal_mainToReverberationParameters2(double param1, double param2, double param3, int channel1, int channel2, int numDot, int typeReverb);
+    void signal_mainToReverberationParameters1(double param1, double param2, double param3, int channel1, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
+    void signal_mainToReverberationParameters2(double param1, double param2, double param3, int channel1, int channel2, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
@@ -216,8 +216,10 @@ public slots:
 
     void slot_carrierParametersToMain(double HSub1, double LSub1, double speed1, double noiseEng1);
     void slot_channelParametersToMain(std::array<std::array<bool, 16>, 30> Table);
-    void slot_reverberationParametersToMain1();
-    void slot_reverberationParametersToMain2();
+    void slot_reverberationParametersToMain1(double param1, double param2, double param3, int channel1, int numDot,
+                                             std::array<bool, 4> ReverbChecks, int typeReverb, bool isCalculate);
+    void slot_reverberationParametersToMain2(double param1, double param2, double param3, int channel1, int channel2, int numDot,
+                                             std::array<bool, 4> ReverbChecks, int typeReverb, bool isCalculate);
 
 };
 #endif // MAINWINDOW_H

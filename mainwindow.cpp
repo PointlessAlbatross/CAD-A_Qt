@@ -506,6 +506,8 @@ void MainWindow::on_elemTurbulentInterf_triggered()
     }*/
 }
 
+
+
 //Мощность рассеянной помехи
 
 void MainWindow::on_powerDiffuseInterf_triggered()
@@ -514,7 +516,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
     double Freq = receivingFreq;
 
     //Найти ещё одну более подробную формулу
-    auto beta = [] (double f)
+    auto beta = [] (double f) // коэф простр затухания
     {
         return 0.036*pow(f/1000.0, 1.5);
     };
@@ -553,7 +555,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
 
     auto Pb_unint = [Freq, Hd, R1, R2, beta, this] (double phi, double theta) -> std::complex<double>
     {
-        return pow(this->noiseEng, 2) * pow(Dt(theta, phi, 0), 2) * Hd(R1(theta, false)/1000.0, Freq) * Hd(R2(theta, false)/1000.0, Freq) *
+        return pow(this->noiseEng, 2) * pow(Dt(theta, phi, 0), 2) * Hd(R1(theta, false)/1000.0, Freq) * Hd(R2(theta, false), Freq) *
                 this->botReflCoef * pow(this->depthSea - this->HSub, 2)*sin(theta) / abs(pow(cos(theta), 3));
     };
 
@@ -673,12 +675,62 @@ void MainWindow::on_paramChanelAction_triggered()
     }
 }
 
-void MainWindow::slot_reverberationParametersToMain1()
+void MainWindow::slot_reverberationParametersToMain1(double param1, double param2, double param3, int channel1, int numDot1,
+                                                     std::array<bool, 4> ReverbChecks1, int typeReverb, bool isCalculate)
 {
+    ReverbChecks = ReverbChecks1;
+    if (isCalculate)
+    {
+        switch (typeReverb) {
+        case 1: //частотная
+            reverbFreq1 = param1;
+            reverbFreq2 = param2;
+            reverbDist3 = param3;
+            numDot = numDot1;
+            reverbChannel1 = channel1;
 
+            break;
+        case 2: //временная
+            reverbFreq3 = param1;
+            reverbDist1 = param2;
+            reverbDist2 = param3;
+            numDot = numDot1;
+            reverbChannel1 = channel1;
+            break;
+        default:
+            break;
+        }
+        //add code
+
+
+
+    }
+    else
+    {
+        switch (typeReverb) {
+        case 1: //частотная
+            reverbFreq1 = param1;
+            reverbFreq2 = param2;
+            reverbDist3 = param3;
+            numDot = numDot1;
+            reverbChannel1 = channel1;
+
+            break;
+        case 2: //временная
+            reverbFreq3 = param1;
+            reverbDist1 = param2;
+            reverbDist2 = param3;
+            numDot = numDot1;
+            reverbChannel1 = channel1;
+            break;
+        default:
+            break;
+        }
+    }
 }
 
-void MainWindow::slot_reverberationParametersToMain2()
+void MainWindow::slot_reverberationParametersToMain2(double param1, double param2, double param3, int channel1, int channel2, int numDot,
+                                                     std::array<bool, 4> ReverbChecks1,  int typeReverb, bool isCalculate)
 {
 
 }
@@ -687,7 +739,7 @@ void MainWindow::on_actionRevervPowFreq_triggered() //Реверберацион
 {
     ReverberationParameters window;
     connect(this, &MainWindow::signal_mainToReverberationParameters1, &window, &ReverberationParameters::slot_mainToReverberationParameters1);
-    emit signal_mainToReverberationParameters1(reverbFreq1, reverbFreq2, reverbDist3, reverbChannel1, numDot, 1);
+    emit signal_mainToReverberationParameters1(reverbFreq1, reverbFreq2, reverbDist3, reverbChannel1, numDot, ReverbChecks, 1);
     connect(&window, &ReverberationParameters::signal_reverberationParametersToMain1, this, &MainWindow::slot_reverberationParametersToMain1);
     window.setModal(true);
     window.exec();
@@ -698,7 +750,7 @@ void MainWindow::on_actionRevervPowTime_triggered() //Реверберацион
 {
     ReverberationParameters window;
     connect(this, &MainWindow::signal_mainToReverberationParameters1, &window, &ReverberationParameters::slot_mainToReverberationParameters1);
-    emit signal_mainToReverberationParameters1(reverbFreq3, reverbDist1, reverbDist2, reverbChannel1, numDot, 2);
+    emit signal_mainToReverberationParameters1(reverbFreq3, reverbDist1, reverbDist2, reverbChannel1, numDot, ReverbChecks, 2);
     connect(&window, &ReverberationParameters::signal_reverberationParametersToMain1, this, &MainWindow::slot_reverberationParametersToMain1);
     window.setModal(true);
     window.exec();
