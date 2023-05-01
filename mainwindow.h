@@ -118,6 +118,12 @@ private:
     std::complex<double> Dt(double theta, double phi, int grp); //диаграмма направленности
     double D(double theta, double phi);
 
+
+    void powerSurfReverb();
+    void powerBotReverb();
+    void powerSurroundReverb();
+
+
     double reverbDist1;
     double reverbDist2;
     double reverbDist3;

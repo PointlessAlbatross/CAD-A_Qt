@@ -396,6 +396,8 @@ double MainWindow::D(double theta, double phi)
     return 1;
 }
 
+
+
 double MainWindow::g(double f) // спектр мощности излучаемого сигнала на частоте f;
 {
     double ps = pressure; // излучаемое давление
@@ -515,10 +517,21 @@ void MainWindow::on_powerDiffuseInterf_triggered()
     qDebug() << "freq" << receivingFreq;
     double Freq = receivingFreq;
 
-    //Найти ещё одну более подробную формулу
-    auto beta = [] (double f) // коэф простр затухания
+    auto beta = [this] (double f1) // коэф простр затухания
     {
-        return 0.036*pow(f/1000.0, 1.5);
+        double f = f1/1000;
+        //return 0.036*pow(f/1000.0, 1.5); //формула Шихе-Хелли
+        const double a = 8.68e3;
+        const double A = 2.34e-6; // постоянная ионной релаксации
+        double S = salinity;
+        double T = tempWater;
+        double fp = 21.9 * pow(10, 6-1520/(T+273)); // частота релаксации при атмосферном давлении, кГц
+        const double B = 3.38e-6; // постоянная вязкости пресной воды
+        const double b1 = 6.54e-4; // градиент изменения коэффициента затухания под влиянием статического давления
+        double p = HSub / 10.0; //гидростатическое давление
+
+        return a * (A * S * fp * pow(f, 2) / (pow(fp, 2) + pow(f, 2)) + B * pow(f, 2) / fp) * (1 - b1 * p);
+        // формула Шулкина-Марша
     };
     qDebug() << "beta" << beta(Freq);
 
@@ -675,10 +688,119 @@ void MainWindow::on_paramChanelAction_triggered()
     }
 }
 
+
+void MainWindow::powerSurfReverb()
+{
+    const int c = 1500;
+    double tauC = pulseDuration;
+    auto Db = [c] (double to)
+    {
+        return c*to;
+    };
+
+    auto Rmin = [this] (double Db)
+    {
+        return sqrt(pow(Db, 2) - pow (HSub, 2));
+    };
+
+    auto De = [tauC, c] (double Db)
+    {
+        return Db + c * tauC / 2.0;
+    };
+
+    auto Rmax = [this] (double De)
+    {
+        return sqrt(pow(De, 2) - pow (HSub, 2));
+    };
+
+    auto K = [this, c] (double theta, double phi)
+    {
+        double num, denum;
+        num = 1 + speed * sin(theta)* cos(phi) / c;
+        denum = 1 - speed * sin(theta)* cos(phi) / c;
+        return num / denum;
+    };
+
+    auto beta = [this] (double f1) // коэф простр затухания
+    {
+        double f = f1/1000;
+        //return 0.036*pow(f/1000.0, 1.5); //формула Шихе-Хелли
+        const double a = 8.68e3;
+        const double A = 2.34e-6; // постоянная ионной релаксации
+        double S = salinity;
+        double T = tempWater;
+        double fp = 21.9 * pow(10, 6-1520/(T+273)); // частота релаксации при атмосферном давлении, кГц
+        const double B = 3.38e-6; // постоянная вязкости пресной воды
+        const double b1 = 6.54e-4; // градиент изменения коэффициента затухания под влиянием статического давления
+        double p = HSub / 10.0; //гидростатическое давление
+
+        return a * (A * S * fp * pow(f, 2) / (pow(fp, 2) + pow(f, 2)) + B * pow(f, 2) / fp) * (1 - b1 * p);
+        // формула Шулкина-Марша
+    };
+
+    auto D = [this] (double R)
+    {
+        return sqrt(pow(R, 2) + pow (HSub, 2));
+    };
+
+    auto Hd = [beta] (double D, double f) -> double
+    {
+        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D);
+    };
+
+    auto THETA = [this] (double R)
+    {
+        return atan2(R, HSub);
+    };
+
+    auto X = [this](double theta, double phi, double theta_0, double phi_0)
+    {
+        return pow(k, 2) * ( pow(sin(theta), 2) + pow(sin(theta_0), 2) - 2 * sin(theta) * sin (theta_0) * cos(phi - phi_0));
+    };
+
+    auto q = [this] (double theta, double theta_0)
+    {
+        return k * (cos(theta) + cos(theta_0));
+    };
+
+    auto ms = [X, q, this] (double theta, double phi)
+    {
+        double theta_0 = M_PI, phi_0 = 0;
+        double delta2 = 0.001 * (3 + 5.12 * windSpeed);
+        return 4 * (1 / 2.0 *(1 + pow(X(theta, phi, theta_0, phi_0), 2) / pow (q(theta, theta_0), 2))) * exp(-pow(X(theta, phi, theta_0, phi_0), 2) / (2 * delta2 * pow(q(theta, theta_0), 2)));
+    };
+
+    double f = freq;
+    auto Ps_unint = [this, Hd, tauC, THETA, K, D, ms, f] (double phi, double R)
+    {
+        std::complex<double> D_t = Dt(THETA(R),phi, 0);
+        return 1 / tauC * pow(D_t, 2) * pow(D_t, 2)
+                * pow(g(f / K(THETA(R), phi)), 2) * pow(Hd(D(R), f), 2) * ms(THETA(R), phi) * R;
+    };
+    double time = 0;
+    double R_min = Rmin(Db(time));
+    double R_max = Rmax(Db(time));
+    auto Ps = m_cadAMath.monteCarlo2(Ps_unint, -M_PI_2, M_PI_2, R_min, R_max, 100000);
+
+}
+
+void MainWindow::powerBotReverb()
+{
+
+}
+
+void MainWindow::powerSurroundReverb()
+{
+
+}
+
+
 void MainWindow::slot_reverberationParametersToMain1(double param1, double param2, double param3, int channel1, int numDot1,
                                                      std::array<bool, 4> ReverbChecks1, int typeReverb, bool isCalculate)
 {
     ReverbChecks = ReverbChecks1;
+    numDot = numDot1;
+    reverbChannel1 = channel1;
     if (isCalculate)
     {
         switch (typeReverb) {
@@ -686,22 +808,22 @@ void MainWindow::slot_reverberationParametersToMain1(double param1, double param
             reverbFreq1 = param1;
             reverbFreq2 = param2;
             reverbDist3 = param3;
-            numDot = numDot1;
-            reverbChannel1 = channel1;
 
             break;
         case 2: //временная
             reverbFreq3 = param1;
             reverbDist1 = param2;
             reverbDist2 = param3;
-            numDot = numDot1;
-            reverbChannel1 = channel1;
+
             break;
         default:
             break;
         }
         //add code
-
+        if (ReverbChecks[0]) //поверхностная реверберация
+        {
+            powerSurfReverb();
+        }
 
 
     }

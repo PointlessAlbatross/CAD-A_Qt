@@ -29,10 +29,9 @@ public:
     simpson2(std::function<double(double, double)> f, double a1, double b1,
                                                              double a2, double b2,
                                                              int n1, int n2);
-    simpson3(std::function<double(double, double, double)> f, double a1, double b1,
-                                                                     double a2, double b2,
-                                                                     double a3, double b3,
-                                                                     int n1, int n2, int n3);
+                                                             */
+    double simpson3(std::function<double (double, double, double)> f, double a1, double b1, double a2, double b2, double a3, double b3, int n);
+    /*
     romberg(std::function<double (double)> f,
                                  double a, double b, int n);
     romberg2(std::function<double (double, double)> f,
