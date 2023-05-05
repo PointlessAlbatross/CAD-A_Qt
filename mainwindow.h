@@ -39,8 +39,8 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    int antennaType;
-    int overlayType;
+    int antennaType; // амплитудная/фазовая
+    int overlayType; // 4/6 угольная
 
     double radCircScr;
     double distHex;
@@ -122,6 +122,8 @@ private:
     void powerSurfReverb();
     void powerBotReverb();
     void powerSurroundReverb();
+
+    bool checkChannel(int i);
 
 
     double reverbDist1;
