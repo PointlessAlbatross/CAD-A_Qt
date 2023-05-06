@@ -78,12 +78,52 @@ MainWindow::MainWindow(QWidget *parent)
     ui->antennaTypeAction->setText("Тип антенны:  Амплитудная");
     overlayType = 0;
     ui->overlayAction->setText("Вид накладки:  4-угольники");
+    updateRawDataWindow();
 }
 
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::updateRawDataWindow()
+{
+    ui->antenna_Info->clear();
+    if(overlayType) // 6-угольная антенна
+    {
+        if (antennaType)
+            ui->antenna_Info->appendPlainText("Фазовая антенна");
+        else
+            ui->antenna_Info->appendPlainText("Амплитудная антенна");
+            ui->antenna_Info->appendPlainText("Четырехугольные элементы");
+        ui->antenna_Info->appendPlainText("Шестиугольные элементы\n");
+
+        ui->antenna_Info->appendPlainText("Радиус, мм = " + QString::number(radAnt * 1000));
+        ui->antenna_Info->appendPlainText("X, мм = " + QString::number(radCircScr * 1000));
+        ui->antenna_Info->appendPlainText("зазор dX, мм = " + QString::number(distHex * 1000) + "\n");
+
+        ui->antenna_Info->appendPlainText("частота, Гц = " + QString::number(receivingFreq));
+        ui->antenna_Info->appendPlainText("k, 1/м = " + QString::number(k));
+    }
+    else
+    {
+        if (antennaType)
+            ui->antenna_Info->appendPlainText("Фазовая антенна");
+        else
+            ui->antenna_Info->appendPlainText("Амплитудная антенна");
+        ui->antenna_Info->appendPlainText("Четырехугольные элементы\n");
+        //ui->antenna_Info->appendPlainText("Число накладок" + QString::number(abs(Psurf)));
+
+        ui->antenna_Info->appendPlainText("Радиус, мм = " + QString::number(radAnt * 1000));
+        ui->antenna_Info->appendPlainText("X, мм = " + QString::number(sizeX * 1000));
+        ui->antenna_Info->appendPlainText("зазор dX, мм = " + QString::number(distX * 1000));
+        ui->antenna_Info->appendPlainText("Z, = " + QString::number(sizeZ * 1000));
+        ui->antenna_Info->appendPlainText("зазор dZ, мм = " + QString::number(distZ * 1000) + "\n");
+
+        ui->antenna_Info->appendPlainText("частота, Гц = " + QString::number(receivingFreq));
+        ui->antenna_Info->appendPlainText("k, 1/м = " + QString::number(k));
+    }
 }
 
 
@@ -168,6 +208,7 @@ void MainWindow::slotParamRectToMain(double size_x1, double size_z1,
         for(int j = 0; j < num_row; j++ )
             SelectedElem[i][j].resize(Max_elem[j]);
     }
+    updateRawDataWindow();
 }
 
 void MainWindow::slotParamHexToMain(double rad_circ_scr_1, double distHex_1, double rad_ant_1, int num_row_1, QVector<int> Max_elem_1)
@@ -193,6 +234,7 @@ void MainWindow::slotParamHexToMain(double rad_circ_scr_1, double distHex_1, dou
         for(int j = 0; j < num_row; j++ )
             SelectedElem[i][j].resize(Max_elem[j]);
     }
+    updateRawDataWindow();
 }
 
 void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int riseTime1, int pressure1, int receiving_freq1, int radiation_freq1, int impulseType1)
@@ -205,6 +247,7 @@ void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int ris
     radiationFreq = radiation_freq1;
     k = radiation_freq1 * 2 * M_PI / 1500;
     qDebug() <<"k = " << k << Qt::endl;
+    updateRawDataWindow();
 }
 
 void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<QPair<double,double>>> Center_pos1,
@@ -216,6 +259,7 @@ void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVect
     Centroids = Centroids1;
     Arr_sensitivityGroup = Arr_sensitivity;
     SelectedElem = SelectedElem1;
+    updateRawDataWindow();
 
 
 }
@@ -330,6 +374,7 @@ void MainWindow::on_overlayAction_triggered()
         ui->overlayAction->setText("Вид накладки:  4-угольники");
         overlayType = 0;
     }
+    updateRawDataWindow();
 }
 
 void MainWindow::on_antennaTypeAction_triggered()
@@ -344,6 +389,7 @@ void MainWindow::on_antennaTypeAction_triggered()
         ui->antennaTypeAction->setText("Тип антенны:  Амплитудная");
         antennaType = 0;
     }
+    updateRawDataWindow();
 }
 
 void MainWindow::on_charts_action_triggered()
@@ -514,6 +560,8 @@ void MainWindow::on_elemTurbulentInterf_triggered()
 
 void MainWindow::on_powerDiffuseInterf_triggered()
 {
+    ui->consoleText->clear();
+
     int chn1 = 0;
     qDebug() << "freq" << receivingFreq;
     double Freq = receivingFreq;
@@ -629,6 +677,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         qDebug() <<"плотность мощности рассеянной помехи";
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
         qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
+        ui->consoleText->appendPlainText(QString::number(abs(Psurf)) + "\n");
     }
     else
     {
@@ -641,6 +690,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
                     continue;
             auto Psurf = m_cadAMath.monteCarlo2(Ps_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 100000);
             qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
+            ui->consoleText->appendPlainText(QString::number(abs(Psurf)) + "\n");
         }
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
@@ -658,6 +708,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
         qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
+        ui->consoleText->appendPlainText(QString::number(abs(Pbot)) + "\n");
     }
     else
     {
@@ -669,6 +720,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
                     continue;
             auto Pbot = m_cadAMath.monteCarlo2(Pb_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 100000);
             qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
+            ui->consoleText->appendPlainText(QString::number(abs(Pbot)) + "\n");
         }
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
@@ -758,6 +810,7 @@ void MainWindow::slot_channelParametersToMain(std::array<std::array<bool, 16>, 3
     {
         qDebug() << SubarrayCenter[chn].first << SubarrayCenter[chn].second;
     }
+    updateRawDataWindow();
 
 }
 

@@ -68,6 +68,8 @@ private:
     int receivingFreq;
     double k; // Волновое число
 
+    void updateRawDataWindow();
+
     int num_row;
     QVector<int> Max_elem;
 
