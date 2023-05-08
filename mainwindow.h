@@ -121,9 +121,9 @@ private:
     double D(double theta, double phi);
 
 
-    void powerSurfReverb();
-    void powerBotReverb();
-    void powerSurroundReverb();
+    void powerSurfReverb(int type);
+    void powerBotReverb(int type);
+    void powerSurroundReverb(int type);
 
     bool checkChannel(int i);
 

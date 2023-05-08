@@ -829,7 +829,7 @@ void MainWindow::on_paramChanelAction_triggered()
 }
 
 
-void MainWindow::powerSurfReverb()
+void MainWindow::powerSurfReverb(int typeRev)
 {
     const int c = 1500;
     double tauC = pulseDuration;
@@ -925,7 +925,7 @@ void MainWindow::powerSurfReverb()
 }
 
 
-void MainWindow::powerBotReverb()
+void MainWindow::powerBotReverb(int typeRev)
 {
     const int c = 1500;
     double tauC = pulseDuration;
@@ -978,7 +978,7 @@ void MainWindow::powerBotReverb()
     {
         return sqrt(pow(R, 2) + pow (depthSea - HSub, 2));
     };
-
+/*
     auto Hd = [beta] (double D, double f) -> double
     {
         return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D);
@@ -998,20 +998,27 @@ void MainWindow::powerBotReverb()
         return num / denum;
     };
 
-    double f = freq;
+
     auto Pb_unint = [this, Hd, tauC, THETA, K, D, mb, f] (double phi, double R)
     {
         std::complex<double> D_t = Dt(THETA(R),phi, 0);
         return 1 / tauC * pow(D_t, 2) * pow(D_t, 2)
                 * pow(g(f / K(THETA(R), phi)), 2) * pow(Hd(D(R), f), 2) * mb(THETA(R)) * R;
     };
-    double time = 0;
-    double R_min = Rmin(Db(time));
-    double R_max = Rmax(De(time));
-    auto Pb = m_cadAMath.monteCarlo2(Pb_unint, -M_PI_2, M_PI_2, R_min, R_max, 100000);
+
+    if(typeRev) // частотная
+    {
+        double fMin = reverbFreq1;
+        double fMax = reverbFreq2;
+        double time = 0;
+        double R_min = Rmin(Db(time));
+        double R_max = Rmax(De(time));
+        auto Pb = m_cadAMath.monteCarlo2(Pb_unint, -M_PI_2, M_PI_2, R_min, R_max, 100000);
+    }
+*/
 }
 
-void MainWindow::powerSurroundReverb()
+void MainWindow::powerSurroundReverb(int typeRev)
 {
 
 }
@@ -1052,7 +1059,7 @@ void MainWindow::slot_reverberationParametersToMain1(double param1, double param
         //add code
         if (ReverbChecks[0]) //поверхностная реверберация
         {
-            powerSurfReverb();
+            powerSurfReverb(typeReverb);
         }
 
 

@@ -31,6 +31,7 @@ private:
     int antennaType;
     int overlayType;
     bool regime;
+    int textType;
 
     int diamPix;
     int cnt;
@@ -73,6 +74,7 @@ private:
     void redrawingHex();
     void drawCirc();
     void drawRect (int x, int z, int size_x_pix, int size_z_pix, int j1, int i1);
+    void setText (int cx, int cz, int j1, int i1);
     void drawHex (int x, int z, int rad_circ_scr_pix, int j1, int i1);
     int i1, j1, n1;
     double weight;
@@ -138,6 +140,10 @@ private slots:
     void on_groupNumButton_15_clicked();
     void on_groupNumButton_16_clicked();
     void on_saveButton_clicked();
+    void on_clcButton_clicked();
+    void on_colRowButton_clicked();
+    void on_numButton_clicked();
+    void on_weightButton_clicked();
 };
 
 #endif // ARRANGEMENT_OF_ELEMENTS_H

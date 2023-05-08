@@ -11,6 +11,7 @@ ArrangementOfElements::ArrangementOfElements(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ArrangementOfElements)
 {
+    textType = 1;
     diamPix = 500 * scaleKoef; // число пикселей в диаметре
     groupNum = 1;
     ui->setupUi(this);
@@ -310,6 +311,7 @@ void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_p
             QPen pen(Qt::black);
             pen.setWidth(int (scaleKoef));
             QGraphicsRectItem *received_pressed = scene->addRect(x, z, size_x_pix, size_z_pix);
+            setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i);
             received_pressed->setPen(pen);
             received_pressed->setBrush(QBrush(QColor(0, 0, 139)));
             received_pressed->show();
@@ -319,6 +321,7 @@ void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_p
             QPen pen(Qt::black);
             pen.setWidth(int (scaleKoef));
             QGraphicsRectItem *received = scene->addRect(x, z, size_x_pix, size_z_pix);
+            setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i);
             received->setPen(pen);
             received->setBrush(QBrush(QColor(64, 207, 255)));
             received->show();
@@ -329,9 +332,71 @@ void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_p
         QPen pen(Qt::black);
         pen.setWidth(int (scaleKoef));
         QGraphicsRectItem *radiation = scene->addRect(x, z, size_x_pix, size_z_pix);
+        setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i);
         radiation->setPen(pen);
         radiation->setBrush(QBrush(QColor(244, 169, 0)));
         radiation->show();
+    }
+
+
+}
+
+void ArrangementOfElements::setText(int cx, int cz, int j1, int i1)
+{
+    if (textType == 1)
+    {
+
+    }
+    else
+    {
+        QGraphicsTextItem *textItem;
+        if(textType == 2)
+            textItem = new QGraphicsTextItem(QString::number(j1 + 1) + "." + QString::number(i1 + 1));
+        if(textType == 3)
+        {
+            int n = 1;
+            for (int j = 0; j < ButtonPos.size(); j++){
+                for (int i = 0; i < ButtonPos[j].size(); i++)
+                {
+                    std::get<2>(ButtonPos[j][i]) = n;
+                    n++;
+                }
+            }
+            textItem = new QGraphicsTextItem(QString::number(std::get<2>(ButtonPos[j1][i1])) );
+        }
+        if(textType == 4)
+        {
+            if (!antennaType) //амплитудная антенна
+            {
+                if(regime) // режим приема
+                    textItem = new QGraphicsTextItem(QString::number(WeightCoef[0][j1][i1]));
+                else
+                    textItem = new QGraphicsTextItem(QString::number(WeightCoef[16][j1][i1]));
+
+            }
+            else if(!regime) // режим излучения
+                textItem = new QGraphicsTextItem(QString::number(WeightCoef[16][j1][i1]));
+            else
+                textItem = new QGraphicsTextItem(QString::number(WeightCoef[groupNum - 1][j1][i1]));
+        }
+        textItem->setPos(cx, cz); // Установка позиции текста
+        // Добавление элемента на сцену
+        QFont font = textItem->font();
+        font.setPointSizeF(font.pointSizeF() * scaleKoef);
+        textItem->setFont(font);
+        textItem->setDefaultTextColor(Qt::black);
+
+        int textWidth = textItem->boundingRect().width();
+        int textHeight = textItem->boundingRect().height();
+
+        // Расчет позиции текста в середине прямоугольника
+        int textX = cx - textWidth / 2;
+        int textY = cz - textHeight / 2;
+
+        // Установка позиции текста
+        textItem->setPos(textX, textY);
+
+        scene->addItem(textItem);
     }
 
 
@@ -356,6 +421,7 @@ void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, i
                 << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6)), y - rad_circ_scr_pix / 2)
                 << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6)), y + rad_circ_scr_pix / 2);
             scene->addPolygon(hex, pen, brush);
+            setText(x, y, j, i);
         }
         else
         {
@@ -372,6 +438,7 @@ void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, i
                 << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y - rad_circ_scr_pix / 2.0)
                 << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y + rad_circ_scr_pix / 2.0);
             scene->addPolygon(hex, pen, brush);
+            setText(x, y, j, i);
         }
     }
     else
@@ -389,6 +456,7 @@ void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, i
             << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y - rad_circ_scr_pix / 2.0)
             << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y + rad_circ_scr_pix / 2.0);
         scene->addPolygon(hex, pen, brush);
+        setText(x, y, j, i);
     }
 }
 /*
@@ -717,6 +785,8 @@ void ArrangementOfElements::slotSelectWeightToArrange(double weight1, int i, int
         WeightCoef[0][i][j] = weight1;
     else
         WeightCoef[groupNum - 1][i][j] = weight1;
+
+    redrawing();
 }
 
 
@@ -1214,4 +1284,45 @@ void ArrangementOfElements::on_saveButton_clicked()
                              Arr_Denum, SelectedElem);
     QWidget::close();
 }
+
+
+void ArrangementOfElements::on_clcButton_clicked()
+{
+    if(textType != 1)
+    {
+        textType = 1;
+        redrawing();
+    }
+}
+
+
+void ArrangementOfElements::on_colRowButton_clicked()
+{
+    if(textType != 2)
+    {
+        textType = 2;
+        redrawing();
+    }
+}
+
+
+void ArrangementOfElements::on_numButton_clicked()
+{
+    if(textType != 3)
+    {
+        textType = 3;
+        redrawing();
+    }
+}
+
+
+void ArrangementOfElements::on_weightButton_clicked()
+{
+    if(textType != 4)
+    {
+        textType = 4;
+        redrawing();
+    }
+}
+
 
