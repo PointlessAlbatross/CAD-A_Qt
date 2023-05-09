@@ -311,7 +311,7 @@ void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_p
             QPen pen(Qt::black);
             pen.setWidth(int (scaleKoef));
             QGraphicsRectItem *received_pressed = scene->addRect(x, z, size_x_pix, size_z_pix);
-            setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i);
+            setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i, Qt::white);
             received_pressed->setPen(pen);
             received_pressed->setBrush(QBrush(QColor(0, 0, 139)));
             received_pressed->show();
@@ -321,7 +321,7 @@ void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_p
             QPen pen(Qt::black);
             pen.setWidth(int (scaleKoef));
             QGraphicsRectItem *received = scene->addRect(x, z, size_x_pix, size_z_pix);
-            setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i);
+            setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i, Qt::black);
             received->setPen(pen);
             received->setBrush(QBrush(QColor(64, 207, 255)));
             received->show();
@@ -332,7 +332,7 @@ void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_p
         QPen pen(Qt::black);
         pen.setWidth(int (scaleKoef));
         QGraphicsRectItem *radiation = scene->addRect(x, z, size_x_pix, size_z_pix);
-        setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i);
+        setText(x + size_x_pix / 2, z + size_z_pix / 2, j, i, Qt::black);
         radiation->setPen(pen);
         radiation->setBrush(QBrush(QColor(244, 169, 0)));
         radiation->show();
@@ -341,7 +341,7 @@ void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_p
 
 }
 
-void ArrangementOfElements::setText(int cx, int cz, int j1, int i1)
+void ArrangementOfElements::setText(int cx, int cz, int j1, int i1, QColor color)
 {
     if (textType == 1)
     {
@@ -384,7 +384,7 @@ void ArrangementOfElements::setText(int cx, int cz, int j1, int i1)
         QFont font = textItem->font();
         font.setPointSizeF(font.pointSizeF() * scaleKoef);
         textItem->setFont(font);
-        textItem->setDefaultTextColor(Qt::black);
+        textItem->setDefaultTextColor(color);
 
         int textWidth = textItem->boundingRect().width();
         int textHeight = textItem->boundingRect().height();
@@ -421,7 +421,7 @@ void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, i
                 << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6)), y - rad_circ_scr_pix / 2)
                 << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6)), y + rad_circ_scr_pix / 2);
             scene->addPolygon(hex, pen, brush);
-            setText(x, y, j, i);
+            setText(x, y, j, i, Qt::white);
         }
         else
         {
@@ -438,7 +438,7 @@ void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, i
                 << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y - rad_circ_scr_pix / 2.0)
                 << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y + rad_circ_scr_pix / 2.0);
             scene->addPolygon(hex, pen, brush);
-            setText(x, y, j, i);
+            setText(x, y, j, i, Qt::black);
         }
     }
     else
@@ -456,7 +456,7 @@ void ArrangementOfElements::drawHex(int x, int y, int rad_circ_scr_pix, int j, i
             << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y - rad_circ_scr_pix / 2.0)
             << QPointF(x - int(rad_circ_scr_pix * cos(M_PI/6.0)), y + rad_circ_scr_pix / 2.0);
         scene->addPolygon(hex, pen, brush);
-        setText(x, y, j, i);
+        setText(x, y, j, i, Qt::black);
     }
 }
 /*

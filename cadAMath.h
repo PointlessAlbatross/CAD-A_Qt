@@ -24,12 +24,9 @@ public:
                        double a1, double b1,
                        double a2, double b2,
                        double a3, double b3,int N);
-/*
-    simpson(std::function<double(double)> f, double a, double b, int n);
-    simpson2(std::function<double(double, double)> f, double a1, double b1,
-                                                             double a2, double b2,
-                                                             int n1, int n2);
-                                                             */
+
+    double simpson(std::function<double(double)> f, double a, double b, int n);
+    double simpson2(std::function<double(double, double)> f, double a1, double b1, double a2, double b2, int n1, int n2);
     double simpson3(std::function<double (double, double, double)> f, double a1, double b1, double a2, double b2, double a3, double b3, int n);
     /*
     romberg(std::function<double (double)> f,

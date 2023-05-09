@@ -5,36 +5,36 @@ CadAMath::CadAMath()
 
 }
 
-/*
-CadAMath::simpson(std::function<double (double)> f, double a, double b, int n)
+
+double CadAMath::simpson(std::function<double (double)> f, double a, double b, int n)
 {
     double h = (b - a) / n;
 
         // Вычисляем значение функции на узлах
-        T x0 = f(a);
-        T xn = f(b);
-        T xi = 0.0;
+        double x0 = f(a);
+        double xn = f(b);
+        double xi = 0.0;
         for (int i = 1; i < n; ++i) {
             xi += f(a + i * h);
         }
 
         // Считаем интеграл методом Симпсона
-        T integral = h / 3 * (x0 + 4 * xi + 2 * xn);
+        double integral = h / 3 * (x0 + 4 * xi + 2 * xn);
         return integral;
 }
 
-CadAMath::simpson2(std::function<double (double, double)> f, double a1, double b1, double a2, double b2, int n1, int n2)
+double CadAMath::simpson2(std::function<double (double, double)> f, double a1, double b1, double a2, double b2, int n1, int n2)
 {
     double h1 = (b1 - a1) / n1;
     double h2 = (b2 - a2) / n2;
 
-    T sum = 0.0;
+    double sum = 0.0;
     for (int i = 0; i <= n1; i++) {
-        T x1 = a1 + i * h1;
+        double x1 = a1 + i * h1;
         for (int j = 0; j <= n2; j++) {
-            T x2 = a2 + j * h2;
+            double x2 = a2 + j * h2;
 
-            T w1 = 1.0, w2 = 1.0;
+            double w1 = 1.0, w2 = 1.0;
             if (i == 0 || i == n1) w1 = 1.0 / 3.0;
             if (j == 0 || j == n2) w2 = 1.0 / 3.0;
             if ((i == 0 || i == n1) && (j == 0 || j == n2)) w1 = w2 = 1.0 / 9.0;
@@ -45,7 +45,7 @@ CadAMath::simpson2(std::function<double (double, double)> f, double a1, double b
 
     return (b1 - a1) * (b2 - a2) * sum / (n1 * n2);
 }
-*/
+
 double CadAMath::simpson3(std::function<double (double, double, double)> f, double a1, double b1, double a2, double b2, double a3, double b3, int n)
 {
     double h1 = (b1 - a1) / (2.0 * n);

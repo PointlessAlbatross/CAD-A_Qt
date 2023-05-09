@@ -74,7 +74,7 @@ private:
     void redrawingHex();
     void drawCirc();
     void drawRect (int x, int z, int size_x_pix, int size_z_pix, int j1, int i1);
-    void setText (int cx, int cz, int j1, int i1);
+    void setText (int cx, int cz, int j1, int i1, QColor color);
     void drawHex (int x, int z, int rad_circ_scr_pix, int j1, int i1);
     int i1, j1, n1;
     double weight;
