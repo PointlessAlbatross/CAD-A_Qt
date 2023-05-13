@@ -11,10 +11,14 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QPolarChart>
+#include <QtCharts/QCategoryAxis>
 #include <QtCharts/QScatterSeries>
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QChartView>
+
+#include "cadAMath.h"
+
 
 namespace Ui {
 class PatternCharts;
@@ -27,6 +31,8 @@ class PatternCharts : public QDialog
 public:
     explicit PatternCharts(QWidget *parent = nullptr);
     ~PatternCharts();
+
+    CadAMath m_cadAMath;
 
 private:
 
@@ -54,6 +60,7 @@ private:
     double D(double theta, double phi);
     std::complex<double> Dt(double theta, double phi);
     void drawChart();
+    void drawPhaseChart();
     void drawPolarChart();
 
 public slots:

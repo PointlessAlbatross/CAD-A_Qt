@@ -1,6 +1,7 @@
 #include "patternCharts.h"
 #include "ui_patternCharts.h"
 #include <QDebug>
+#include "cadAMath.h"
 
 PatternCharts::PatternCharts(QWidget *parent) :
     QDialog(parent),
@@ -73,8 +74,8 @@ void PatternCharts::drawChart()
             break;
         case 2:
             theta = M_PI_2;
-                for (double deg = -90; deg <= 91; deg += 0.1)
-                    series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
+            for (double deg = -90; deg <= 91; deg += 0.1)
+                series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
             break;
         }
 
@@ -123,53 +124,151 @@ void PatternCharts::drawChart()
     }
 }
 
-void PatternCharts::drawPolarChart()
+void PatternCharts::drawPhaseChart()
 {
-    const qreal angularMin = 0;
-    const qreal angularMax = 360;
+    double stepGraph = 0.01;
+    for(int reg_chart = 1; reg_chart <= 2; reg_chart++)
+    {
+        QVector<std::complex<double>> input;
+        QVector<std::complex<double>> result;
+        QLineSeries *series = new QLineSeries();
+        switch (reg_chart) {
+        case 1:
+            phi = 0;
+            for (double deg = 0; deg <= 181; deg += stepGraph)
+                input.push_back(Dt(deg / 180.0 * M_PI, phi));
+            result = m_cadAMath.ifft(input);
+            for (double deg = 0, cnt = 0 ; deg <= 181; deg += stepGraph, cnt += 1)
+                series->append(deg, atan2(result[cnt].real(), result[cnt].imag()) * 180 / M_PI);
+            break;
+        case 2:
+            double theta = M_PI_2;
+            for (double deg = -90; deg <= 91; deg += stepGraph)
+                input.push_back(Dt(theta, deg / 180.0 * M_PI));
+            result = m_cadAMath.ifft(input);
+            for (double deg = -90, cnt = 0; deg <= 91; deg += stepGraph, cnt += 1)
+                series->append(deg, atan2(result[cnt].real(), result[cnt].imag()) * 180 / M_PI);
+            break;
+        }
 
-    QSplineSeries *series = new QSplineSeries();
-    switch (regChart) {
-    case 1:
-        phi = 0;
-        for (double deg = angularMin; deg <= angularMax; deg += 0.1)
-            series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
-        break;
-    case 2:
-        theta = M_PI_2;
-            for (double deg = angularMin; deg <= angularMax; deg += 0.1)
-                series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
-        break;
+        QChart *chart = new QChart();
+        chart->legend()->hide();
+        chart->addSeries(series);
+
+        QValueAxis *axisX = new QValueAxis;
+        switch (reg_chart) {
+            case 1:
+                chart->setTitle("вертикальное сечение");
+                axisX->setRange(0, 180);
+                axisX->setTitleText("угол Θ, град");
+                break;
+            case 2:
+                chart->setTitle("азимутальное сечение");
+                axisX->setRange(-90, 90);
+                axisX->setTitleText("угол φ, град");
+                break;
+        }
+        axisX->setTickCount(11);
+        axisX->setLabelFormat("%i");
+
+        chart->addAxis(axisX, Qt::AlignBottom);
+        series->attachAxis(axisX);
+
+        QValueAxis *axisY = new QValueAxis();
+        axisY->setRange(-180, 180);
+        axisY->setTickCount(11);
+        axisY->setLabelFormat("%.3f");
+        axisY->setLabelsVisible(true);
+        chart->addAxis(axisY, Qt::AlignLeft);
+        series->attachAxis(axisY);
+
+        QChartView *chartView = new QChartView(chart);
+        chartView->setRenderHint(QPainter::Antialiasing);
+        switch (reg_chart) {
+            case 1:
+                ui->formLayout_1->addWidget(chartView);
+                break;
+            case 2:
+                ui->formLayout_2->addWidget(chartView);
+                break;
+        }
+
     }
-
-    QPolarChart *chart = new QPolarChart();
-    chart->legend()->hide();
-    chart->addSeries(series);
-    chart->setTitle("Simple line chart example");
-
-    QValueAxis *angularAxis = new QValueAxis();
-    angularAxis->setRange(angularMin, angularMax);
-    angularAxis->setTickCount(13); // First and last ticks are co-located on 0/360 angle.
-    angularAxis->setLabelFormat("%d");
-    angularAxis->setLabelsVisible(true);
-    angularAxis->setReverse(true);
-    chart->addAxis(angularAxis, QPolarChart::PolarOrientationAngular);
-
-    QValueAxis *radialAxis = new QValueAxis();
-    radialAxis->setRange(0.0, 1.01);
-    radialAxis->setTickCount(11);
-    radialAxis->setLabelFormat("%.3f");
-    radialAxis->setLabelsVisible(true);
-    chart->addAxis(radialAxis, QPolarChart::PolarOrientationRadial);
-
-
-    QChartView *chartView = new QChartView();
-    chartView->setChart(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-
-    ui->formLayout_1->addWidget(chartView);
 }
 
+
+/*
+        switch (reg_chart) {
+        case 1:
+            phi = 0;
+            for (double deg = angularMin; deg <= angularMax; deg += 0.1)
+                series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
+            break;
+        case 2:
+            theta = M_PI_2;
+                for (double deg = angularMin; deg <= angularMax; deg += 0.1)
+                    series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
+            break;
+        }
+
+
+
+*/
+
+void PatternCharts::drawPolarChart()
+{
+    for (int reg_chart = 1; reg_chart <= 2; reg_chart++)
+    {
+
+        const qreal angularMin = 0;
+        const qreal angularMax = 360;
+
+        QSplineSeries *series = new QSplineSeries();
+        switch (reg_chart) {
+        case 1:
+            phi = 0;
+            for (double deg = angularMin; deg <= angularMax; deg += 0.1)
+                series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
+        break;
+        case 2:
+            theta = M_PI_2;
+                for (double deg = angularMin; deg <= angularMax; deg += 0.1)
+                    series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
+        break;
+        }
+
+        QPolarChart *chart = new QPolarChart();
+        chart->legend()->hide();
+        chart->addSeries(series);
+
+        QValueAxis *angularAxis = new QValueAxis();
+        angularAxis->setRange(angularMin, angularMax);
+        angularAxis->setTickCount(13);
+        angularAxis->setLabelFormat("%d");
+        angularAxis->setLabelsVisible(true);
+        chart->addAxis(angularAxis, QPolarChart::PolarOrientationAngular);
+
+        QValueAxis *radialAxis = new QValueAxis();
+        radialAxis->setRange(0.0, 1.01);
+        radialAxis->setTickCount(11);
+        radialAxis->setLabelFormat("%.3f");
+        radialAxis->setLabelsVisible(true);
+        chart->addAxis(radialAxis, QPolarChart::PolarOrientationRadial);
+
+        QChartView *chartView = new QChartView();
+        chartView->setChart(chart);
+        chartView->setRenderHint(QPainter::Antialiasing);
+
+        switch (reg_chart) {
+        case 1:
+            ui->formLayout_1->addWidget(chartView);
+            break;
+        case 2:
+            ui->formLayout_2->addWidget(chartView);
+            break;
+        }
+    }
+}
 
 
 
@@ -195,5 +294,6 @@ void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVe
     distZ = dist_z1;
 
     drawChart();
+    //drawPhaseChart();
     //drawPolarChart();
 }

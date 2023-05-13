@@ -51,9 +51,9 @@ MainWindow::MainWindow(QWidget *parent)
     pulseDuration = 50;
     riseTime = 100;
     pressure = 1000000;
-    radiationFreq = 20550;
-    receivingFreq = 20000;
-    k = radiationFreq * 2 * M_PI / 1500;
+    receivingFreq = 20550;
+    radiationFreq = 20000;
+    k = receivingFreq * 2 * M_PI / 1500;
     for (unsigned int i = 0; i < TableChannel.size(); i++)
     {
         for (unsigned int j = 0; j < TableChannel[i].size(); j++)
@@ -237,7 +237,7 @@ void MainWindow::slotParamHexToMain(double rad_circ_scr_1, double distHex_1, dou
     updateRawDataWindow();
 }
 
-void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int riseTime1, int pressure1, int receiving_freq1, int radiation_freq1, int impulseType1)
+void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int riseTime1, int pressure1, int radiation_freq1, int receiving_freq1,  int impulseType1)
 {
     impulseType = impulseType1;
     pulseDuration = pulseDuration1;
@@ -356,7 +356,7 @@ void MainWindow::on_action_2_triggered() // Рабочие параметры с
 {
     OperatingSystemParameters window;
     connect(this, &MainWindow::signalMainToOperatingSystemParameters, &window, &OperatingSystemParameters::slotMainToOperatingSystemParameters);
-    emit signalMainToOperatingSystemParameters(pulseDuration, riseTime, pressure, receivingFreq, radiationFreq, impulseType);
+    emit signalMainToOperatingSystemParameters(pulseDuration, riseTime, pressure, radiationFreq, receivingFreq, impulseType);
     connect(&window, &OperatingSystemParameters::signalOperatingSystemParametersToMain, this, &MainWindow::slotOperatingSystemParametersToMain);
     window.setModal(true);
     window.exec();
@@ -560,8 +560,8 @@ void MainWindow::on_elemTurbulentInterf_triggered()
 
 void MainWindow::on_powerDiffuseInterf_triggered()
 {
+    ui->label->setText("Идет вычисление спектра мощности рассеяной помехи");
     ui->consoleText->clear();
-
     int chn1 = 0;
     qDebug() << "freq" << receivingFreq;
     double Freq = receivingFreq;
@@ -672,7 +672,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         QElapsedTimer timer;
         timer.start();
         chn1 = 0;
-        auto Psurf = m_cadAMath.monteCarlo2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 100000);
+        auto Psurf = m_cadAMath.simpson2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
         qint64 elapsed = timer.elapsed();
         qDebug() <<"плотность мощности рассеянной помехи";
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
@@ -688,13 +688,13 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         {
             if (!checkChannel(chn1))
                     continue;
-            auto Psurf = m_cadAMath.monteCarlo2(Ps_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 100000);
+            auto Psurf = m_cadAMath.simpson2(Ps_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
             qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
             ui->consoleText->appendPlainText(QString::number(abs(Psurf)) + "\n");
         }
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
-
+        ui->label->setText("Вычисления выполнены");
     }
 
 
@@ -704,7 +704,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         QElapsedTimer timer;
         timer.start();
         chn1 = 0;
-        auto Pbot = m_cadAMath.monteCarlo2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 100000);
+        auto Pbot = m_cadAMath.simpson2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
         qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
@@ -718,7 +718,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         {
             if (!checkChannel(chn1))
                     continue;
-            auto Pbot = m_cadAMath.monteCarlo2(Pb_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 100000);
+            auto Pbot = m_cadAMath.simpson2(Pb_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
             qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
             ui->consoleText->appendPlainText(QString::number(abs(Pbot)) + "\n");
         }
@@ -920,7 +920,7 @@ void MainWindow::powerSurfReverb(int typeRev)
     double time = 0;
     double R_min = Rmin(Db(time));
     double R_max = Rmax(De(time));
-    auto Ps = m_cadAMath.monteCarlo2(Ps_unint, -M_PI_2, M_PI_2, R_min, R_max, 100000);
+    auto Ps = m_cadAMath.simpson2(Ps_unint, -M_PI_2, M_PI_2, R_min, R_max, 1000);
 
 }
 
@@ -1013,7 +1013,7 @@ void MainWindow::powerBotReverb(int typeRev)
         double time = 0;
         double R_min = Rmin(Db(time));
         double R_max = Rmax(De(time));
-        auto Pb = m_cadAMath.monteCarlo2(Pb_unint, -M_PI_2, M_PI_2, R_min, R_max, 100000);
+        auto Pb = m_cadAMath.simpson2(Pb_unint, -M_PI_2, M_PI_2, R_min, R_max, 1000);
     }
 */
 }

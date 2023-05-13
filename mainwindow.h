@@ -209,8 +209,8 @@ public slots:
     void slotParamHexToMain(double rad_circ_scr, double dist,
               double rad_ant, int num_row,
               QVector<int> Max_elem);
-    void slotOperatingSystemParametersToMain(int duration, int riseTime, int pressure, int receiving_freq,
-                                                  int radiation_freq, int impulseType);
+    void slotOperatingSystemParametersToMain(int duration, int riseTime, int pressure,
+                                                  int radiation_freq, int receiving_freq, int impulseType);
     void slotArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,
                            std::array<QPair<double, double>, 16> Centroids, std::array<double,16> Arr_Denum, std::array<QVector<QVector<bool>>, 16> SelectedElem);
     void slot_selectionOfCorrectiveElementsToMain_save(double qSlot, double q1Slot, double f, double delta_f,
