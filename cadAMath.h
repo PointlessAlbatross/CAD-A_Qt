@@ -43,6 +43,7 @@ public:
                                         double a3, double b3,
                                         int n1, int n2, int n3);
 */
+    int maxOfThree(double a, double b, double c);
 };
 
 #endif // CADAMATH_H

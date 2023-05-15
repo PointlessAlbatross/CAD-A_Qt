@@ -226,3 +226,13 @@ QVector<std::complex<double>> CadAMath::ifft(const QVector<std::complex<double>>
     return result;
 }
 
+int CadAMath::maxOfThree(double a, double b, double c) {
+    int max = a;
+    if (b > max) {
+        max = b;
+    }
+    if (c > max) {
+        max = c;
+    }
+    return max;
+}

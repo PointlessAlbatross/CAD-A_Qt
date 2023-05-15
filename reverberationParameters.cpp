@@ -84,7 +84,7 @@ void ReverberationParameters::slot_mainToReverberationParameters2(double param1,
 
 void ReverberationParameters::on_pushButtonSave_clicked()
 {
-    emit signal_reverberationParametersToMain1(ui->param1Box->value(), ui->param2Box->value(), ui->param2Box->value(),
+    emit signal_reverberationParametersToMain1(ui->param1Box->value(), ui->param2Box->value(), ui->param3Box->value(),
                                                ui->channel1Box->value(), ui->numDotBox->value(),
                                                ReverbChecks, REVERB_TYPE, 0);
 
@@ -100,7 +100,7 @@ void ReverberationParameters::on_pushButtonCancel_clicked()
 
 void ReverberationParameters::on_pushButtonCompute_clicked()
 {
-    emit signal_reverberationParametersToMain1(ui->param1Box->value(), ui->param2Box->value(), ui->param2Box->value(),
+    emit signal_reverberationParametersToMain1(ui->param1Box->value(), ui->param2Box->value(), ui->param3Box->value(),
                                                ui->channel1Box->value(), ui->numDotBox->value(),
                                                ReverbChecks, REVERB_TYPE, 1);
     QWidget::close();

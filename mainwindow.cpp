@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+//![]
     //Предустановленные параметры коррект элем
     q = 1;
     q1 = 0;
@@ -70,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
     reverbChannel2 = 2;
     ReverbChecks = {true, true, true, true};
     numDot = 100;
-
+//![2]
 
     ui->setupUi(this);
     PARAM_WINDOW_FLAG = true;
@@ -96,7 +97,7 @@ void MainWindow::updateRawDataWindow()
             ui->antenna_Info->appendPlainText("Фазовая антенна");
         else
             ui->antenna_Info->appendPlainText("Амплитудная антенна");
-            ui->antenna_Info->appendPlainText("Четырехугольные элементы");
+
         ui->antenna_Info->appendPlainText("Шестиугольные элементы\n");
 
         ui->antenna_Info->appendPlainText("Радиус, мм = " + QString::number(radAnt * 1000));
@@ -602,7 +603,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
 
     auto Hd = [beta] (double R, double f) -> double
     {
-        return 1/(pow(R,2)) * pow(10, -0.1*beta(f)*R);
+        return 1/(pow(R,2)) * pow(10, -0.1*beta(f)*R*1e-3);
     };
     //[] обратное поверхностное рассеивание
     auto X = [this](double theta, double phi, double theta_0, double phi_0)
@@ -645,7 +646,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         double r1 = R1(theta, false);
         double r2 = R2(theta, false);
         std::complex<double> D_t = Dt(theta, phi, chn1);
-        return pow(this->noiseEng, 2) * pow(D_t, 2) * Hd(r1/1000.0, Freq) * Hd(r2, Freq) *
+        return pow(this->noiseEng, 2) * pow(D_t, 2) * Hd(r1, Freq) * Hd(r2, Freq) *
                 mb(theta) * pow(this->depthSea - this->HSub, 2)*sin(theta) / abs(pow(cos(theta), 3));
     };
 
@@ -662,7 +663,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         double r1 = R1(theta, false);
         double r2 = R2(theta, false);
         std::complex<double> D_t = DLt(theta, phi, chn1);
-        return pow(this->noiseEng, 2) * pow(D_t, 2) * Hd(r1/1000.0, Freq) * Hd(r2, Freq) *
+        return pow(this->noiseEng, 2) * pow(D_t, 2) * Hd(r1, Freq) * Hd(r2, Freq) *
                 mb(theta) * pow(this->depthSea - this->HSub, 2)*sin(theta) / abs(pow(cos(theta), 3));
     };
 
@@ -831,36 +832,6 @@ void MainWindow::on_paramChanelAction_triggered()
 
 void MainWindow::powerSurfReverb(int typeRev)
 {
-    const int c = 1500;
-    double tauC = pulseDuration;
-    auto Db = [c] (double to)
-    {
-        return c*to;
-    };
-
-    auto Rmin = [this] (double Db)
-    {
-        return sqrt(pow(Db, 2) - pow (HSub, 2));
-    };
-
-    auto De = [tauC, c] (double Db)
-    {
-        return Db + c * tauC / 2.0;
-    };
-
-    auto Rmax = [this] (double De)
-    {
-        return sqrt(pow(De, 2) - pow (HSub, 2));
-    };
-
-    auto K = [this, c] (double theta, double phi)
-    {
-        double num, denum;
-        num = 1 + speed * sin(theta)* cos(phi) / c;
-        denum = 1 - speed * sin(theta)* cos(phi) / c;
-        return num / denum;
-    };
-
     auto beta = [this] (double f1) // коэф простр затухания
     {
         double f = f1/1000;
@@ -877,7 +848,6 @@ void MainWindow::powerSurfReverb(int typeRev)
         return a * (A * S * fp * pow(f, 2) / (pow(fp, 2) + pow(f, 2)) + B * pow(f, 2) / fp) * (1 - b1 * p);
         // формула Шулкина-Марша
     };
-
     auto D = [this] (double R)
     {
         return sqrt(pow(R, 2) + pow (HSub, 2));
@@ -885,78 +855,34 @@ void MainWindow::powerSurfReverb(int typeRev)
 
     auto Hd = [beta] (double D, double f) -> double
     {
-        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D);
+        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3);
     };
-
-    auto THETA = [this] (double R)
+    if (typeRev == 1) //частотная
     {
-        return atan2(R, HSub);
-    };
-
-    auto X = [this](double theta, double phi, double theta_0, double phi_0)
+        VecSurfFreq.clear();
+        double dist = reverbDist3;
+        for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
+        {
+            double H_d = Hd(D(dist), FRev);
+            VecSurfFreq.push_back(H_d);
+        }
+    }
+    if (typeRev == 2)  //временная
     {
-        return pow(k, 2) * ( pow(sin(theta), 2) + pow(sin(theta_0), 2) - 2 * sin(theta) * sin (theta_0) * cos(phi - phi_0));
-    };
-
-    auto q = [this] (double theta, double theta_0)
-    {
-        return k * (cos(theta) + cos(theta_0));
-    };
-
-    auto ms = [X, q, this] (double theta, double phi)
-    {
-        double theta_0 = M_PI, phi_0 = 0;
-        double delta2 = 0.001 * (3 + 5.12 * windSpeed);
-        return 4 * (1 / 2.0 *(1 + pow(X(theta, phi, theta_0, phi_0), 2) / pow (q(theta, theta_0), 2))) * exp(-pow(X(theta, phi, theta_0, phi_0), 2) / (2 * delta2 * pow(q(theta, theta_0), 2)));
-    };
-
-    double f = freq;
-    auto Ps_unint = [this, Hd, tauC, THETA, K, D, ms, f] (double phi, double R)
-    {
-        std::complex<double> D_t = Dt(THETA(R),phi, 0);
-        return 1 / tauC * pow(D_t, 2) * pow(D_t, 2)
-                * pow(g(f / K(THETA(R), phi)), 2) * pow(Hd(D(R), f), 2) * ms(THETA(R), phi) * R;
-    };
-    double time = 0;
-    double R_min = Rmin(Db(time));
-    double R_max = Rmax(De(time));
-    auto Ps = m_cadAMath.simpson2(Ps_unint, -M_PI_2, M_PI_2, R_min, R_max, 1000);
-
+        VecSurfDist.clear();
+        double frequency = reverbFreq3;
+        for(double DRev = reverbDist1; DRev < reverbDist2; DRev += (reverbDist2 - reverbDist1) / double(numDot))
+        {
+            double H_d = Hd(D(DRev), frequency);
+            VecSurfDist.push_back(H_d);
+        }
+    }
+    qDebug() << VecSurfDist;
 }
 
 
-void MainWindow::powerBotReverb(int typeRev)
+void MainWindow::powerBotReverb(int type)
 {
-    const int c = 1500;
-    double tauC = pulseDuration;
-    auto Db = [c] (double to)
-    {
-        return c*to;
-    };
-
-    auto Rmin = [this] (double Db)
-    {
-        return sqrt(pow(Db, 2) - pow (HSub, 2));
-    };
-
-    auto De = [tauC, c] (double Db)
-    {
-        return Db + c * tauC / 2.0;
-    };
-
-    auto Rmax = [this] (double De)
-    {
-        return sqrt(pow(De, 2) - pow (HSub, 2));
-    };
-
-    auto K = [this, c] (double theta, double phi)
-    {
-        double num, denum;
-        num = 1 + speed * sin(theta)* cos(phi) / c;
-        denum = 1 - speed * sin(theta)* cos(phi) / c;
-        return num / denum;
-    };
-
     auto beta = [this] (double f1) // коэф простр затухания
     {
         double f = f1/1000;
@@ -978,48 +904,173 @@ void MainWindow::powerBotReverb(int typeRev)
     {
         return sqrt(pow(R, 2) + pow (depthSea - HSub, 2));
     };
-/*
     auto Hd = [beta] (double D, double f) -> double
     {
-        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D);
+        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3);
     };
 
-    auto THETA = [this] (double R)
+    if (type == 1) //частотная
     {
-        return M_PI_2 + atan2(R, depthSea);
-    };
-
-    auto mb = [] (double theta)
-    {
-        double m = 1.56;
-        double n = 1.008;
-        double num = m * cos(theta) - sqrt(pow(n, 2) - pow(sin(theta), 2));
-        double denum = m * cos(theta) + sqrt(pow(n, 2) - pow(sin(theta), 2));
-        return num / denum;
-    };
-
-
-    auto Pb_unint = [this, Hd, tauC, THETA, K, D, mb, f] (double phi, double R)
-    {
-        std::complex<double> D_t = Dt(THETA(R),phi, 0);
-        return 1 / tauC * pow(D_t, 2) * pow(D_t, 2)
-                * pow(g(f / K(THETA(R), phi)), 2) * pow(Hd(D(R), f), 2) * mb(THETA(R)) * R;
-    };
-
-    if(typeRev) // частотная
-    {
-        double fMin = reverbFreq1;
-        double fMax = reverbFreq2;
-        double time = 0;
-        double R_min = Rmin(Db(time));
-        double R_max = Rmax(De(time));
-        auto Pb = m_cadAMath.simpson2(Pb_unint, -M_PI_2, M_PI_2, R_min, R_max, 1000);
+        VecBotFreq.clear();
+        double dist = reverbDist3;
+        for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
+        {
+            double H_d = Hd(D(dist), FRev);
+            VecBotFreq.push_back(H_d);
+        }
     }
-*/
+    if (type == 2)  //временная
+    {
+        VecBotDist.clear();
+        double frequency = reverbFreq3;
+        for(double DRev = reverbDist1; DRev < reverbDist2; DRev += (reverbDist2 - reverbDist1) / numDot)
+        {
+            double H_d = Hd(D(DRev), frequency);
+            VecBotDist.push_back(H_d);
+        }
+    }
 }
 
-void MainWindow::powerSurroundReverb(int typeRev)
+void MainWindow::powerSurroundReverb(int type)
 {
+    auto beta = [this] (double f1) // коэф простр затухания
+    {
+        double f = f1/1000;
+        //return 0.036*pow(f/1000.0, 1.5); //формула Шихе-Хелли
+        const double a = 8.68e3;
+        const double A = 2.34e-6; // постоянная ионной релаксации
+        double S = salinity;
+        double T = tempWater;
+        double fp = 21.9 * pow(10, 6-1520/(T+273)); // частота релаксации при атмосферном давлении, кГц
+        const double B = 3.38e-6; // постоянная вязкости пресной воды
+        const double b1 = 6.54e-4; // градиент изменения коэффициента затухания под влиянием статического давления
+        double p = HSub / 10.0; //гидростатическое давление
+
+        return a * (A * S * fp * pow(f, 2) / (pow(fp, 2) + pow(f, 2)) + B * pow(f, 2) / fp) * (1 - b1 * p);
+        // формула Шулкина-Марша
+    };
+
+    auto D = [this] (double R)
+    {
+        return sqrt(pow(R, 2) + pow (R - HSub, 2));
+    };
+    auto Hd = [beta] (double D, double f) -> double
+    {
+        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3);
+    };
+
+    if (type == 1) //частотная
+    {
+        double dist = reverbDist3;
+        for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
+        {
+            double H_d1 = Hd(D(dist), FRev);
+            VecSurrFreq.push_back(H_d1);
+        }
+    }
+    if (type == 2)  //временная
+    {
+        double frequency = reverbFreq3;
+        for(double DReverb = reverbDist1; DReverb < reverbDist2; DReverb += (reverbDist2 - reverbDist1) / numDot)
+        {
+            double H_d2 = Hd(D(DReverb), frequency);
+            VecSurrDist.push_back(H_d2);
+        }
+    }
+}
+
+void MainWindow::powerSumReverb(int type)
+{
+    QVector<double> surf;
+    QVector<double> bot;
+    QVector<double> surround;
+
+    if (type == 1) //частотная
+    {
+        if (ReverbChecks[0]) //поверхностная реверберация
+        {
+            surf = VecSurfFreq;
+        }
+
+
+        if (ReverbChecks[1]) //донная реверберация
+        {
+            bot = VecBotFreq;
+        }
+        else
+
+        if (ReverbChecks[2]) //объемная реверберация
+        {
+            surround = VecSurrFreq;
+        }
+
+        for(int num = 0; num < m_cadAMath.maxOfThree(VecSurfFreq.size(), VecBotFreq.size(), VecSurrFreq.size()); num++)
+        {
+            double sum;
+            if (ReverbChecks[0]) //поверхностная реверберация
+            {
+                sum += VecSurfFreq[num];
+            }
+
+
+            if (ReverbChecks[1]) //донная реверберация
+            {
+                sum = VecBotFreq[num];
+            }
+            else
+
+            if (ReverbChecks[2]) //объемная реверберация
+            {
+                sum = VecSurrFreq[num];
+            }
+
+            VecSumFreq.push_back(sum);
+        }
+    }
+    else if (type == 2)  //временная
+    {
+        if (ReverbChecks[0]) //поверхностная реверберация
+        {
+            surf = VecSurfDist;
+        }
+
+
+        if (ReverbChecks[1]) //донная реверберация
+        {
+            bot = VecBotDist;
+        }
+        else
+
+        if (ReverbChecks[2]) //объемная реверберация
+        {
+            surround = VecSurrDist;
+        }
+
+        for(int num = 0; num < m_cadAMath.maxOfThree(VecSurfDist.size(), VecBotDist.size(), VecSurrDist.size()); num++)
+        {
+            double sum;
+            if (ReverbChecks[0]) //поверхностная реверберация
+            {
+                sum += VecSurfDist[num];
+            }
+
+
+            if (ReverbChecks[1]) //донная реверберация
+            {
+                sum = VecBotDist[num];
+            }
+            else
+
+            if (ReverbChecks[2]) //объемная реверберация
+            {
+                sum = VecSurrDist[num];
+            }
+
+            VecSumFreq.push_back(sum);
+        }
+    }
+
+
 
 }
 
@@ -1056,13 +1107,26 @@ void MainWindow::slot_reverberationParametersToMain1(double param1, double param
         default:
             break;
         }
-        //add code
         if (ReverbChecks[0]) //поверхностная реверберация
         {
             powerSurfReverb(typeReverb);
         }
 
+        if (ReverbChecks[1]) //поверхностная реверберация
+        {
+            powerBotReverb(typeReverb);
+        }
 
+        if (ReverbChecks[2]) //поверхностная реверберация
+        {
+            powerSurroundReverb(typeReverb);
+        }
+
+        if (ReverbChecks[3]) //поверхностная реверберация
+        {
+            //!ошибка выхода за пределы массива
+          //  powerSumReverb(typeReverb);
+        }
     }
     else
     {

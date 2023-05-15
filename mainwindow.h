@@ -124,6 +124,7 @@ private:
     void powerSurfReverb(int type);
     void powerBotReverb(int type);
     void powerSurroundReverb(int type);
+    void powerSumReverb(int type);
 
     bool checkChannel(int i);
 
@@ -138,6 +139,15 @@ private:
     int reverbChannel2;
     std::array<bool, 4> ReverbChecks;
     int numDot;
+
+    QVector<double> VecSurfFreq;
+    QVector<double> VecSurfDist;
+    QVector<double> VecBotFreq;
+    QVector<double> VecBotDist;
+    QVector<double> VecSurrFreq;
+    QVector<double> VecSurrDist;
+    QVector<double> VecSumFreq;
+    QVector<double> VecSumDist;
 
     double g(double f);
 
