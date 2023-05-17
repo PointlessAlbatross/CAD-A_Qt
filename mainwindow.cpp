@@ -877,7 +877,6 @@ void MainWindow::powerSurfReverb(int typeRev)
             VecSurfDist.push_back(H_d);
         }
     }
-    qDebug() << VecSurfDist;
 }
 
 
@@ -961,6 +960,7 @@ void MainWindow::powerSurroundReverb(int type)
 
     if (type == 1) //частотная
     {
+        VecSurrFreq.clear();
         double dist = reverbDist3;
         for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
         {
@@ -970,6 +970,7 @@ void MainWindow::powerSurroundReverb(int type)
     }
     if (type == 2)  //временная
     {
+        VecSurrDist.clear();
         double frequency = reverbFreq3;
         for(double DReverb = reverbDist1; DReverb < reverbDist2; DReverb += (reverbDist2 - reverbDist1) / numDot)
         {
@@ -981,47 +982,26 @@ void MainWindow::powerSurroundReverb(int type)
 
 void MainWindow::powerSumReverb(int type)
 {
-    QVector<double> surf;
-    QVector<double> bot;
-    QVector<double> surround;
-
     if (type == 1) //частотная
     {
-        if (ReverbChecks[0]) //поверхностная реверберация
-        {
-            surf = VecSurfFreq;
-        }
-
-
-        if (ReverbChecks[1]) //донная реверберация
-        {
-            bot = VecBotFreq;
-        }
-        else
-
-        if (ReverbChecks[2]) //объемная реверберация
-        {
-            surround = VecSurrFreq;
-        }
-
+        VecSumFreq.clear();
         for(int num = 0; num < m_cadAMath.maxOfThree(VecSurfFreq.size(), VecBotFreq.size(), VecSurrFreq.size()); num++)
         {
-            double sum;
+            double sum = 0;
             if (ReverbChecks[0]) //поверхностная реверберация
             {
                 sum += VecSurfFreq[num];
             }
 
-
             if (ReverbChecks[1]) //донная реверберация
             {
-                sum = VecBotFreq[num];
+                sum += VecBotFreq[num];
             }
             else
 
             if (ReverbChecks[2]) //объемная реверберация
             {
-                sum = VecSurrFreq[num];
+                sum += VecSurrFreq[num];
             }
 
             VecSumFreq.push_back(sum);
@@ -1029,23 +1009,7 @@ void MainWindow::powerSumReverb(int type)
     }
     else if (type == 2)  //временная
     {
-        if (ReverbChecks[0]) //поверхностная реверберация
-        {
-            surf = VecSurfDist;
-        }
-
-
-        if (ReverbChecks[1]) //донная реверберация
-        {
-            bot = VecBotDist;
-        }
-        else
-
-        if (ReverbChecks[2]) //объемная реверберация
-        {
-            surround = VecSurrDist;
-        }
-
+        VecSumDist.clear();
         for(int num = 0; num < m_cadAMath.maxOfThree(VecSurfDist.size(), VecBotDist.size(), VecSurrDist.size()); num++)
         {
             double sum;
@@ -1066,7 +1030,7 @@ void MainWindow::powerSumReverb(int type)
                 sum = VecSurrDist[num];
             }
 
-            VecSumFreq.push_back(sum);
+            VecSumDist.push_back(sum);
         }
     }
 
@@ -1124,8 +1088,7 @@ void MainWindow::slot_reverberationParametersToMain1(double param1, double param
 
         if (ReverbChecks[3]) //поверхностная реверберация
         {
-            //!ошибка выхода за пределы массива
-          //  powerSumReverb(typeReverb);
+            powerSumReverb(typeReverb);
         }
     }
     else
