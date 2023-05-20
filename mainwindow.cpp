@@ -679,7 +679,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         qDebug() <<"плотность мощности рассеянной помехи";
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
         qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
-        ui->consoleText->appendPlainText(QString::number(abs(Psurf)) + "\n");
+        ui->consoleText->appendPlainText(QString::number(abs(Psurf), 'e', 2) + "\n");
     }
     else
     {
@@ -692,7 +692,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
                     continue;
             auto Psurf = m_cadAMath.simpson2(Ps_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
             qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
-            ui->consoleText->appendPlainText(QString::number(abs(Psurf)) + "\n");
+            ui->consoleText->appendPlainText(QString::number(abs(Psurf), 'e', 2) + "\n");
         }
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
@@ -710,7 +710,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
         qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
-        ui->consoleText->appendPlainText(QString::number(abs(Pbot)) + "\n");
+        ui->consoleText->appendPlainText(QString::number(abs(Pbot), 'e', 2) + "\n");
     }
     else
     {
@@ -722,7 +722,7 @@ void MainWindow::on_powerDiffuseInterf_triggered()
                     continue;
             auto Pbot = m_cadAMath.simpson2(Pb_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
             qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
-            ui->consoleText->appendPlainText(QString::number(abs(Pbot)) + "\n");
+            ui->consoleText->appendPlainText(QString::number(abs(Pbot), 'e', 2) + "\n");
         }
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
