@@ -341,12 +341,13 @@ void MainWindow::slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot
             w -= 1;
         w_ar.push_back(w);
     }
-    qDebug() << w_ar <<Qt::endl;
+    /*qDebug() << w_ar <<Qt::endl;
     qDebug() << abs_K <<Qt::endl;
     qDebug() << abs_K0 <<Qt::endl;
     qDebug() << k0Fn(w_r) <<Qt::endl;
     qDebug() << w_r <<Qt::endl;
     qDebug() << abs_k0Max <<Qt::endl;
+    */
 }
 
 
