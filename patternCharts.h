@@ -6,6 +6,7 @@
 #include <ccomplex>
 #include <QPainter>
 
+
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
 #include <QtCharts/QChartView>
@@ -16,6 +17,8 @@
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QChartView>
+#include <QtCharts/QLegend>
+#include <QtCharts/QLogValueAxis>
 
 #include "cadAMath.h"
 
@@ -62,6 +65,11 @@ private:
     void drawChart();
     void drawPhaseChart();
     void drawPolarChart();
+    void drawReverb(QVector<double> VecSurfFreq, QVector<double> VecSurfDist, QVector<double> VecBotFreq,
+                    QVector<double> VecBotDist, QVector<double> VecSurrFreq, QVector<double> VecSurrDist,
+                    QVector<double> VecSumFreq, QVector<double> VecSumDist, std::array<bool, 4> ReverbChecks,
+                    std::array<bool, 2> ReverbCalc, QVector<double> VecFreq,
+                    QVector<double> VecDist);
 
 public slots:
     void slotMainToCharts(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef,
@@ -69,7 +77,19 @@ public slots:
                              double k,
                              double size_x, double size_z, double dist_x, double dist_z,
                              double rad_circ_scr, double dist_hex,
-                             int overlay_type);
+                             int overlay_type,
+                             QVector<double> VecSurfFreq,
+                             QVector<double> VecSurfDist,
+                             QVector<double> VecBotFreq,
+                             QVector<double> VecBotDist,
+                             QVector<double> VecSurrFreq,
+                             QVector<double> VecSurrDist,
+                             QVector<double> VecSumFreq,
+                             QVector<double> VecSumDist,
+                             std::array<bool, 4> ReverbChecks,
+                             std::array<bool, 2> ReverbCalc,
+                             QVector<double> VecFreq,
+                             QVector<double> VecDist);
 private:
     Ui::PatternCharts *ui;
 };

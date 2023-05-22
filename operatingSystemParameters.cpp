@@ -82,7 +82,7 @@ void OperatingSystemParameters::on_unitRadioButton_clicked(bool checked)
 {
     if (checked)
     {
-        impulseType = 2;
+        impulseType = 3;
         ui->riseTimeBox->hide();
     }
 }

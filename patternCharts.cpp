@@ -270,6 +270,198 @@ void PatternCharts::drawPolarChart()
     }
 }
 
+void PatternCharts::drawReverb(QVector<double> VecSurfFreq, QVector<double> VecSurfDist, QVector<double> VecBotFreq,
+                               QVector<double> VecBotDist, QVector<double> VecSurrFreq, QVector<double> VecSurrDist,
+                               QVector<double> VecSumFreq, QVector<double> VecSumDist, std::array<bool, 4> ReverbChecks,
+                               std::array<bool, 2> ReverbCalc, QVector<double> VecFreq, QVector<double> VecDist)
+{
+
+
+    if (ReverbCalc[0]) // Осуществлялся частотный расчет
+    {
+        QWidget *newPage = new QWidget();
+        QFormLayout *formLayout = new QFormLayout(newPage);
+        QChart *chart = new QChart();
+        chart->legend()->setAlignment(Qt::AlignBottom);
+
+        if (ReverbChecks[0])
+        {
+            QLineSeries *surfSeries = new QLineSeries();
+            for (int i = 0; i < VecFreq.size(); i++)
+            {
+                surfSeries->append(VecFreq[i], VecSurfFreq[i]);
+                surfSeries->setColor(Qt::red);
+                surfSeries->setName("Поверхностная реверберация");
+            }
+        chart->addSeries(surfSeries);
+        }
+
+        if (ReverbChecks[1])
+        {
+            QLineSeries *botSeries = new QLineSeries();
+            for (int i = 0; i < VecFreq.size(); i++)
+            {
+                botSeries->append(VecFreq[i], VecBotFreq[i]);
+                botSeries->setColor(Qt::blue);
+                botSeries->setName("Донная реверберация");
+            }
+        chart->addSeries(botSeries);
+        }
+
+        if (ReverbChecks[2])
+        {
+            QLineSeries *surrSeries = new QLineSeries();
+            for (int i = 0; i < VecFreq.size(); i++)
+            {
+                surrSeries->append(VecFreq[i], VecSurrFreq[i]);
+                surrSeries->setColor(Qt::darkGreen);
+                surrSeries->setName("Объемная реверберация");
+            }
+        chart->addSeries(surrSeries);
+        }
+
+        if (ReverbChecks[3])
+        {
+            QLineSeries *sumSeries = new QLineSeries();
+            for (int i = 0; i < VecFreq.size(); i++)
+            {
+                sumSeries->append(VecFreq[i], VecSumFreq[i]);
+                sumSeries->setColor(Qt::magenta);
+                sumSeries->setName("Суммарная реверберация");
+            }
+        chart->addSeries(sumSeries);
+        }
+
+
+        // Создание осей графика
+        QValueAxis *axisX = new QValueAxis();
+        axisX->setTitleText("f, Гц");
+        QLogValueAxis *axisY = new QLogValueAxis();
+        auto num1 = std::max_element(VecSurfFreq.begin(), VecSurfFreq.end());
+        double num1v = *num1;
+        auto num2 = std::max_element(VecBotFreq.begin(), VecBotFreq.end());
+        double num2v = *num2;
+        auto num3 = std::max_element(VecSurrFreq.begin(), VecSurrFreq.end());
+        double num3v = *num3;
+        auto num4 = std::max_element(VecSumFreq.begin(), VecSumFreq.end());
+        double num4v = *num4;
+        double maxValue = std::max({num1v, num2v, num3v, num4v});
+
+        axisY->setMin(1e-5);
+        axisY->setLabelFormat("%.2e");
+        axisY->setMax(maxValue);
+        //axisY->setMax(1);
+        chart->addAxis(axisX, Qt::AlignBottom);
+        chart->addAxis(axisY, Qt::AlignLeft);
+
+
+        // Привязка серий к осям
+        for (QAbstractSeries *series : chart->series()) {
+            series->attachAxis(axisX);
+            series->attachAxis(axisY);
+        }
+        // Создание виджета для отображения графика
+        QChartView *chartView = new QChartView(chart);
+        chartView->setRenderHint(QPainter::Antialiasing);
+
+        // Добавление виджета с графиком в форму
+        formLayout->addWidget(chartView);
+
+        ui->tabWidget->addTab(newPage, "Реверберация по частоте");
+    }
+
+    if (ReverbCalc[1]) // Осуществлялся временной расчет
+    {
+        QWidget *newPage = new QWidget();
+        QFormLayout *formLayout = new QFormLayout(newPage);
+        QChart *chart = new QChart();
+        chart->legend()->setAlignment(Qt::AlignBottom);
+        if (ReverbChecks[0])
+        {
+            QLineSeries *surfSeries = new QLineSeries();
+            for (int i = 0; i < VecDist.size(); i++)
+            {
+                surfSeries->append(VecDist[i], VecSurfDist[i]);
+                surfSeries->setColor(Qt::red);
+                surfSeries->setName("Поверхностная реверберация");
+            }
+        chart->addSeries(surfSeries);
+        }
+
+        if (ReverbChecks[1])
+        {
+            QLineSeries *botSeries = new QLineSeries();
+            for (int i = 0; i < VecDist.size(); i++)
+            {
+                botSeries->append(VecDist[i], VecBotDist[i]);
+                botSeries->setColor(Qt::blue);
+                botSeries->setName("Донная реверберация");
+            }
+        chart->addSeries(botSeries);
+        }
+
+        if (ReverbChecks[2])
+        {
+            QLineSeries *surrSeries = new QLineSeries();
+            for (int i = 0; i < VecDist.size(); i++)
+            {
+                surrSeries->append(VecDist[i], VecSurrDist[i]);
+                surrSeries->setColor(Qt::darkGreen);
+                surrSeries->setName("Объемная реверберация");
+            }
+        chart->addSeries(surrSeries);
+        }
+
+        if (ReverbChecks[3])
+        {
+            QLineSeries *sumSeries = new QLineSeries();
+            for (int i = 0; i < VecDist.size(); i++)
+            {
+                sumSeries->append(VecDist[i], VecSumDist[i]);
+                sumSeries->setColor(Qt::magenta);
+                sumSeries->setName("Суммарная реверберация");
+            }
+        chart->addSeries(sumSeries);
+        }
+
+
+        // Создание осей графика
+        QValueAxis *axisX = new QValueAxis();
+        axisX->setTitleText("r, м");
+        QLogValueAxis *axisY = new QLogValueAxis();
+        auto num1 = std::max_element(VecSurfDist.begin(), VecSurfDist.end());
+        double num1v = *num1;
+        auto num2 = std::max_element(VecBotDist.begin(), VecBotDist.end());
+        double num2v = *num2;
+        auto num3 = std::max_element(VecSurrDist.begin(), VecSurrDist.end());
+        double num3v = *num3;
+        auto num4 = std::max_element(VecSumDist.begin(), VecSumDist.end());
+        double num4v = *num4;
+        double maxValue = std::max({num1v, num2v, num3v, num4v});
+
+        axisY->setMin(1e-8);
+        axisY->setMax(maxValue);
+        axisY->setLabelFormat("%.2e");
+        chart->addAxis(axisX, Qt::AlignBottom);
+        chart->addAxis(axisY, Qt::AlignLeft);
+
+        // Привязка серий к осям
+        for (QAbstractSeries *series : chart->series()) {
+            series->attachAxis(axisX);
+            series->attachAxis(axisY);
+        }
+        // Создание виджета для отображения графика
+        QChartView *chartView = new QChartView(chart);
+        chartView->setRenderHint(QPainter::Antialiasing);
+
+        // Добавление виджета с графиком в форму
+        formLayout->addWidget(chartView);
+
+        ui->tabWidget->addTab(newPage, "Реверберация по дальности");
+    }
+
+}
+
 
 
 void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1,
@@ -277,7 +469,20 @@ void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVe
                          double k1,
                          double size_x1, double size_z1, double dist_x1, double dist_z1,
                          double rad_circ_scr1, double dist_hex1,
-                         int overlay_type1)
+                         int overlay_type1,
+                         QVector<double> VecSurfFreq,
+                         QVector<double> VecSurfDist,
+                         QVector<double> VecBotFreq,
+                         QVector<double> VecBotDist,
+                         QVector<double> VecSurrFreq,
+                         QVector<double> VecSurrDist,
+                         QVector<double> VecSumFreq,
+                         QVector<double> VecSumDist,
+                         std::array<bool, 4> ReverbChecks,
+                         std::array<bool, 2> ReverbCalc,
+                         QVector<double> VecFreq,
+                         QVector<double> VecDist
+                         )
 {
     CenterPos = Center_pos1;
     overlayType = overlay_type1;
@@ -294,6 +499,8 @@ void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVe
     distZ = dist_z1;
 
     drawChart();
+    drawReverb(VecSurfFreq, VecSurfDist, VecBotFreq, VecBotDist, VecSurrFreq,
+               VecSurrDist, VecSumFreq, VecSumDist, ReverbChecks, ReverbCalc, VecFreq, VecDist);
     //drawPhaseChart();
     //drawPolarChart();
 }

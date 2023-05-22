@@ -149,6 +149,11 @@ private:
     QVector<double> VecSumFreq;
     QVector<double> VecSumDist;
 
+    QVector<double> VecFreq;
+    QVector<double> VecDist;
+
+    std::array<bool, 2> ReverbCalc; //{частотная, временная}
+
     double g(double f);
 
 private slots:
@@ -196,7 +201,19 @@ signals:
                                double k,
                                double size_x, double size_z, double dist_x, double dist_z,
                                double rad_circ_scr, double dist_hex,
-                               int overlay_type);
+                               int overlay_type,
+                               QVector<double> VecSurfFreq,
+                               QVector<double> VecSurfDist,
+                               QVector<double> VecBotFreq,
+                               QVector<double> VecBotDist,
+                               QVector<double> VecSurrFreq,
+                               QVector<double> VecSurrDist,
+                               QVector<double> VecSumFreq,
+                               QVector<double> VecSumDist,
+                               std::array<bool, 4> ReverbChecks,
+                               std::array<bool, 2> ReverbCalc,
+                               QVector<double> VecFreq,
+                               QVector<double> VecDist);
     void signal_mainToSelectionOfCorrectiveElements(double qSignal, double q1Signal, double f, double delta_f,
                                                     double C0, double C, double R, double L);
 

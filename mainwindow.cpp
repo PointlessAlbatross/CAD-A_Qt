@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     noiseEng = 1; // Шум движителя
 
     //
-    depthSea = 400;
+    depthSea = 400;  // глубина моря
     windSpeed = 10;
     salinity = 32;
     tempWater = 4;
@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
     impulseType = 1;
     pulseDuration = 50;
     riseTime = 100;
-    pressure = 1000000;
+    pressure = 100000;
     receivingFreq = 20550;
     radiationFreq = 20000;
     k = receivingFreq * 2 * M_PI / 1500;
@@ -61,16 +61,16 @@ MainWindow::MainWindow(QWidget *parent)
             TableChannel[i][j] = false;
     }
 
-    reverbDist1 = 0;
+    reverbDist1 = 100;
     reverbDist2 = 5000;
     reverbDist3 = 500;
-    reverbFreq1 = 20000; //частота расчета1
-    reverbFreq2 = 21100; //частота расчета2
+    reverbFreq1 = 100; //частота расчета1
+    reverbFreq2 = 25000; //частота расчета2
     reverbFreq3 = 20550; //частота расчета3
     reverbChannel1 = 1;
     reverbChannel2 = 2;
     ReverbChecks = {true, true, true, true};
-    numDot = 100;
+    numDot = 200;
 //![2]
 
     ui->setupUi(this);
@@ -400,7 +400,10 @@ void MainWindow::on_charts_action_triggered()
     connect(this, &MainWindow::signalMainToCharts, &window, &PatternCharts::slotMainToCharts);
     emit signalMainToCharts(CurrNumElem, WeightCoef, CenterPos, k,
                                sizeX, sizeZ, distX, distZ,
-                               radCircScr, distHex, overlayType);
+                               radCircScr, distHex, overlayType,
+                            VecSurfFreq, VecSurfDist, VecBotFreq, VecBotDist,
+                            VecSurrFreq, VecSurrDist, VecSumFreq, VecSumDist,
+                            ReverbChecks, ReverbCalc, VecFreq, VecDist);
     window.setModal(true);
     window.exec();
 }
@@ -446,31 +449,32 @@ double MainWindow::D(double theta, double phi)
 
 
 
-double MainWindow::g(double f) // спектр мощности излучаемого сигнала на частоте f;
+double MainWindow::g(double f1) // спектр мощности излучаемого сигнала на частоте f;
 {
+    double f = f1 / 1000.0;
     double ps = pressure; // излучаемое давление
-    double fs = radiationFreq; // частота излучения
-    double ts = pulseDuration; // длительность имульса
-    double tf = riseTime; // длительность фронта
-    double g1;
+    double fs = radiationFreq / 1000.0; // частота излучения
+    double ts = pulseDuration / 1000.0; // длительность имульса
+    double tf = riseTime / 1000.0; // длительность фронта
+    double g1 = 0;
     switch (impulseType)
     {
         case 1:
             g1 = sin(M_PI * (f - fs) * ts) / (M_PI * (f - fs) * ts) *
-                (ps * sqrt(2)) * ts / 2.0;
+                (ps * sqrt(2.0)) * ts / 2.0;
             break;
         case 2:
             g1 = sin (M_PI * (f - fs) * (ts - tf)) / (M_PI * (f - fs) * (ts - tf)) *
                 sin(M_PI * (f - fs) * ts) / (M_PI * (f - fs) * ts) *
-                (ps * sqrt(2)) * (ts - tf) / 2.0;
+                (ps * sqrt(2.0)) * (ts - tf) / 2.0;
             break;
         case 3:
-            g1 = ps * sqrt(2);
+            g1 = ps * sqrt(2.0);
             break;
         default:
             break;
     }
-    return g1;
+    return abs(g1);
 }
 
 
@@ -836,7 +840,8 @@ void MainWindow::powerSurfReverb(int typeRev)
     auto beta = [this] (double f1) // коэф простр затухания
     {
         double f = f1/1000;
-        //return 0.036*pow(f/1000.0, 1.5); //формула Шихе-Хелли
+        return 0.036*pow(f, 1.5); //формула Шихе-Хелли
+        /*
         const double a = 8.68e3;
         const double A = 2.34e-6; // постоянная ионной релаксации
         double S = salinity;
@@ -848,6 +853,7 @@ void MainWindow::powerSurfReverb(int typeRev)
 
         return a * (A * S * fp * pow(f, 2) / (pow(fp, 2) + pow(f, 2)) + B * pow(f, 2) / fp) * (1 - b1 * p);
         // формула Шулкина-Марша
+        */
     };
     auto D = [this] (double R)
     {
@@ -860,21 +866,27 @@ void MainWindow::powerSurfReverb(int typeRev)
     };
     if (typeRev == 1) //частотная
     {
+        VecFreq.clear();
         VecSurfFreq.clear();
         double dist = reverbDist3;
         for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
         {
-            double H_d = Hd(D(dist), FRev);
+            VecFreq.push_back(FRev);
+            qDebug() << "g(f)" << g(FRev);
+            double H_d = Hd(D(dist), FRev) * g(FRev);
             VecSurfFreq.push_back(H_d);
         }
+        qDebug() << "VecSurfFreq" << VecSurfFreq;
     }
     if (typeRev == 2)  //временная
     {
+        VecDist.clear();
         VecSurfDist.clear();
         double frequency = reverbFreq3;
         for(double DRev = reverbDist1; DRev < reverbDist2; DRev += (reverbDist2 - reverbDist1) / double(numDot))
         {
-            double H_d = Hd(D(DRev), frequency);
+            VecDist.push_back(DRev);
+            double H_d = Hd(D(DRev), frequency) * g(frequency);
             VecSurfDist.push_back(H_d);
         }
     }
@@ -886,7 +898,8 @@ void MainWindow::powerBotReverb(int type)
     auto beta = [this] (double f1) // коэф простр затухания
     {
         double f = f1/1000;
-        //return 0.036*pow(f/1000.0, 1.5); //формула Шихе-Хелли
+        return 0.036*pow(f, 1.5); //формула Шихе-Хелли
+        /*
         const double a = 8.68e3;
         const double A = 2.34e-6; // постоянная ионной релаксации
         double S = salinity;
@@ -898,6 +911,7 @@ void MainWindow::powerBotReverb(int type)
 
         return a * (A * S * fp * pow(f, 2) / (pow(fp, 2) + pow(f, 2)) + B * pow(f, 2) / fp) * (1 - b1 * p);
         // формула Шулкина-Марша
+        */
     };
 
     auto D = [this] (double R)
@@ -911,21 +925,25 @@ void MainWindow::powerBotReverb(int type)
 
     if (type == 1) //частотная
     {
+        VecFreq.clear();
         VecBotFreq.clear();
         double dist = reverbDist3;
         for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
         {
-            double H_d = Hd(D(dist), FRev);
+            VecFreq.push_back(FRev);
+            double H_d = Hd(D(dist), FRev) * g(FRev);
             VecBotFreq.push_back(H_d);
         }
     }
     if (type == 2)  //временная
     {
+        VecDist.clear();
         VecBotDist.clear();
         double frequency = reverbFreq3;
         for(double DRev = reverbDist1; DRev < reverbDist2; DRev += (reverbDist2 - reverbDist1) / numDot)
         {
-            double H_d = Hd(D(DRev), frequency);
+            VecDist.push_back(DRev);
+            double H_d = Hd(D(DRev), frequency) * g(frequency);
             VecBotDist.push_back(H_d);
         }
     }
@@ -936,7 +954,8 @@ void MainWindow::powerSurroundReverb(int type)
     auto beta = [this] (double f1) // коэф простр затухания
     {
         double f = f1/1000;
-        //return 0.036*pow(f/1000.0, 1.5); //формула Шихе-Хелли
+        return 0.036*pow(f, 1.5); //формула Шихе-Хелли
+        /*
         const double a = 8.68e3;
         const double A = 2.34e-6; // постоянная ионной релаксации
         double S = salinity;
@@ -948,6 +967,7 @@ void MainWindow::powerSurroundReverb(int type)
 
         return a * (A * S * fp * pow(f, 2) / (pow(fp, 2) + pow(f, 2)) + B * pow(f, 2) / fp) * (1 - b1 * p);
         // формула Шулкина-Марша
+        */
     };
 
     auto D = [this] (double R)
@@ -962,20 +982,24 @@ void MainWindow::powerSurroundReverb(int type)
     if (type == 1) //частотная
     {
         VecSurrFreq.clear();
+        VecFreq.clear();
         double dist = reverbDist3;
         for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
         {
-            double H_d1 = Hd(D(dist), FRev);
+            VecFreq.push_back(FRev);
+            double H_d1 = Hd(D(dist), FRev) * g(FRev);
             VecSurrFreq.push_back(H_d1);
         }
     }
     if (type == 2)  //временная
     {
         VecSurrDist.clear();
+        VecDist.clear();
         double frequency = reverbFreq3;
         for(double DReverb = reverbDist1; DReverb < reverbDist2; DReverb += (reverbDist2 - reverbDist1) / numDot)
         {
-            double H_d2 = Hd(D(DReverb), frequency);
+            VecDist.push_back(DReverb);
+            double H_d2 = Hd(D(DReverb), frequency)* g(frequency);
             VecSurrDist.push_back(H_d2);
         }
     }
@@ -1013,7 +1037,7 @@ void MainWindow::powerSumReverb(int type)
         VecSumDist.clear();
         for(int num = 0; num < m_cadAMath.maxOfThree(VecSurfDist.size(), VecBotDist.size(), VecSurrDist.size()); num++)
         {
-            double sum;
+            double sum = 0;
             if (ReverbChecks[0]) //поверхностная реверберация
             {
                 sum += VecSurfDist[num];
@@ -1022,13 +1046,13 @@ void MainWindow::powerSumReverb(int type)
 
             if (ReverbChecks[1]) //донная реверберация
             {
-                sum = VecBotDist[num];
+                sum += VecBotDist[num];
             }
             else
 
             if (ReverbChecks[2]) //объемная реверберация
             {
-                sum = VecSurrDist[num];
+                sum += VecSurrDist[num];
             }
 
             VecSumDist.push_back(sum);
@@ -1058,12 +1082,14 @@ void MainWindow::slot_reverberationParametersToMain1(double param1, double param
     {
         switch (typeReverb) {
         case 1: //частотная
+            ReverbCalc[0] = true;
             reverbFreq1 = param1;
             reverbFreq2 = param2;
             reverbDist3 = param3;
 
             break;
         case 2: //временная
+            ReverbCalc[1] = true;
             reverbFreq3 = param1;
             reverbDist1 = param2;
             reverbDist2 = param3;
