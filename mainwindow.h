@@ -154,6 +154,8 @@ private:
 
     std::array<bool, 2> ReverbCalc; //{частотная, временная}
 
+    double Rekv;
+
     double g(double f);
 
 private slots:

@@ -70,7 +70,9 @@ MainWindow::MainWindow(QWidget *parent)
     reverbChannel1 = 1;
     reverbChannel2 = 2;
     ReverbChecks = {true, true, true, true};
+    ReverbCalc = {false, false};
     numDot = 200;
+    Rekv = 10;
 //![2]
 
     ui->setupUi(this);
@@ -862,7 +864,7 @@ void MainWindow::powerSurfReverb(int typeRev)
 
     auto Hd = [beta, this] (double D, double f) -> double
     {
-        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3) * g(f);
+        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3) * g(f) * Rekv;
     };
     if (typeRev == 1) //частотная
     {
@@ -873,7 +875,7 @@ void MainWindow::powerSurfReverb(int typeRev)
         {
             VecFreq.push_back(FRev);
             qDebug() << "g(f)" << g(FRev);
-            double H_d = Hd(D(dist), FRev) * 10;
+            double H_d = Hd(D(dist), FRev);
             VecSurfFreq.push_back(H_d);
         }
         qDebug() << "VecSurfFreq" << VecSurfFreq;
@@ -886,7 +888,7 @@ void MainWindow::powerSurfReverb(int typeRev)
         for(double DRev = reverbDist1; DRev < reverbDist2; DRev += (reverbDist2 - reverbDist1) / double(numDot))
         {
             VecDist.push_back(DRev);
-            double H_d = Hd(D(DRev), frequency) * 10;
+            double H_d = Hd(D(DRev), frequency);
             VecSurfDist.push_back(H_d);
         }
     }
@@ -920,7 +922,7 @@ void MainWindow::powerBotReverb(int type)
     };
     auto Hd = [beta, this] (double D, double f) -> double
     {
-        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3) * g(f);
+        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3) * g(f) * Rekv;
     };
 
     if (type == 1) //частотная
@@ -931,7 +933,7 @@ void MainWindow::powerBotReverb(int type)
         for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
         {
             VecFreq.push_back(FRev);
-            double H_d = Hd(D(dist), FRev)  * 10;
+            double H_d = Hd(D(dist), FRev);
             VecBotFreq.push_back(H_d);
         }
     }
@@ -943,7 +945,7 @@ void MainWindow::powerBotReverb(int type)
         for(double DRev = reverbDist1; DRev < reverbDist2; DRev += (reverbDist2 - reverbDist1) / numDot)
         {
             VecDist.push_back(DRev);
-            double H_d = Hd(D(DRev), frequency) * g(frequency) * 10;
+            double H_d = Hd(D(DRev), frequency) * g(frequency);
             VecBotDist.push_back(H_d);
         }
     }
@@ -976,7 +978,7 @@ void MainWindow::powerSurroundReverb(int type)
     };
     auto Hd = [beta, this] (double D, double f) -> double
     {
-        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3)* g(f);
+        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3)* g(f) * Rekv;
     };
 
     if (type == 1) //частотная
@@ -987,7 +989,7 @@ void MainWindow::powerSurroundReverb(int type)
         for(double FRev = reverbFreq1; FRev < reverbFreq2; FRev += (reverbFreq2 - reverbFreq1) / numDot)
         {
             VecFreq.push_back(FRev);
-            double H_d1 = Hd(D(dist), FRev) * 10;
+            double H_d1 = Hd(D(dist), FRev);
             VecSurrFreq.push_back(H_d1);
         }
     }
@@ -999,7 +1001,7 @@ void MainWindow::powerSurroundReverb(int type)
         for(double DReverb = reverbDist1; DReverb < reverbDist2; DReverb += (reverbDist2 - reverbDist1) / numDot)
         {
             VecDist.push_back(DReverb);
-            double H_d2 = Hd(D(DReverb), frequency) * 10;
+            double H_d2 = Hd(D(DReverb), frequency);
             VecSurrDist.push_back(H_d2);
         }
     }

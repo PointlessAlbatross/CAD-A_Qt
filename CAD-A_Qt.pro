@@ -14,6 +14,7 @@ SOURCES += \
     cadAMath.cpp \
     carrierParameters.cpp \
     channelParameters.cpp \
+    echoSignal.cpp \
     main.cpp \
     mainwindow.cpp \
     operatingSystemParameters.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     cadAMath.h \
     carrierParameters.h \
     channelParameters.h \
+    echoSignal.h \
     mainwindow.h \
     operatingSystemParameters.h \
     patternCharts.h \
@@ -43,6 +45,7 @@ FORMS += \
     arrangementOfElements.ui \
     carrierParameters.ui \
     channelParameters.ui \
+    echoSignal.ui \
     mainwindow.ui \
     operatingSystemParameters.ui \
     patternCharts.ui \
