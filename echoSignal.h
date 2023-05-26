@@ -11,7 +11,7 @@ class EchoSignal : public QDialog
 {
     Q_OBJECT
 
-    bool ECHO_TYPE;
+    int echo_type;
 
 public:
     explicit EchoSignal(QWidget *parent = nullptr);

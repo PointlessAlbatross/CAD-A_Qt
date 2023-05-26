@@ -48,10 +48,10 @@ MainWindow::MainWindow(QWidget *parent)
     radAnt = 0.2;
     num_row = 5;
 
-    impulseType = 1;
-    pulseDuration = 50;
-    riseTime = 100;
-    pressure = 100000;
+    impulseType = 1; // тип импульса
+    pulseDuration = 50; // длительность импульса
+    riseTime = 100; // длительность фронта
+    pressure = 100000; // излучаемое давление
     receivingFreq = 20550;
     radiationFreq = 20000;
     k = receivingFreq * 2 * M_PI / 1500;
@@ -73,6 +73,19 @@ MainWindow::MainWindow(QWidget *parent)
     ReverbCalc = {false, false};
     numDot = 200;
     Rekv = 10;
+
+    echoDist1 = 100;
+    echoDist2 = 5000;
+    echoDist3 = 500;
+    echoFreq1 = 100; //частота расчета1
+    echoFreq2 = 25000; //частота расчета2
+    echoFreq3 = 20550; //частота расчета3
+    echoChannel = 1;
+    elevationAng = 90; //угол места
+    azimuthAng = 0; // азимут
+    relatSpeed = 0;
+    Rekv = 10;
+    EchoCalc = {false, false};
 //![2]
 
     ui->setupUi(this);
@@ -407,7 +420,9 @@ void MainWindow::on_charts_action_triggered()
                                radCircScr, distHex, overlayType,
                             VecSurfFreq, VecSurfDist, VecBotFreq, VecBotDist,
                             VecSurrFreq, VecSurrDist, VecSumFreq, VecSumDist,
-                            ReverbChecks, ReverbCalc, VecFreq, VecDist);
+                            ReverbChecks, ReverbCalc, VecFreq, VecDist,
+                            VecFreqE, VecEchoFreq, VecDistE, VecEchoDist,
+                            EchoCalc);
     window.setModal(true);
     window.exec();
 }
@@ -570,7 +585,7 @@ void MainWindow::on_elemTurbulentInterf_triggered()
 
 void MainWindow::on_powerDiffuseInterf_triggered()
 {
-    ui->label->setText("Идет вычисление спектра мощности рассеяной помехи");
+    //ui->label->setText("Идет вычисление спектра мощности рассеяной помехи");
     ui->consoleText->clear();
     int chn1 = 0;
     qDebug() << "freq" << receivingFreq;
@@ -1198,10 +1213,118 @@ void MainWindow::on_echoDistAction_triggered()
 }
 
 void MainWindow::slot_echoSignalToMain(double param1, double param2, double param3, int channel,
-                                       int numDot,  int typeEchoSign,
+                                       int numDot1,  int typeEchoSign,
                                        bool isCalculate, double elevation, double azimuth,
                                        double relative_speed, double R_ekv)
 {
+    numDotEcho = numDot1;
+    elevationAng = elevation;
+    azimuthAng = azimuth;
+    relatSpeed = relative_speed;
+    Rekv = R_ekv;
+    echoChannel = channel;
+    switch (typeEchoSign) {
+    case 1: //частотная
+        echoFreq1 = param1;
+        echoFreq2 = param2;
+        echoDist3 = param3;
+
+        break;
+    case 2: //временная
+        echoDist1 = param1;
+        echoDist2 = param2;
+        echoFreq3 = param3;
+        break;
+    default:
+        break;
+    }
+    if (isCalculate)
+    {
+        powerEchoSignal(typeEchoSign);
+    }
 
 }
 
+void MainWindow::powerEchoSignal(int type)
+{
+    auto K_dopl = [this] (double theta, double phi)
+    {
+        double const c = 1500;
+        double Kd = (1 + relatSpeed * sin(theta) * cos(phi) / c) / (1 - relatSpeed * sin(theta) * cos(phi) / c);
+        return Kd;
+    };
+
+    auto beta = [this] (double f1) // коэф простр затухания
+    {
+        double f = f1/1000;
+        //return 0.036*pow(f, 1.5); //формула Шихе-Хелли
+
+        const double a = 8.68e3;
+        const double A = 2.34e-6; // постоянная ионной релаксации
+        double S = salinity;
+        double T = tempWater;
+        double fp = 21.9 * pow(10, 6-1520/(T+273)); // частота релаксации при атмосферном давлении, кГц
+        const double B = 3.38e-6; // постоянная вязкости пресной воды
+        const double b1 = 6.54e-4; // градиент изменения коэффициента затухания под влиянием статического давления
+        double p = HSub / 10.0; //гидростатическое давление
+
+        return a * (A * S * fp * pow(f, 2) / (pow(fp, 2) + pow(f, 2)) + B * pow(f, 2) / fp) * (1 - b1 * p);
+        // формула Шулкина-Марша
+    };
+
+    auto Hd = [beta, this] (double D, double f) -> double
+    {
+        return 1/(pow(D,2)) * pow(10, -0.1*beta(f)*D*1e-3);
+    };
+
+    auto P_sign = [this, Hd, K_dopl] (double f, double R, double theta, double phi)
+    {
+        double ts = pulseDuration / 1000.0; // длительность имульса
+        std::complex<double> D_rec; // модуль нормированной диаграммы направленности приемной решетки;
+        if (antennaType) // фазовая антенна
+        {
+            D_rec = DLt(theta, phi, echoChannel);
+        }
+        else if (!antennaType) // амплитудная антенна
+        {
+            D_rec = Dt(theta, phi, 0);
+        }
+        std::complex<double> D_rad = Dt(theta, phi, 16); // модуль нормированной диаграммы направленности излучающей решетки;
+
+        double Ps = 1/ ts * abs(pow(D_rad, 2)) * abs(pow(D_rec, 2)) * 2 * pow(g(f / K_dopl(theta, phi)), 2) * pow(Hd(R, f), 2) * pow(Rekv, 2) / 4;
+        return Ps;
+    };
+
+
+    if (type == 1) //частотная
+    {
+        VecFreqE.clear();
+        VecEchoFreq.clear();
+        double dist = echoDist3;
+        for(double FEcho = echoFreq1; FEcho < echoFreq2; FEcho += (echoFreq2 - echoFreq1) / numDotEcho)
+        {
+            VecFreqE.push_back(FEcho);
+            //![]
+            double Psig = P_sign(FEcho, dist, elevationAng * M_PI / 180.0, azimuthAng * M_PI / 180.0);
+            VecEchoFreq.push_back(Psig);
+        }
+        qDebug() << "VecEchoFreq: " << VecEchoFreq;
+        EchoCalc[0] = true;
+    }
+    if (type == 2)  //временная
+    {
+        VecDistE.clear();
+        VecEchoDist.clear();
+        double frequency = echoFreq3;
+        for(double DEcho = echoDist1; DEcho < echoDist2; DEcho += (echoDist2 - echoDist1) / numDotEcho)
+        {
+            VecDistE.push_back(DEcho);
+            double Psig = P_sign(frequency, DEcho, elevationAng * M_PI / 180.0, azimuthAng * M_PI / 180.0);
+            VecEchoDist.push_back(Psig);
+        }
+        qDebug() << "VecEchoDist: " << VecEchoDist;
+        EchoCalc[1] = true;
+    }
+
+
+}

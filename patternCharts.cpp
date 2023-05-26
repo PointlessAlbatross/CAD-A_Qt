@@ -337,6 +337,7 @@ void PatternCharts::drawReverb(QVector<double> VecSurfFreq, QVector<double> VecS
         QValueAxis *axisX = new QValueAxis();
         axisX->setTitleText("f, Гц");
         QLogValueAxis *axisY = new QLogValueAxis();
+        axisX->setTickCount(11);
         auto num1 = std::max_element(VecSurfFreq.begin(), VecSurfFreq.end());
         double num1v = *num1;
         auto num2 = std::max_element(VecBotFreq.begin(), VecBotFreq.end());
@@ -347,9 +348,19 @@ void PatternCharts::drawReverb(QVector<double> VecSurfFreq, QVector<double> VecS
         double num4v = *num4;
         double maxValue = std::max({num1v, num2v, num3v, num4v});
 
-        axisY->setMin(1e-5);
+        auto num12 = std::max_element(VecSurfFreq.begin(), VecSurfFreq.end());
+        double num1m = *num12;
+        auto num22 = std::max_element(VecBotFreq.begin(), VecBotFreq.end());
+        double num2m = *num22;
+        auto num32 = std::max_element(VecSurrFreq.begin(), VecSurrFreq.end());
+        double num3m = *num32;
+        auto num42 = std::max_element(VecSumFreq.begin(), VecSumFreq.end());
+        double num4m = *num42;
+        double minValue = std::min({num1m, num2m, num3m, num4m});
+
+        axisY->setMin(m_cadAMath.floorToPowerOfTen(minValue));
+        axisY->setMax(m_cadAMath.ceilToPowerOfTen(maxValue));
         axisY->setLabelFormat("%.2e");
-        axisY->setMax(maxValue);
         //axisY->setMax(1);
         chart->addAxis(axisX, Qt::AlignBottom);
         chart->addAxis(axisY, Qt::AlignLeft);
@@ -429,6 +440,7 @@ void PatternCharts::drawReverb(QVector<double> VecSurfFreq, QVector<double> VecS
         QValueAxis *axisX = new QValueAxis();
         axisX->setTitleText("r, м");
         QLogValueAxis *axisY = new QLogValueAxis();
+        axisX->setTickCount(11);
         auto num1 = std::max_element(VecSurfDist.begin(), VecSurfDist.end());
         double num1v = *num1;
         auto num2 = std::max_element(VecBotDist.begin(), VecBotDist.end());
@@ -439,8 +451,19 @@ void PatternCharts::drawReverb(QVector<double> VecSurfFreq, QVector<double> VecS
         double num4v = *num4;
         double maxValue = std::max({num1v, num2v, num3v, num4v});
 
-        axisY->setMin(1e-8);
-        axisY->setMax(maxValue);
+        auto num12 = std::max_element(VecSurfDist.begin(), VecSurfDist.end());
+        double num1m = *num12;
+        auto num22 = std::max_element(VecBotDist.begin(), VecBotDist.end());
+        double num2m = *num22;
+        auto num32 = std::max_element(VecSurrDist.begin(), VecSurrDist.end());
+        double num3m = *num32;
+        auto num42 = std::max_element(VecSumDist.begin(), VecSumDist.end());
+        double num4m = *num42;
+        double minValue = std::min({num1m, num2m, num3m, num4m});
+
+
+        axisY->setMin(m_cadAMath.floorToPowerOfTen(minValue));
+        axisY->setMax(m_cadAMath.ceilToPowerOfTen(maxValue));
         axisY->setLabelFormat("%.2e");
         chart->addAxis(axisX, Qt::AlignBottom);
         chart->addAxis(axisY, Qt::AlignLeft);
@@ -462,27 +485,127 @@ void PatternCharts::drawReverb(QVector<double> VecSurfFreq, QVector<double> VecS
 
 }
 
+void PatternCharts::drawEcho(QVector<double> VecFreqE, QVector<double> VecEchoFreq, QVector<double> VecDistE, QVector<double> VecEchoDist, std::array<bool, 2> EchoCalc)
+{
+    if (EchoCalc[0]) // Осуществлялся частотный расчет
+    {
+        QWidget *newPage = new QWidget();
+        QFormLayout *formLayout = new QFormLayout(newPage);
+        QChart *chart = new QChart();
+        chart->legend()->setAlignment(Qt::AlignBottom);
+        QLineSeries *Series = new QLineSeries();
+        for (int i = 0; i < VecFreqE.size(); i++)
+        {
+            Series->append(VecFreqE[i], VecEchoFreq[i]);
+            Series->setName("Эхо-сигнал от частоты");
+        }
+        chart->addSeries(Series);
+
+        // Создание осей графика
+        QValueAxis *axisX = new QValueAxis();
+        axisX->setTitleText("f, Гц");
+        QLogValueAxis *axisY = new QLogValueAxis();
+        axisX->setTickCount(11);
+        auto mxVal = std::max_element(VecEchoFreq.begin(), VecEchoFreq.end());
+        double mxVal1 = *mxVal;
+        auto mnVal = std::min_element(VecEchoFreq.begin(), VecEchoFreq.end());
+        double mnVal1 = *mnVal;
+
+        axisY->setMin(m_cadAMath.floorToPowerOfTen(mnVal1));
+        axisY->setLabelFormat("%.2e");
+        axisY->setMax(m_cadAMath.ceilToPowerOfTen(mxVal1));
+        chart->addAxis(axisX, Qt::AlignBottom);
+        chart->addAxis(axisY, Qt::AlignLeft);
+
+        // Привязка серий к осям
+        for (QAbstractSeries *series : chart->series()) {
+            series->attachAxis(axisX);
+            series->attachAxis(axisY);
+        }
+        // Создание виджета для отображения графика
+        QChartView *chartView = new QChartView(chart);
+        chartView->setRenderHint(QPainter::Antialiasing);
+
+        // Добавление виджета с графиком в форму
+        formLayout->addWidget(chartView);
+
+        ui->tabWidget->addTab(newPage, "Эхо-сигнал от частоты");
+    }
+
+    if (EchoCalc[1]) // Осуществлялся временной расчет
+    {
+        QWidget *newPage = new QWidget();
+        QFormLayout *formLayout = new QFormLayout(newPage);
+        QChart *chart = new QChart();
+        chart->legend()->setAlignment(Qt::AlignBottom);
+        QLineSeries *Series = new QLineSeries();
+        for (int i = 0; i < VecDistE.size(); i++)
+        {
+            Series->append(VecDistE[i], VecEchoDist[i]);
+            Series->setName("Эхо-сигнал от дальности");
+        }
+        chart->addSeries(Series);
+
+
+        // Создание осей графика
+        QValueAxis *axisX = new QValueAxis();
+        axisX->setTitleText("R, м");
+        QLogValueAxis *axisY = new QLogValueAxis();
+        auto mxVal = std::max_element(VecEchoDist.begin(), VecEchoDist.end());
+        double mxVal1 = *mxVal;
+        auto mnVal = std::min_element(VecEchoDist.begin(), VecEchoDist.end());
+        double mnVal1 = *mnVal;
+        axisX->setTickCount(11);
+
+
+        axisY->setMin(m_cadAMath.floorToPowerOfTen(mnVal1));
+        axisY->setLabelFormat("%.2e");
+        axisY->setMax(m_cadAMath.ceilToPowerOfTen(mxVal1));
+        chart->addAxis(axisX, Qt::AlignBottom);
+        chart->addAxis(axisY, Qt::AlignLeft);
+
+        // Привязка серий к осям
+        for (QAbstractSeries *series : chart->series()) {
+            series->attachAxis(axisX);
+            series->attachAxis(axisY);
+        }
+        // Создание виджета для отображения графика
+        QChartView *chartView = new QChartView(chart);
+        chartView->setRenderHint(QPainter::Antialiasing);
+
+        // Добавление виджета с графиком в форму
+        formLayout->addWidget(chartView);
+
+        ui->tabWidget->addTab(newPage, "Эхо-сигнал от дальности");
+    }
+}
+
 
 
 void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1,
-                         QVector<QVector<QPair<double,double>>> Center_pos1,
-                         double k1,
-                         double size_x1, double size_z1, double dist_x1, double dist_z1,
-                         double rad_circ_scr1, double dist_hex1,
-                         int overlay_type1,
-                         QVector<double> VecSurfFreq,
-                         QVector<double> VecSurfDist,
-                         QVector<double> VecBotFreq,
-                         QVector<double> VecBotDist,
-                         QVector<double> VecSurrFreq,
-                         QVector<double> VecSurrDist,
-                         QVector<double> VecSumFreq,
-                         QVector<double> VecSumDist,
-                         std::array<bool, 4> ReverbChecks,
-                         std::array<bool, 2> ReverbCalc,
-                         QVector<double> VecFreq,
-                         QVector<double> VecDist
-                         )
+                                     QVector<QVector<QPair<double,double>>> Center_pos1,
+                                     double k1,
+                                     double size_x1, double size_z1, double dist_x1, double dist_z1,
+                                     double rad_circ_scr1, double dist_hex1,
+                                     int overlay_type1,
+                                     QVector<double> VecSurfFreq,
+                                     QVector<double> VecSurfDist,
+                                     QVector<double> VecBotFreq,
+                                     QVector<double> VecBotDist,
+                                     QVector<double> VecSurrFreq,
+                                     QVector<double> VecSurrDist,
+                                     QVector<double> VecSumFreq,
+                                     QVector<double> VecSumDist,
+                                     std::array<bool, 4> ReverbChecks,
+                                     std::array<bool, 2> ReverbCalc,
+                                     QVector<double> VecFreq,
+                                     QVector<double> VecDist,
+                                     QVector<double> VecFreqE,
+                                     QVector<double> VecEchoFreq,
+                                     QVector<double> VecDistE,
+                                     QVector<double> VecEchoDist,
+                                     std::array<bool, 2> EchoCalc
+                                    )
 {
     CenterPos = Center_pos1;
     overlayType = overlay_type1;
@@ -501,6 +624,7 @@ void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVe
     drawChart();
     drawReverb(VecSurfFreq, VecSurfDist, VecBotFreq, VecBotDist, VecSurrFreq,
                VecSurrDist, VecSumFreq, VecSumDist, ReverbChecks, ReverbCalc, VecFreq, VecDist);
+    drawEcho(VecFreqE, VecEchoFreq, VecDistE, VecEchoDist, EchoCalc);
     //drawPhaseChart();
     //drawPolarChart();
 }

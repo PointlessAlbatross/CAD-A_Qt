@@ -236,3 +236,27 @@ int CadAMath::maxOfThree(double a, double b, double c) {
     }
     return max;
 }
+
+double CadAMath::floorToPowerOfTen(double number)
+{
+    if (number == 0.0) {
+            return 0.0;
+        }
+
+        int exponent = static_cast<int>(floor(log10(fabs(number))));
+        double factor = pow(10, exponent);
+
+        return copysign(factor, number);
+}
+
+double CadAMath::ceilToPowerOfTen(double number)
+{
+    if (number == 0.0) {
+        return 0.0;
+    }
+
+    int exponent = static_cast<int>(ceil(log10(fabs(number))));
+    double factor = pow(10, exponent);
+
+    return copysign(factor, number);
+}

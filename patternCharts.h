@@ -71,6 +71,12 @@ private:
                     std::array<bool, 2> ReverbCalc, QVector<double> VecFreq,
                     QVector<double> VecDist);
 
+    void drawEcho(QVector<double> VecFreqE,
+                  QVector<double> VecEchoFreq,
+                  QVector<double> VecDistE,
+                  QVector<double> VecEchoDist,
+                  std::array<bool, 2> EchoCalc);
+
 public slots:
     void slotMainToCharts(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef,
                              QVector<QVector<QPair<double,double>>> Center_pos,
@@ -89,7 +95,12 @@ public slots:
                              std::array<bool, 4> ReverbChecks,
                              std::array<bool, 2> ReverbCalc,
                              QVector<double> VecFreq,
-                             QVector<double> VecDist);
+                             QVector<double> VecDist,
+                             QVector<double> VecFreqE,
+                             QVector<double> VecEchoFreq,
+                             QVector<double> VecDistE,
+                             QVector<double> VecEchoDist,
+                             std::array<bool, 2> EchoCalc);
 private:
     Ui::PatternCharts *ui;
 };

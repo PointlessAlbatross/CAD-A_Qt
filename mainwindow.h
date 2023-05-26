@@ -129,6 +129,8 @@ private:
 
     bool checkChannel(int i);
 
+    void powerEchoSignal(int type);
+
 
     double reverbDist1;
     double reverbDist2;
@@ -153,6 +155,12 @@ private:
     QVector<double> VecFreq;
     QVector<double> VecDist;
 
+    QVector<double> VecDistE;
+    QVector<double> VecFreqE;
+
+    QVector<double> VecEchoFreq;
+    QVector<double> VecEchoDist;
+
     std::array<bool, 2> ReverbCalc; //{частотная, временная}
 
     double g(double f);
@@ -169,6 +177,7 @@ private:
     double azimuthAng;
     double relatSpeed;
     double Rekv;
+    std::array<bool, 2> EchoCalc;
 
 private slots:
     void on_action_triggered();
@@ -231,7 +240,13 @@ signals:
                                std::array<bool, 4> ReverbChecks,
                                std::array<bool, 2> ReverbCalc,
                                QVector<double> VecFreq,
-                               QVector<double> VecDist);
+                               QVector<double> VecDist,
+                               QVector<double> VecFreqE,
+                               QVector<double> VecEchoFreq,
+                               QVector<double> VecDistE,
+                               QVector<double> VecEchoDist,
+                               std::array<bool, 2> EchoCalc);
+
     void signal_mainToSelectionOfCorrectiveElements(double qSignal, double q1Signal, double f, double delta_f,
                                                     double C0, double C, double R, double L);
 
@@ -243,9 +258,12 @@ signals:
 
     void signal_mainToCarrierParameters(double HSub, double LSub, double speed, double noiseEng);
     void signal_mainToChannelParameters(std::array<std::array<bool, 16>, 30> Table);
-    void signal_mainToReverberationParameters1(double param1, double param2, double param3, int channel1, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
-    void signal_mainToReverberationParameters2(double param1, double param2, double param3, int channel1, int channel2, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
-    void signal_mainToEchoSignal(double param1, double param2, double param3, int channel, int numDot, int typeEchoSign, double elevation, double azimuth, double relative_speed, double R_ekv);
+    void signal_mainToReverberationParameters1(double param1, double param2, double param3,
+                                               int channel1, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
+    void signal_mainToReverberationParameters2(double param1, double param2, double param3,
+                                               int channel1, int channel2, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
+    void signal_mainToEchoSignal(double param1, double param2, double param3,
+                                 int channel, int numDot, int typeEchoSign, double elevation, double azimuth, double relative_speed, double R_ekv);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
