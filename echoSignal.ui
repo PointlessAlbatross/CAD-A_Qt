@@ -118,7 +118,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="channel1Box">
+      <widget class="QSpinBox" name="channelBox">
        <property name="minimum">
         <number>1</number>
        </property>

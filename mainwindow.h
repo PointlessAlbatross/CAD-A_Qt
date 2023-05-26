@@ -15,6 +15,7 @@
 #include "carrierParameters.h"
 #include "channelParameters.h"
 #include "reverberationParameters.h"
+#include "echoSignal.h"
 
 #include <array>
 #include <ccomplex>
@@ -154,9 +155,20 @@ private:
 
     std::array<bool, 2> ReverbCalc; //{частотная, временная}
 
-    double Rekv;
-
     double g(double f);
+
+    double echoDist1;
+    double echoDist2;
+    double echoDist3;
+    double echoFreq1;
+    double echoFreq2;
+    double echoFreq3;
+    int echoChannel;
+    int numDotEcho;
+    double elevationAng;
+    double azimuthAng;
+    double relatSpeed;
+    double Rekv;
 
 private slots:
     void on_action_triggered();
@@ -185,6 +197,10 @@ private slots:
     void on_actionRevervPowFreq_triggered();
 
     void on_actionRevervPowTime_triggered();
+
+    void on_echoFreqAction_triggered();
+
+    void on_echoDistAction_triggered();
 
 signals:
     void signalMainToParamRect(double size_x, double size_z,
@@ -229,6 +245,7 @@ signals:
     void signal_mainToChannelParameters(std::array<std::array<bool, 16>, 30> Table);
     void signal_mainToReverberationParameters1(double param1, double param2, double param3, int channel1, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
     void signal_mainToReverberationParameters2(double param1, double param2, double param3, int channel1, int channel2, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
+    void signal_mainToEchoSignal(double param1, double param2, double param3, int channel, int numDot, int typeEchoSign, double elevation, double azimuth, double relative_speed, double R_ekv);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
@@ -259,6 +276,10 @@ public slots:
                                              std::array<bool, 4> ReverbChecks, int typeReverb, bool isCalculate);
     void slot_reverberationParametersToMain2(double param1, double param2, double param3, int channel1, int channel2, int numDot,
                                              std::array<bool, 4> ReverbChecks, int typeReverb, bool isCalculate);
+
+    void slot_echoSignalToMain(double param1, double param2, double param3,
+                               int channel, int numDot,  int typeEchoSign, bool isCalculate,
+                               double elevation, double azimuth, double relative_speed, double R_ekv);
 
 };
 #endif // MAINWINDOW_H

@@ -82,6 +82,8 @@ MainWindow::MainWindow(QWidget *parent)
     overlayType = 0;
     ui->overlayAction->setText("Вид накладки:  4-угольники");
     updateRawDataWindow();
+
+    numDotEcho = 200;
 }
 
 
@@ -1150,6 +1152,8 @@ void MainWindow::slot_reverberationParametersToMain2(double param1, double param
 
 }
 
+
+
 void MainWindow::on_actionRevervPowFreq_triggered() //Реверберационная->мощности->частотная
 {
     ReverberationParameters window;
@@ -1169,5 +1173,35 @@ void MainWindow::on_actionRevervPowTime_triggered() //Реверберацион
     connect(&window, &ReverberationParameters::signal_reverberationParametersToMain1, this, &MainWindow::slot_reverberationParametersToMain1);
     window.setModal(true);
     window.exec();
+}
+
+
+void MainWindow::on_echoFreqAction_triggered()
+{
+    EchoSignal window;
+    connect(this, &MainWindow::signal_mainToEchoSignal, &window, &EchoSignal::slot_mainToEchoSignal);
+    emit signal_mainToEchoSignal(echoFreq1, echoFreq2, echoDist3, echoChannel, numDotEcho, 1, elevationAng, azimuthAng, relatSpeed, Rekv);
+    connect(&window, &EchoSignal::signal_echoSignalToMain, this, &MainWindow::slot_echoSignalToMain);
+    window.setModal(true);
+    window.exec();
+}
+
+
+void MainWindow::on_echoDistAction_triggered()
+{
+    EchoSignal window;
+    connect(this, &MainWindow::signal_mainToEchoSignal, &window, &EchoSignal::slot_mainToEchoSignal);
+    emit signal_mainToEchoSignal(echoDist1, echoDist2, echoFreq3, echoChannel, numDotEcho, 2, elevationAng, azimuthAng, relatSpeed, Rekv);
+    connect(&window, &EchoSignal::signal_echoSignalToMain, this, &MainWindow::slot_echoSignalToMain);
+    window.setModal(true);
+    window.exec();
+}
+
+void MainWindow::slot_echoSignalToMain(double param1, double param2, double param3, int channel,
+                                       int numDot,  int typeEchoSign,
+                                       bool isCalculate, double elevation, double azimuth,
+                                       double relative_speed, double R_ekv)
+{
+
 }
 

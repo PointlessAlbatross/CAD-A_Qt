@@ -117,6 +117,13 @@
      <addaction name="menu_10"/>
      <addaction name="menu_11"/>
     </widget>
+    <widget class="QMenu" name="menu_13">
+     <property name="title">
+      <string>Эхосигнал</string>
+     </property>
+     <addaction name="echoFreqAction"/>
+     <addaction name="echoDistAction"/>
+    </widget>
     <addaction name="separator"/>
     <addaction name="menu_8"/>
     <addaction name="corrective_action"/>
@@ -124,6 +131,7 @@
     <addaction name="menu_6"/>
     <addaction name="powerDiffuseInterf"/>
     <addaction name="menu_7"/>
+    <addaction name="menu_13"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -261,6 +269,16 @@
   <action name="actionRevervCrelTime">
    <property name="text">
     <string>Временная зависимость</string>
+   </property>
+  </action>
+  <action name="echoFreqAction">
+   <property name="text">
+    <string>Изменение мощности по частоте</string>
+   </property>
+  </action>
+  <action name="echoDistAction">
+   <property name="text">
+    <string>Изменение мощности во времени</string>
    </property>
   </action>
  </widget>
