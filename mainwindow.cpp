@@ -97,6 +97,8 @@ MainWindow::MainWindow(QWidget *parent)
     updateRawDataWindow();
 
     numDotEcho = 200;
+
+    chartsChannel = 1;
 }
 
 
@@ -269,7 +271,7 @@ void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int ris
 }
 
 void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<QPair<double,double>>> Center_pos1,
-                                   std::array<QPair<double, double>, 16> Centroids1,std::array<double,16> Arr_sensitivity, std::array<QVector<QVector<bool>>, 16> SelectedElem1)
+                                   std::array<QPair<double, double>, 16> Centroids1, std::array<double,16> Arr_sensitivity, std::array<QVector<QVector<bool>>, 16> SelectedElem1)
 {
     CurrNumElem = Curr_num_elem1;
     WeightCoef = Weight_coef1;
@@ -422,7 +424,9 @@ void MainWindow::on_charts_action_triggered()
                             VecSurrFreq, VecSurrDist, VecSumFreq, VecSumDist,
                             ReverbChecks, ReverbCalc, VecFreq, VecDist,
                             VecFreqE, VecEchoFreq, VecDistE, VecEchoDist,
-                            EchoCalc);
+                            EchoCalc,
+                            TableChannel, Arr_sensitivityGroup, SubarrayCenter, SelectedElem, Centroids, antennaType,
+                            chartsChannel);
     window.setModal(true);
     window.exec();
 }
@@ -818,15 +822,17 @@ void MainWindow::slot_channelParametersToMain(std::array<std::array<bool, 16>, 3
         int Denum = 0;
         for (int grp = 0; grp < 16; grp++)
         {
-            Z_CL_num += Centroids[grp].first * TableChannel[chn][grp] * Arr_sensitivityGroup[grp];
-            Y_CL_num += Centroids[grp].second * TableChannel[chn][grp] * Arr_sensitivityGroup[grp];
-            Denum += TableChannel[chn][grp] * Arr_sensitivityGroup[grp];
+            if(!TableChannel[chn][grp])
+                continue;
+            Z_CL_num += Centroids[grp].first * Arr_sensitivityGroup[grp];
+            Y_CL_num += Centroids[grp].second  * Arr_sensitivityGroup[grp];
+            Denum += Arr_sensitivityGroup[grp];
         }
         if (Denum > 0)
         {
             // координаты центра канала
-            SubarrayCenter[chn].first = Z_CL_num / Denum;
-            SubarrayCenter[chn].second = Y_CL_num / Denum;
+            SubarrayCenter[chn].second = Z_CL_num / Denum;
+            SubarrayCenter[chn].first = Y_CL_num / Denum;
         }
     }
     //debug
@@ -1245,6 +1251,11 @@ void MainWindow::slot_echoSignalToMain(double param1, double param2, double para
 
 }
 
+void MainWindow::slot_chartsParametersToMain(int chartsChannel1)
+{
+    chartsChannel = chartsChannel1;
+}
+
 void MainWindow::powerEchoSignal(int type)
 {
     auto K_dopl = [this] (double theta, double phi)
@@ -1283,7 +1294,8 @@ void MainWindow::powerEchoSignal(int type)
         std::complex<double> D_rec; // модуль нормированной диаграммы направленности приемной решетки;
         if (antennaType) // фазовая антенна
         {
-            D_rec = DLt(theta, phi, echoChannel);
+            //![фазовая]
+            D_rec = DLt(theta, phi, echoChannel - 1);
         }
         else if (!antennaType) // амплитудная антенна
         {
@@ -1328,3 +1340,14 @@ void MainWindow::powerEchoSignal(int type)
 
 
 }
+
+void MainWindow::on_chartsParameters_triggered()
+{
+    ChartsParameters window;
+    connect(this, &MainWindow::signal_mainToChartsParameters, &window, &ChartsParameters::slot_mainToChartsParameters);
+    emit signal_mainToChartsParameters(chartsChannel);
+    connect(&window, &ChartsParameters::signal_chartsParametersToMain, this, &MainWindow::slot_chartsParametersToMain);
+    window.setModal(true);
+    window.exec();
+}
+

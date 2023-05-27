@@ -1264,15 +1264,17 @@ void ArrangementOfElements::on_saveButton_clicked()
             {
                 for (int j = 0; j < CenterPos[i].size(); j++)
                 {
-                    YclNum += WeightCoef[grp][i][j] * CenterPos[i][j].second * SelectedElem[grp][i][j];
-                    ZclNum += WeightCoef[grp][i][j] * CenterPos[i][j].first * SelectedElem[grp][i][j];
-                    Den += WeightCoef[grp][i][j] * SelectedElem[grp][i][j];
+                    if(!SelectedElem[grp][i][j])
+                        continue;
+                    YclNum += WeightCoef[grp][i][j] * CenterPos[i][j].first;
+                    ZclNum += WeightCoef[grp][i][j] * CenterPos[i][j].second;
+                    Den += WeightCoef[grp][i][j];
                 }
             }
         if (Den)
         {
-            Centroids[grp].first = ZclNum / Den;
-            Centroids[grp].second = YclNum / Den;
+            Centroids[grp].second = ZclNum / Den;
+            Centroids[grp].first = YclNum / Den;
             Arr_Denum[grp] = Den;
         }
         qDebug() << Centroids[grp];

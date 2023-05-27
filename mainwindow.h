@@ -16,6 +16,7 @@
 #include "channelParameters.h"
 #include "reverberationParameters.h"
 #include "echoSignal.h"
+#include "chartsParameters.h"
 
 #include <array>
 #include <ccomplex>
@@ -179,6 +180,8 @@ private:
     double Rekv;
     std::array<bool, 2> EchoCalc;
 
+    int chartsChannel;
+
 private slots:
     void on_action_triggered();
     void on_antenna_array_triggered();
@@ -210,6 +213,8 @@ private slots:
     void on_echoFreqAction_triggered();
 
     void on_echoDistAction_triggered();
+
+    void on_chartsParameters_triggered();
 
 signals:
     void signalMainToParamRect(double size_x, double size_z,
@@ -245,7 +250,15 @@ signals:
                                QVector<double> VecEchoFreq,
                                QVector<double> VecDistE,
                                QVector<double> VecEchoDist,
-                               std::array<bool, 2> EchoCalc);
+                               std::array<bool, 2> EchoCalc,
+
+                               std::array<std::array<bool, 16>, 30> TableChannel,
+                               std::array<double,16> Arr_sensitivityGroup,
+                               std::array<QPair<double, double>, 30> SubarrayCenter,
+                               std::array<QVector<QVector<bool>>, 16> SelectedElem,
+                               std::array<QPair<double, double>, 16> Centroids,
+                               int antennaType, int chartsChannel
+                            );
 
     void signal_mainToSelectionOfCorrectiveElements(double qSignal, double q1Signal, double f, double delta_f,
                                                     double C0, double C, double R, double L);
@@ -264,6 +277,8 @@ signals:
                                                int channel1, int channel2, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb);
     void signal_mainToEchoSignal(double param1, double param2, double param3,
                                  int channel, int numDot, int typeEchoSign, double elevation, double azimuth, double relative_speed, double R_ekv);
+
+    void signal_mainToChartsParameters(int chartsChannel);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
@@ -298,6 +313,8 @@ public slots:
     void slot_echoSignalToMain(double param1, double param2, double param3,
                                int channel, int numDot,  int typeEchoSign, bool isCalculate,
                                double elevation, double azimuth, double relative_speed, double R_ekv);
+
+    void slot_chartsParametersToMain(int chartsChannel);
 
 };
 #endif // MAINWINDOW_H

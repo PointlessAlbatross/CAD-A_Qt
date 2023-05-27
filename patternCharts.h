@@ -39,6 +39,7 @@ public:
 
 private:
 
+    int antennaType;
     QVector<int> CurrNumElem;
     std::array<QVector<QVector<double>>, 17>  WeightCoef;
     QVector<QVector<QPair<double,double>>> CenterPos;
@@ -60,8 +61,17 @@ private:
 
     int regChart;
 
+    std::array<std::array<bool, 16>, 30> TableChannel;
+    std::array<double,16> Arr_sensitivityGroup;
+    std::array<QPair<double, double>, 30> SubarrayCenter;
+    std::array<QVector<QVector<bool>>, 16> SelectedElem;
+    std::array<QPair<double, double>, 16> Centroids;
+
+
     double D(double theta, double phi);
     std::complex<double> Dt(double theta, double phi);
+    std::complex<double> DLt(double theta, double phi, int chn); //диаграмма направленности канала
+    std::complex<double> DUt(double theta, double phi, int grp); //диаграмма направленности группы
     void drawChart();
     void drawPhaseChart();
     void drawPolarChart();
@@ -76,6 +86,8 @@ private:
                   QVector<double> VecDistE,
                   QVector<double> VecEchoDist,
                   std::array<bool, 2> EchoCalc);
+
+    int chartsChannel;
 
 public slots:
     void slotMainToCharts(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef,
@@ -100,7 +112,13 @@ public slots:
                              QVector<double> VecEchoFreq,
                              QVector<double> VecDistE,
                              QVector<double> VecEchoDist,
-                             std::array<bool, 2> EchoCalc);
+                             std::array<bool, 2> EchoCalc,
+                             std::array<std::array<bool, 16>, 30> TableChannel,
+                             std::array<double,16> Arr_sensitivityGroup,
+                             std::array<QPair<double, double>, 30> SubarrayCenter,
+                             std::array<QVector<QVector<bool>>, 16> SelectedElem,
+                             std::array<QPair<double, double>, 16> Centroids,
+                             int antennaType, int chartsChannel);
 private:
     Ui::PatternCharts *ui;
 };

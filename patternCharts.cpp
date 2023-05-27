@@ -40,7 +40,7 @@ double PatternCharts::D(double theta, double phi)
     }
     return 1;
 }
-//проблеммы с каналами
+
 std::complex<double> PatternCharts::Dt(double theta, double phi)
 {
     double theta_t = M_PI_2, phi_t = 0;
@@ -53,7 +53,8 @@ std::complex<double> PatternCharts::Dt(double theta, double phi)
                 //[1] Числитель
                 D_numerator += (WeightCoef[0][a][b] * exp( (1.0*i) * k * (CenterPos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
                                                    + CenterPos[a][b].second * (cos (theta) - cos(theta_t))) ) *
-                         D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
+                         //D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(tan(theta_t), cos(phi_t)) ))) / 2.0 );
+                        D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
                 //[2] Знаменатель
                 D_denumerator += WeightCoef[0][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
         }
@@ -61,23 +62,86 @@ std::complex<double> PatternCharts::Dt(double theta, double phi)
     return D_numerator / D_denumerator;
 }
 
+
+std::complex<double> PatternCharts::DLt(double theta, double phi, int chn) //диаграмма направленности канала
+{
+    double theta_t = M_PI_2, phi_t = 0;
+    std::complex<double> i (0, 1); // Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0;
+    for (int grp = 0; grp < 16; grp++)
+    {
+        if (!TableChannel[chn][grp])
+            continue;
+        D_numerator += Arr_sensitivityGroup[grp] *
+                exp((1.0*i) * k * (SubarrayCenter[chn].first * (sin(theta) * sin (phi) - sin(theta_t) * sin(phi_t)) +
+                                   SubarrayCenter[chn].second * (cos(theta) - cos (theta_t)) ) * DUt(theta, phi, grp))*( 1.0 + abs( sin( atan2(theta, phi) ))) / 2.0;
+        D_denumerator += Arr_sensitivityGroup[grp] * DUt(theta_t, phi_t, grp)*( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
+    }
+    return D_numerator / D_denumerator;
+}
+
+
+std::complex<double> PatternCharts::DUt(double theta, double phi, int grp) //диаграмма направленности группы
+{
+    double theta_t = M_PI_2, phi_t = 0;
+    std::complex<double> i (0, 1); // Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0;
+    for (int a = 0; a < CenterPos.size(); a++)
+    {
+        for(int b = 0; b < CenterPos[a].size(); b++)
+        {
+                if (!SelectedElem[grp][a][b])
+                    continue;
+                //[1] Числитель
+                D_numerator += (WeightCoef[grp][a][b] * exp( (1.0*i) * k * ((CenterPos[a][b].first - Centroids[grp].first ) * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
+                                                   + (CenterPos[a][b].second - Centroids[grp].second) * (cos (theta) - cos(theta_t))) ) *
+                         D(theta, phi) * ( 1.0 + abs( sin( atan2(theta, phi) ))) / 2.0 );
+                //[2] Знаменатель
+                D_denumerator += WeightCoef[grp][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
+        }
+    }
+    return D_numerator / D_denumerator;
+}
+
+
+
+
 void PatternCharts::drawChart()
 {
     for(int reg_chart = 1; reg_chart <= 2; reg_chart++)
     {
         QLineSeries *series = new QLineSeries();
-        switch (reg_chart) {
-        case 1:
-            phi = 0;
-            for (double deg = 0; deg <= 181; deg += 0.1)
-                series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
-            break;
-        case 2:
-            theta = M_PI_2;
-            for (double deg = -90; deg <= 91; deg += 0.1)
-                series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
-            break;
+        if (!antennaType){
+            // амплитудная
+                   switch (reg_chart) {
+                   case 1:
+                       phi = 0;
+                       for (double deg = 0; deg <= 181; deg += 0.1)
+                           series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
+                       break;
+                   case 2:
+                       theta = M_PI_2;
+                       for (double deg = -90; deg <= 91; deg += 0.1)
+                           series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
+                       break;
+                   }
         }
+        else if (antennaType)
+        {
+            switch (reg_chart) {
+            case 1:
+                phi = 0;
+                for (double deg = 0; deg <= 181; deg += 0.1)
+                    series->append(deg, abs(DUt(deg / 180.0 * M_PI, phi, chartsChannel)));
+                break;
+            case 2:
+                theta = M_PI_2;
+                for (double deg = -90; deg <= 91; deg += 0.1)
+                    series->append(deg, abs(DUt(theta, deg / 180.0 * M_PI, chartsChannel)));
+                break;
+            }
+        }
+
 
         QChart *chart = new QChart();
         chart->legend()->hide();
@@ -124,6 +188,7 @@ void PatternCharts::drawChart()
     }
 }
 
+/*
 void PatternCharts::drawPhaseChart()
 {
     double stepGraph = 0.01;
@@ -195,24 +260,6 @@ void PatternCharts::drawPhaseChart()
 
     }
 }
-
-
-/*
-        switch (reg_chart) {
-        case 1:
-            phi = 0;
-            for (double deg = angularMin; deg <= angularMax; deg += 0.1)
-                series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
-            break;
-        case 2:
-            theta = M_PI_2;
-                for (double deg = angularMin; deg <= angularMax; deg += 0.1)
-                    series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
-            break;
-        }
-
-
-
 */
 
 void PatternCharts::drawPolarChart()
@@ -604,9 +651,24 @@ void PatternCharts::slotMainToCharts(QVector<int> Curr_num_elem1, std::array<QVe
                                      QVector<double> VecEchoFreq,
                                      QVector<double> VecDistE,
                                      QVector<double> VecEchoDist,
-                                     std::array<bool, 2> EchoCalc
+                                     std::array<bool, 2> EchoCalc,
+                                     std::array<std::array<bool, 16>, 30> TableChannel1,
+                                     std::array<double,16> Arr_sensitivityGroup1,
+                                     std::array<QPair<double, double>, 30> SubarrayCenter1,
+                                     std::array<QVector<QVector<bool>>, 16> SelectedElem1,
+                                     std::array<QPair<double, double>, 16> Centroids1,
+                                     int antennaType1, int chartsChannel1
                                     )
 {
+    antennaType = antennaType1;
+    TableChannel = TableChannel1;
+    Arr_sensitivityGroup = Arr_sensitivityGroup1;
+    SubarrayCenter = SubarrayCenter1;
+    SelectedElem = SelectedElem1;
+    Centroids = Centroids1;
+
+    chartsChannel = chartsChannel1;
+
     CenterPos = Center_pos1;
     overlayType = overlay_type1;
     CurrNumElem = Curr_num_elem1;

@@ -140,6 +140,7 @@
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="charts_action"/>
+    <addaction name="chartsParameters"/>
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
@@ -279,6 +280,11 @@
   <action name="echoDistAction">
    <property name="text">
     <string>Изменение мощности во времени</string>
+   </property>
+  </action>
+  <action name="chartsParameters">
+   <property name="text">
+    <string>Параметры графиков</string>
    </property>
   </action>
  </widget>
