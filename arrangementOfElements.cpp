@@ -1282,8 +1282,9 @@ void ArrangementOfElements::on_saveButton_clicked()
         qDebug() << CenterPos;
     }
 
+    int numElem = std::get<2>(ButtonPos[ButtonPos.size() - 1][ButtonPos[ButtonPos.size() - 1].size() - 1]);
     emit signalArrangeToMain(CurrNumElem, WeightCoef, CenterPos, Centroids,
-                             Arr_Denum, SelectedElem);
+                             Arr_Denum, SelectedElem, numElem);
     QWidget::close();
 }
 
@@ -1326,5 +1327,3 @@ void ArrangementOfElements::on_weightButton_clicked()
         redrawing();
     }
 }
-
-

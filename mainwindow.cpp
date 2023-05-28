@@ -36,24 +36,24 @@ MainWindow::MainWindow(QWidget *parent)
     botReflCoef = 0.5;
 
     //Предустановленные 4угольн элем
-    sizeX = 0.05;
-    sizeZ = 0.05;
-    distX = 0.005;
-    distZ = 0.005;
+    sizeX = 0.033;
+    sizeZ = 0.033;
+    distX = 0.002;
+    distZ = 0.002;
 
     //Предустановленные 6угольн элем
-    radCircScr = 0.02;
-    distHex = 0.005;
+    radCircScr = 0.03; // радиус описанной окружности
+    distHex = 0.004;
 
-    radAnt = 0.2;
-    num_row = 5;
+    radAnt = 0.18;
+    num_row = 8;
 
     impulseType = 1; // тип импульса
     pulseDuration = 50; // длительность импульса
     riseTime = 100; // длительность фронта
     pressure = 100000; // излучаемое давление
-    receivingFreq = 20550;
-    radiationFreq = 20000;
+    receivingFreq = 20550; //частота приема
+    radiationFreq = 20000; //частота излучения
     k = receivingFreq * 2 * M_PI / 1500;
     for (unsigned int i = 0; i < TableChannel.size(); i++)
     {
@@ -133,7 +133,8 @@ void MainWindow::updateRawDataWindow()
         else
             ui->antenna_Info->appendPlainText("Амплитудная антенна");
         ui->antenna_Info->appendPlainText("Четырехугольные элементы\n");
-        //ui->antenna_Info->appendPlainText("Число накладок" + QString::number(abs(Psurf)));
+
+        ui->antenna_Info->appendPlainText("Число накладок: " + QString::number(numElem));
 
         ui->antenna_Info->appendPlainText("Радиус, мм = " + QString::number(radAnt * 1000));
         ui->antenna_Info->appendPlainText("X, мм = " + QString::number(sizeX * 1000));
@@ -271,7 +272,8 @@ void MainWindow::slotOperatingSystemParametersToMain(int pulseDuration1, int ris
 }
 
 void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVector<QVector<double>>, 17> Weight_coef1, QVector<QVector<QPair<double,double>>> Center_pos1,
-                                   std::array<QPair<double, double>, 16> Centroids1, std::array<double,16> Arr_sensitivity, std::array<QVector<QVector<bool>>, 16> SelectedElem1)
+                                   std::array<QPair<double, double>, 16> Centroids1, std::array<double,16> Arr_sensitivity, std::array<QVector<QVector<bool>>, 16> SelectedElem1,
+                                   int numElem1)
 {
     CurrNumElem = Curr_num_elem1;
     WeightCoef = Weight_coef1;
@@ -280,7 +282,9 @@ void MainWindow::slotArrangeToMain(QVector<int> Curr_num_elem1, std::array<QVect
     Arr_sensitivityGroup = Arr_sensitivity;
     SelectedElem = SelectedElem1;
     updateRawDataWindow();
+    numElem = numElem1;
 
+    updateRawDataWindow();
 
 }
 
@@ -702,11 +706,22 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         timer.start();
         chn1 = 0;
         auto Psurf = m_cadAMath.simpson2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
+        qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
+        auto Pbot = m_cadAMath.simpson2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
+        qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
         qint64 elapsed = timer.elapsed();
+        qDebug() <<"Elapsed time:"<<elapsed<<"ms";
+
+
         qDebug() <<"плотность мощности рассеянной помехи";
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
         qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
-        ui->consoleText->appendPlainText(QString::number(abs(Psurf), 'e', 2) + "\n");
+        ui->consoleText->appendPlainText("Канал  Поверхность     Дно             Сумма\n");
+        ui->consoleText->appendPlainText(QString::number(1) + "          "
+                                         + QString::number(abs(Psurf), 'e', 2) + "            "
+                                         + QString::number(abs(Pbot), 'e', 2) + "      "
+                                         + QString::number(abs(Pbot) + abs(Psurf), 'e', 2) + "\n");
+
     }
     else
     {
@@ -717,47 +732,26 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         {
             if (!checkChannel(chn1))
                     continue;
+            qDebug() <<"плотность мощности рассеянной помехи";
             auto Psurf = m_cadAMath.simpson2(Ps_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
             qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
-            ui->consoleText->appendPlainText(QString::number(abs(Psurf), 'e', 2) + "\n");
+            auto Pbot = m_cadAMath.simpson2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
+            qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
+            qint64 elapsed = timer.elapsed();
+            qDebug() <<"Elapsed time:"<<elapsed<<"ms";
+
+            ui->consoleText->appendPlainText("Канал  Поверхность     Дно             Сумма\n");
+            ui->consoleText->appendPlainText(QString::number(chn1 + 1) + "          "
+                                             + QString::number(abs(Psurf), 'e', 2) + "            "
+                                             + QString::number(abs(Pbot), 'e', 2) + "      "
+                                             + QString::number(abs(Pbot) + abs(Psurf), 'e', 2) + "\n");
+
         }
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
+        qDebug() <<"Вычисления выполнены";
         ui->label->setText("Вычисления выполнены");
     }
-
-
-
-    if (!antennaType)
-    {
-        QElapsedTimer timer;
-        timer.start();
-        chn1 = 0;
-        auto Pbot = m_cadAMath.simpson2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
-        qint64 elapsed = timer.elapsed();
-        qDebug() <<"Elapsed time:"<<elapsed<<"ms";
-        qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
-        ui->consoleText->appendPlainText(QString::number(abs(Pbot), 'e', 2) + "\n");
-    }
-    else
-    {
-        QElapsedTimer timer;
-        timer.start();
-        for (int chn1 = 0; chn1 < 30; chn1++)
-        {
-            if (!checkChannel(chn1))
-                    continue;
-            auto Pbot = m_cadAMath.simpson2(Pb_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
-            qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
-            ui->consoleText->appendPlainText(QString::number(abs(Pbot), 'e', 2) + "\n");
-        }
-        qint64 elapsed = timer.elapsed();
-        qDebug() <<"Elapsed time:"<<elapsed<<"ms";
-
-    }
-
-
-
 }
 
 

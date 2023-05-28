@@ -107,4 +107,3 @@ void AntennaArrayParametersRect::on_pushButton_2_clicked()
 {
     QWidget::close();
 }
-

@@ -70,6 +70,8 @@ private:
     int receivingFreq;
     double k; // Волновое число
 
+    int numElem;
+
     void updateRawDataWindow();
 
     int num_row;
@@ -291,7 +293,7 @@ public slots:
     void slotOperatingSystemParametersToMain(int duration, int riseTime, int pressure,
                                                   int radiation_freq, int receiving_freq, int impulseType);
     void slotArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17>  Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,
-                           std::array<QPair<double, double>, 16> Centroids, std::array<double,16> Arr_Denum, std::array<QVector<QVector<bool>>, 16> SelectedElem);
+                           std::array<QPair<double, double>, 16> Centroids, std::array<double,16> Arr_Denum, std::array<QVector<QVector<bool>>, 16> SelectedElem, int numElem);
     void slot_selectionOfCorrectiveElementsToMain_save(double qSlot, double q1Slot, double f, double delta_f,
                                                         double C0, double C, double R, double L);
     void slot_selectionOfCorrectiveElementsToMain_calculate(double qSlot, double q1Slot, double f, double delta_f,

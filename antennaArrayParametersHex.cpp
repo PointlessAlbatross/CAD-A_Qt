@@ -110,5 +110,3 @@ void AntennaArrayParametersHex::slotMainToParamHex(double rad_circ_scr_1, double
     ui->radAntBox->setValue(radAnt);
     ui->numRowBox->setValue(numRow);
 }
-
-

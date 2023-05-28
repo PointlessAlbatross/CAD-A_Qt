@@ -93,7 +93,8 @@ private:
 signals:
     void signalArrangeToSelectWeight (double, int, int, int);
     void signalArrangeToMain(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,
-                             std::array<QPair<double, double>, 16> Centroids, std::array<double,16> Arr_Denum, std::array<QVector<QVector<bool>>, 16> Selected_elem);
+                             std::array<QPair<double, double>, 16> Centroids, std::array<double,16> Arr_Denum, std::array<QVector<QVector<bool>>, 16> Selected_elem,
+                             int numElem);
 
 
 public slots:
