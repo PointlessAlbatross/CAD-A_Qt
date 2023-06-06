@@ -12,6 +12,7 @@ SOURCES += \
     antennaArrayParametersRect.cpp \
     arrangementOfElements.cpp \
     cadAMath.cpp \
+    calcParam.cpp \
     carrierParameters.cpp \
     channelParameters.cpp \
     chartsParameters.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     antennaArrayParametersRect.h \
     arrangementOfElements.h \
     cadAMath.h \
+    calcParam.h \
     carrierParameters.h \
     channelParameters.h \
     chartsParameters.h \
@@ -45,6 +47,7 @@ FORMS += \
     antennaArrayParametersHex.ui \
     antennaArrayParametersRect.ui \
     arrangementOfElements.ui \
+    calcParam.ui \
     carrierParameters.ui \
     channelParameters.ui \
     chartsParameters.ui \

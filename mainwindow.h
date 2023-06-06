@@ -17,6 +17,7 @@
 #include "reverberationParameters.h"
 #include "echoSignal.h"
 #include "chartsParameters.h"
+#include "calcParam.h"
 
 #include <array>
 #include <ccomplex>
@@ -146,6 +147,9 @@ private:
     std::array<bool, 4> ReverbChecks;
     int numDot;
 
+    int integrateOption; // выбор способа интегрирования
+    int integrateDot; // количество точек
+
     QVector<double> VecSurfFreq;
     QVector<double> VecSurfDist;
     QVector<double> VecBotFreq;
@@ -165,7 +169,9 @@ private:
     QVector<double> VecEchoDist;
 
     std::array<bool, 2> ReverbCalc; //{частотная, временная}
-
+    std::complex<double> integrate2(std::function<std::complex<double>(double, double)> f,
+                       double a1, double b1,
+                       double a2, double b2,int N);
     double g(double f);
 
     double echoDist1;
@@ -217,6 +223,8 @@ private slots:
     void on_echoDistAction_triggered();
 
     void on_chartsParameters_triggered();
+
+    void on_actionCalcParam_triggered();
 
 signals:
     void signalMainToParamRect(double size_x, double size_z,
@@ -281,6 +289,7 @@ signals:
                                  int channel, int numDot, int typeEchoSign, double elevation, double azimuth, double relative_speed, double R_ekv);
 
     void signal_mainToChartsParameters(int chartsChannel);
+    void signal_mainToCalcParam(int opt, int integDot);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
@@ -317,6 +326,8 @@ public slots:
                                double elevation, double azimuth, double relative_speed, double R_ekv);
 
     void slot_chartsParametersToMain(int chartsChannel);
+
+    void slot_calcParamToMain(int opt, int integDot);
 
 };
 #endif // MAINWINDOW_H

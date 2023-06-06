@@ -132,6 +132,9 @@
     <addaction name="powerDiffuseInterf"/>
     <addaction name="menu_7"/>
     <addaction name="menu_13"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionCalcParam"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -285,6 +288,11 @@
   <action name="chartsParameters">
    <property name="text">
     <string>Параметры графиков</string>
+   </property>
+  </action>
+  <action name="actionCalcParam">
+   <property name="text">
+    <string>Параметры расчетов</string>
    </property>
   </action>
  </widget>

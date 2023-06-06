@@ -86,6 +86,9 @@ MainWindow::MainWindow(QWidget *parent)
     relatSpeed = 0;
     Rekv = 10;
     EchoCalc = {false, false};
+
+    integrateOption = 1;
+    integrateDot = 1000;
 //![2]
 
     ui->setupUi(this);
@@ -705,9 +708,9 @@ void MainWindow::on_powerDiffuseInterf_triggered()
         QElapsedTimer timer;
         timer.start();
         chn1 = 0;
-        auto Psurf = m_cadAMath.simpson2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
+        auto Psurf = integrate2(Ps_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, integrateDot);
         qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
-        auto Pbot = m_cadAMath.simpson2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
+        auto Pbot = integrate2(Pb_unint, M_PI_2, M_PI, -M_PI_2, M_PI_2, integrateDot);
         qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
         qint64 elapsed = timer.elapsed();
         qDebug() <<"Elapsed time:"<<elapsed<<"ms";
@@ -733,9 +736,9 @@ void MainWindow::on_powerDiffuseInterf_triggered()
             if (!checkChannel(chn1))
                     continue;
             qDebug() <<"плотность мощности рассеянной помехи";
-            auto Psurf = m_cadAMath.simpson2(Ps_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
+            auto Psurf = integrate2(Ps_unint_ph, 0.0, M_PI_2, -M_PI_2, M_PI_2, integrateDot);
             qDebug() << "Поверхность:"<<abs(Psurf)<<Qt::endl;
-            auto Pbot = m_cadAMath.simpson2(Pb_unint, 0.0, M_PI_2, -M_PI_2, M_PI_2, 1000);
+            auto Pbot = integrate2(Pb_unint_ph, M_PI_2, M_PI, -M_PI_2, M_PI_2, integrateDot);
             qDebug() << "Дно:"<<abs(Pbot)<<Qt::endl;
             qint64 elapsed = timer.elapsed();
             qDebug() <<"Elapsed time:"<<elapsed<<"ms";
@@ -1250,6 +1253,12 @@ void MainWindow::slot_chartsParametersToMain(int chartsChannel1)
     chartsChannel = chartsChannel1;
 }
 
+void MainWindow::slot_calcParamToMain(int opt, int integDot)
+{
+    integrateOption = opt;
+    integrateDot = integDot;
+}
+
 void MainWindow::powerEchoSignal(int type)
 {
     auto K_dopl = [this] (double theta, double phi)
@@ -1335,12 +1344,33 @@ void MainWindow::powerEchoSignal(int type)
 
 }
 
+std::complex<double> MainWindow::integrate2(std::function<std::complex<double> (double, double)> f, double a1, double b1, double a2, double b2, int N)
+{
+    if (integrateOption == 1) // метод Симпсона
+        return m_cadAMath.rectInt2(f, a1, b1, a2, b2, N);
+    if (integrateOption == 2) // метод Симпсона
+        return m_cadAMath.simpson2(f, a1, b1, a2, b2, N);
+    if (integrateOption == 3) // метод Монте-Карло
+        return m_cadAMath.monteCarlo2(f, a1, b1, a2, b2, N);
+}
+
 void MainWindow::on_chartsParameters_triggered()
 {
     ChartsParameters window;
     connect(this, &MainWindow::signal_mainToChartsParameters, &window, &ChartsParameters::slot_mainToChartsParameters);
     emit signal_mainToChartsParameters(chartsChannel);
     connect(&window, &ChartsParameters::signal_chartsParametersToMain, this, &MainWindow::slot_chartsParametersToMain);
+    window.setModal(true);
+    window.exec();
+}
+
+
+void MainWindow::on_actionCalcParam_triggered()
+{
+    CalcParam window;
+    connect(this, &MainWindow::signal_mainToCalcParam, &window, &CalcParam::slot_mainToCalcParam);
+    emit signal_mainToCalcParam(integrateOption, integrateDot);
+    connect(&window, &CalcParam::signal_calcParamToMain, this, &MainWindow::slot_calcParamToMain);
     window.setModal(true);
     window.exec();
 }

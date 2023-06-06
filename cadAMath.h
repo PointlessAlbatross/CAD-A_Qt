@@ -8,6 +8,7 @@
 #include <QtMath>
 #include <random>
 
+typedef std::complex<double> Complex;
 
 class CadAMath
 {
@@ -30,6 +31,8 @@ public:
     std::complex<double> simpson3(const std::function<std::complex<double>(double, double, double)>& func, double ax, double bx, double ay, double by, double az, double bz, int n);
     QVector<std::complex<double>> fft(const QVector<std::complex<double>>& input);
     QVector<std::complex<double>> ifft(const QVector<std::complex<double>>& input);
+    Complex rectInt2(std::function<Complex (double, double)> f, double x1, double x2, double y1, double y2, int N);
+
     /*
     romberg(std::function<double (double)> f,
                                  double a, double b, int n);

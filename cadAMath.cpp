@@ -226,6 +226,25 @@ QVector<std::complex<double>> CadAMath::ifft(const QVector<std::complex<double>>
     return result;
 }
 
+Complex CadAMath::rectInt2(std::function<Complex (double, double)> f, double x1, double x2, double y1, double y2, int N)
+{
+    int numPointsX = N, numPointsY = N;
+    double dx = (x2 - x1) / numPointsX;
+    double dy = (y2 - y1) / numPointsY;
+
+    Complex integral = 0.0;
+
+    for (int i = 0; i < numPointsX; ++i) {
+        for (int j = 0; j < numPointsY; ++j) {
+            double x = x1 + (i + 0.5) * dx;
+            double y = y1 + (j + 0.5) * dy;
+            integral += f(x, y) * dx * dy;
+        }
+    }
+
+    return integral;
+}
+
 int CadAMath::maxOfThree(double a, double b, double c) {
     int max = a;
     if (b > max) {
