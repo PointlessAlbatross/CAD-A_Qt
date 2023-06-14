@@ -5,4 +5,4 @@
 
 CAD-A_Qt создана на Qt6
 
-Автор: Остапенко Никита ostap.nikita98@gmail.com
+Автор: Никита Остапенко ostap.nikita98@gmail.com
