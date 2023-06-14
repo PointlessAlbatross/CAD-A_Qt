@@ -1346,11 +1346,13 @@ void MainWindow::powerEchoSignal(int type)
 
 std::complex<double> MainWindow::integrate2(std::function<std::complex<double> (double, double)> f, double a1, double b1, double a2, double b2, int N)
 {
-    if (integrateOption == 1) // метод Симпсона
+    if (integrateOption == 1) // метод прямоугольников
         return m_cadAMath.rectInt2(f, a1, b1, a2, b2, N);
-    if (integrateOption == 2) // метод Симпсона
+    if (integrateOption == 2) // метод трапеций
+        return m_cadAMath.trapez2(f, a1, b1, a2, b2, N);
+    if (integrateOption == 3) // метод Симпсона
         return m_cadAMath.simpson2(f, a1, b1, a2, b2, N);
-    if (integrateOption == 3) // метод Монте-Карло
+    if (integrateOption == 4) // метод Монте-Карло
         return m_cadAMath.monteCarlo2(f, a1, b1, a2, b2, N);
 }
 

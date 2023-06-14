@@ -32,6 +32,7 @@ public:
     QVector<std::complex<double>> fft(const QVector<std::complex<double>>& input);
     QVector<std::complex<double>> ifft(const QVector<std::complex<double>>& input);
     Complex rectInt2(std::function<Complex (double, double)> f, double x1, double x2, double y1, double y2, int N);
+    Complex trapez2(std::function<Complex (double, double)> f, double x1, double x2, double y1, double y2, int N);
 
     /*
     romberg(std::function<double (double)> f,

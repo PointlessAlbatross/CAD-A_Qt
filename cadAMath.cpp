@@ -245,6 +245,28 @@ Complex CadAMath::rectInt2(std::function<Complex (double, double)> f, double x1,
     return integral;
 }
 
+Complex CadAMath::trapez2(std::function<Complex (double, double)> f, double x1, double x2, double y1, double y2, int N)
+{
+        int numPointsX = N, numPointsY = N;
+        double dx = (x2 - x1) / numPointsX;
+        double dy = (y2 - y1) / numPointsY;
+
+        Complex integral = 0.0;
+
+        for (int i = 0; i < numPointsX; ++i) {
+            for (int j = 0; j < numPointsY; ++j) {
+                double x1 = x1 + i * dx;
+                double x2 = x1 + (i + 1) * dx;
+                double y1 = y1 + j * dy;
+                double y2 = y1 + (j + 1) * dy;
+
+                integral += (f(x1, y1) + f(x2, y1) + f(x1, y2) + f(x2, y2)) * 0.25 * dx * dy;
+            }
+        }
+
+        return integral;
+}
+
 int CadAMath::maxOfThree(double a, double b, double c) {
     int max = a;
     if (b > max) {

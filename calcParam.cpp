@@ -37,10 +37,12 @@ void CalcParam::on_comboBox_currentIndexChanged(int index)
 {
     if(index == 0) // метод прямоугольников
         selectedOption = 1;
-    if(index == 1) // метод Симпсона
+    if(index == 1) // метод трапеций
         selectedOption = 2;
-    if(index == 2) // метод Монте-Карло
+    if(index == 2) // метод Симпсона
         selectedOption = 3;
+    if(index == 3) // метод Монте-Карло
+        selectedOption = 4;
 
 }
 

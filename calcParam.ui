@@ -23,6 +23,11 @@
      </item>
      <item>
       <property name="text">
+       <string>Метод трапеций</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Метод Симпсона</string>
       </property>
      </item>
