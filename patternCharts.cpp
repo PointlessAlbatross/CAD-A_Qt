@@ -15,9 +15,17 @@ PatternCharts::~PatternCharts()
     delete ui;
 }
 
+
+/*!
+ * \brief PatternCharts::D
+ * Метод для вычисления характеристики направленности отдельного элемента
+ * \param theta Вертикальный угол
+ * \param phi Горизонтальный угол
+ * \return Направленность антенны при заданном угле
+ */
 double PatternCharts::D(double theta, double phi)
 {
-    if (overlayType == 0) // Четырехугольник
+    if (overlayType == 0) /// Четырехугольник
     {
         double a;
         if (phi != 0)
@@ -27,7 +35,7 @@ double PatternCharts::D(double theta, double phi)
         double b = sin ( k * (sizeZ+distZ) / 2.0 * cos (theta)) / (k * (sizeZ+distZ) / 2.0 * cos (theta));
         return a * b;
     }
-    else if (overlayType != 0)  // Шестиугольник
+    else if (overlayType != 0)  /// Шестиугольник
     {
         double a1,b1;
         if (phi != 0)
@@ -40,34 +48,46 @@ double PatternCharts::D(double theta, double phi)
     }
     return 1;
 }
-
+/*!
+ * \brief PatternCharts::Dt
+ * Метод для вычисления характеристики направленности для амплитудной антенны
+ * \param theta Вертикальный угол
+ * \param phi Горизонтальный угол
+ * \return Направленность антенны при заданном угле
+ */
 std::complex<double> PatternCharts::Dt(double theta, double phi)
 {
     double theta_t = M_PI_2, phi_t = 0;
-    std::complex<double> i (0, 1); // Мнимая единица
-    std::complex<double> D_numerator = 0, D_denumerator = 0;
+    std::complex<double> i (0, 1); ///< Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0; ///< Числитель и знаменатель
     for (int a = 0; a < CenterPos.size(); a++)
     {
         for(int b = 0; b < CenterPos[a].size(); b++)
         {
-                //[1] Числитель
+                //![1] Числитель
                 D_numerator += (WeightCoef[0][a][b] * exp( (1.0*i) * k * (CenterPos[a][b].first * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
                                                    + CenterPos[a][b].second * (cos (theta) - cos(theta_t))) ) *
-                         //D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(tan(theta_t), cos(phi_t)) ))) / 2.0 );
                         D(theta_t, phi_t) * ( 1.0 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0 );
-                //[2] Знаменатель
+                //![2] Знаменатель
                 D_denumerator += WeightCoef[0][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
         }
     }
     return D_numerator / D_denumerator;
 }
 
-
-std::complex<double> PatternCharts::DLt(double theta, double phi, int chn) //диаграмма направленности канала
+/*!
+ * \brief PatternCharts::DLt
+ * Метод для вычисления характеристики направленности для каналов фазовой антенны
+ * \param theta Вертикальный угол
+ * \param phi Горизонтальный угол
+ * \param chn Номер канала
+ * \return Направленность канала при заданном угле
+ */
+std::complex<double> PatternCharts::DLt(double theta, double phi, int chn)
 {
     double theta_t = M_PI_2, phi_t = 0;
-    std::complex<double> i (0, 1); // Мнимая единица
-    std::complex<double> D_numerator = 0, D_denumerator = 0;
+    std::complex<double> i (0, 1); ///< Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0; ///< Числитель и знаменатель
     for (int grp = 0; grp < 16; grp++)
     {
         if (!TableChannel[chn][grp])
@@ -80,23 +100,30 @@ std::complex<double> PatternCharts::DLt(double theta, double phi, int chn) //д�
     return D_numerator / D_denumerator;
 }
 
-
-std::complex<double> PatternCharts::DUt(double theta, double phi, int grp) //диаграмма направленности группы
+/*!
+ * \brief PatternCharts::DUt
+ * Метод для вычисления характеристики направленности для групп фазовой антенны
+ * \param theta
+ * \param phi
+ * \param grp
+ * \return
+ */
+std::complex<double> PatternCharts::DUt(double theta, double phi, int grp)
 {
     double theta_t = M_PI_2, phi_t = 0;
-    std::complex<double> i (0, 1); // Мнимая единица
-    std::complex<double> D_numerator = 0, D_denumerator = 0;
+    std::complex<double> i (0, 1); ///< Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0; ///< Числитель и знаменатель
     for (int a = 0; a < CenterPos.size(); a++)
     {
         for(int b = 0; b < CenterPos[a].size(); b++)
         {
                 if (!SelectedElem[grp][a][b])
                     continue;
-                //[1] Числитель
+                //![1] Числитель
                 D_numerator += (WeightCoef[grp][a][b] * exp( (1.0*i) * k * ((CenterPos[a][b].first - Centroids[grp].first ) * ( sin(theta)*sin(phi) - sin(theta_t)*sin(phi_t) )
                                                    + (CenterPos[a][b].second - Centroids[grp].second) * (cos (theta) - cos(theta_t))) ) *
                          D(theta, phi) * ( 1.0 + abs( sin( atan2(theta, phi) ))) / 2.0 );
-                //[2] Знаменатель
+                //![2] Знаменатель
                 D_denumerator += WeightCoef[grp][a][b] * D(theta_t, phi_t) * ( 1 + abs( sin( atan2(theta_t, phi_t) ))) / 2.0;
         }
     }
