@@ -25,7 +25,7 @@ PatternCharts::~PatternCharts()
  */
 double PatternCharts::D(double theta, double phi)
 {
-    if (overlayType == 0) /// Четырехугольник
+    if (overlayType == 0) // Четырехугольник
     {
         double a;
         if (phi != 0)
@@ -35,7 +35,7 @@ double PatternCharts::D(double theta, double phi)
         double b = sin ( k * (sizeZ+distZ) / 2.0 * cos (theta)) / (k * (sizeZ+distZ) / 2.0 * cos (theta));
         return a * b;
     }
-    else if (overlayType != 0)  /// Шестиугольник
+    else if (overlayType != 0)  // Шестиугольник
     {
         double a1,b1;
         if (phi != 0)
@@ -58,8 +58,8 @@ double PatternCharts::D(double theta, double phi)
 std::complex<double> PatternCharts::Dt(double theta, double phi)
 {
     double theta_t = M_PI_2, phi_t = 0;
-    std::complex<double> i (0, 1); ///< Мнимая единица
-    std::complex<double> D_numerator = 0, D_denumerator = 0; ///< Числитель и знаменатель
+    std::complex<double> i (0, 1); // Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0; // Числитель и знаменатель
     for (int a = 0; a < CenterPos.size(); a++)
     {
         for(int b = 0; b < CenterPos[a].size(); b++)
@@ -86,8 +86,8 @@ std::complex<double> PatternCharts::Dt(double theta, double phi)
 std::complex<double> PatternCharts::DLt(double theta, double phi, int chn)
 {
     double theta_t = M_PI_2, phi_t = 0;
-    std::complex<double> i (0, 1); ///< Мнимая единица
-    std::complex<double> D_numerator = 0, D_denumerator = 0; ///< Числитель и знаменатель
+    std::complex<double> i (0, 1); // Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0; // Числитель и знаменатель
     for (int grp = 0; grp < 16; grp++)
     {
         if (!TableChannel[chn][grp])
@@ -111,8 +111,8 @@ std::complex<double> PatternCharts::DLt(double theta, double phi, int chn)
 std::complex<double> PatternCharts::DUt(double theta, double phi, int grp)
 {
     double theta_t = M_PI_2, phi_t = 0;
-    std::complex<double> i (0, 1); ///< Мнимая единица
-    std::complex<double> D_numerator = 0, D_denumerator = 0; ///< Числитель и знаменатель
+    std::complex<double> i (0, 1); // Мнимая единица
+    std::complex<double> D_numerator = 0, D_denumerator = 0; // Числитель и знаменатель
     for (int a = 0; a < CenterPos.size(); a++)
     {
         for(int b = 0; b < CenterPos[a].size(); b++)

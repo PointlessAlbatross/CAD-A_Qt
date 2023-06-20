@@ -25,7 +25,15 @@ ArrangementOfElements::ArrangementOfElements(QWidget *parent) :
     ui->graphicsView->scale(1 / (scaleKoef), 1 / (scaleKoef)); // начальный масштаб
 }
 
-
+/*!
+ * \brief ArrangementOfElements::rectCheck
+ * Метод проверяет попадает ли указатель мыши в прямоугольник
+ * \param x Координата x мыши
+ * \param y Координата y мыши
+ * \param vx Координата x центра прямоугольника
+ * \param vy Координата y центра прямоугольника
+ * \return Был ли клик на прямоугольник
+ */
 bool ArrangementOfElements::rectCheck(int x, int y, int vx, int vy)
 {
     return x >= vx and
@@ -34,6 +42,12 @@ bool ArrangementOfElements::rectCheck(int x, int y, int vx, int vy)
            y <= vy + sizeZPix;
 }
 
+/*!
+ * \brief ArrangementOfElements::rectClick
+ * Метод позволяющий кликать на прямоугольники на сцене
+ * \param watched
+ * \param event
+ */
 void ArrangementOfElements::rectClick(QObject *watched, QEvent *event)
 {
     if(watched == scene){
@@ -97,20 +111,27 @@ void ArrangementOfElements::rectClick(QObject *watched, QEvent *event)
 }
 
 
-
+/*!
+ * \brief ArrangementOfElements::hexCheck
+ * Метод проверяет попадает ли указатель мыши в шестиугольник
+ * \param cx Координата x центра шестиугольника
+ * \param cy Координата y центра шестиугольника
+ * \param x Координата x мыши
+ * \param y Координата y мыши
+ * \return Был ли клик на шестиугольник
+ */
 bool ArrangementOfElements::hexCheck(int cx, int cy, int x, int y)
 {
     const int sides = 6;
     double angle = M_PI / 6.0; // 30 градусов в радиан
     double vertexX[sides];
     double vertexY[sides];
-    for (int i = 0; i < sides; ++i) {
+    for (int i = 0; i < sides; ++i)
+    {
         vertexX[i] = cx + radCircScrPix * cos(angle);
         vertexY[i] = cy + radCircScrPix * sin(angle);
         angle += M_PI / 3.0; // 60 градусов в радиан
     }
-
-    // Проверяет принадлежит ли точка шестиугольнику
     bool inside = false;
     for (int i = 0, j = sides - 1; i < sides; j = i++) {
         if (((vertexY[i] > y) != (vertexY[j] > y)) and
@@ -121,6 +142,12 @@ bool ArrangementOfElements::hexCheck(int cx, int cy, int x, int y)
     return inside;
 }
 
+/*!
+ * \brief ArrangementOfElements::hexClick
+ * Метод позволяющий кликать на прямоугольники на сцене
+ * \param watched
+ * \param event
+ */
 void ArrangementOfElements::hexClick(QObject *watched, QEvent *event)
 {
     if(watched == scene){
@@ -184,7 +211,13 @@ void ArrangementOfElements::hexClick(QObject *watched, QEvent *event)
     }
 }
 
-
+/*!
+ * \brief ArrangementOfElements::eventFilter
+ * Метод позволяющий щелкать мышью по сцене
+ * \param watched
+ * \param event
+ * \return
+ */
 bool ArrangementOfElements::eventFilter(QObject *watched, QEvent *event)
 {
     if (!overlayType) // клик по прямоугольникам
@@ -194,7 +227,10 @@ bool ArrangementOfElements::eventFilter(QObject *watched, QEvent *event)
     return QDialog::eventFilter(watched, event);
 }
 
-
+/*!
+ * \brief ArrangementOfElements::hideReshapeButtons
+ * Скрывает кнопки "+" "-" в зависимости от количества рядов
+ */
 void ArrangementOfElements::hideReshapeButtons()
 {
     if (numRow < 19)
@@ -249,6 +285,11 @@ void ArrangementOfElements::hideReshapeButtons()
     }
 }
 
+/*!
+ * \brief ArrangementOfElements::disabledGroupButton
+ * Метод делает кнопки групп недоступными
+ * \param b
+ */
 void ArrangementOfElements::disabledGroupButton(bool b)
 {
     ui->groupNumButton_1->setDisabled(b);
@@ -269,6 +310,11 @@ void ArrangementOfElements::disabledGroupButton(bool b)
     ui->groupNumButton_16->setDisabled(b);
 }
 
+/*!
+ * \brief ArrangementOfElements::wheelEvent
+ * Метод позволяющий выполнять зум колесиком мыши
+ * \param event
+ */
 void ArrangementOfElements::wheelEvent(QWheelEvent *event)
 {
     // получаем указатель на элемент QGraphicsView из объекта ui
@@ -292,6 +338,10 @@ void ArrangementOfElements::wheelEvent(QWheelEvent *event)
         }
 }
 
+/*!
+ * \brief ArrangementOfElements::drawCirc
+ * Метод чертит окружность антенной решетки
+ */
 void ArrangementOfElements::drawCirc()
 {
     QPen pen;
@@ -301,7 +351,16 @@ void ArrangementOfElements::drawCirc()
                       diamPix + width_pen * 2, diamPix + width_pen * 2, pen);
 }
 
-
+/*!
+ * \brief ArrangementOfElements::drawRect
+ * Метод рисует на сцене прямоугольник
+ * \param x Кооринаты x левого верхнего угла
+ * \param z Кооринаты z левого верхнего угла
+ * \param size_x_pix Размер прямоугольника в пикселях по x
+ * \param size_z_pix Размер прямоугольника в пикселях по z
+ * \param j
+ * \param i
+ */
 void ArrangementOfElements::drawRect (int x, int z, int size_x_pix, int size_z_pix, int j, int i)
 {
     if (regime)

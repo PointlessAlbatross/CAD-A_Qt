@@ -13,7 +13,12 @@ AntennaArrayParametersHex::AntennaArrayParametersHex(QWidget *parent) :
     ui->radHexBox->selectAll();
 }
 
-
+/*!
+ * \brief AntennaArrayParametersHex::arrCapacity
+ * Метод для зеркального количества элементов в антенне
+ * \param Ar Верхние ряды
+ * \param Ar1 Нижние ряды
+ */
 void AntennaArrayParametersHex::arrCapacity(QVector<int> & Ar,
                   const QVector<int> & Ar1)
 {
@@ -23,7 +28,12 @@ void AntennaArrayParametersHex::arrCapacity(QVector<int> & Ar,
         Ar[i] = Ar1[i - numRow / 2];
 }
 
-
+/*!
+ * \brief AntennaArrayParametersHex::maxCapacity
+ * Метод вычисляющий максимальное количество элементов в ряду
+ * \param i Номер ряда
+ * \return Максимальное количество элементов
+ */
 int AntennaArrayParametersHex::maxCapacity(int i)
 {
     size_t n = 0;
@@ -71,7 +81,11 @@ AntennaArrayParametersHex::~AntennaArrayParametersHex()
     delete ui;
 }
 
-void AntennaArrayParametersHex::on_saveButton_clicked() // сохранить
+/*!
+ * \brief AntennaArrayParametersHex::on_saveButton_clicked
+ * Кнопка сохранить
+ */
+void AntennaArrayParametersHex::on_saveButton_clicked()
 {
     radCircScr = ui->radHexBox->value();
     dist = ui->distHexBox->value();
@@ -93,12 +107,23 @@ void AntennaArrayParametersHex::on_saveButton_clicked() // сохранить
 
 }
 
-
+/*!
+ * \brief AntennaArrayParametersHex::on_cancelButton_clicked
+ * Кнопка отмена
+ */
 void AntennaArrayParametersHex::on_cancelButton_clicked() // отмена
 {
     QWidget::close();
 }
 
+/*!
+ * \brief AntennaArrayParametersHex::slotMainToParamHex
+ * Слот принимающий данные из главного окна
+ * \param rad_circ_scr_1 Радиус описанной окружности
+ * \param dist_1 Зазор между элементами
+ * \param rad_ant_1 Радиус антенной решетки
+ * \param num_row_1 Количество рядов элементов
+ */
 void AntennaArrayParametersHex::slotMainToParamHex(double rad_circ_scr_1, double dist_1, double rad_ant_1, int num_row_1)
 {
     qDebug()<<"Вызов слота main_to_param_hex "<<Qt::endl;

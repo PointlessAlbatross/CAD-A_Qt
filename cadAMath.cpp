@@ -5,7 +5,15 @@ CadAMath::CadAMath()
 
 }
 
-
+/*!
+ * \brief CadAMath::simpson
+ * Вычисление определенного интегралла методом Симпсона
+ * \param func Подынтегральная функция
+ * \param a Нижний предел
+ * \param b Верхний предел
+ * \param n Число точек
+ * \return Результат интегрирования
+ */
 std::complex<double> CadAMath::simpson(const std::function<std::complex<double>(double)>& func, double a, double b, int n)
 {
     double h = (b - a) / n; // Шаг интегрирования
@@ -24,6 +32,17 @@ std::complex<double> CadAMath::simpson(const std::function<std::complex<double>(
     return (h / 3.0) * sum; // Возвращаем результат интегрирования
 }
 
+/*!
+ * \brief CadAMath::simpson2
+ * Вычисление двойного определенного интегралла методом Симпсона
+ * \param func Подынтегральная функция
+ * \param ax Нижний предел 1
+ * \param bx Верхний предел 1
+ * \param ay Нижний предел 2
+ * \param by Верхний предел 2
+ * \param n Число точек
+ * \return Результат интегрирования
+ */
 std::complex<double> CadAMath::simpson2(const std::function<std::complex<double>(double, double)>& func, double ax, double bx, double ay, double by, int n)
 {
     double hx = (bx - ax) / n; // Шаг интегрирования по x
@@ -50,6 +69,19 @@ std::complex<double> CadAMath::simpson2(const std::function<std::complex<double>
         return (hx * hy / 9.0) * sum; // Возвращаем результат интегрирования
 }
 
+/*!
+ * \brief CadAMath::simpson3
+ * Вычисление тройного определенного интегралла методом Симпсона
+ * \param func Подынтегральная функция
+ * \param ax Нижний предел 1
+ * \param bx Верхний предел 1
+ * \param ay Нижний предел 2
+ * \param by Верхний предел 2
+ * \param az Нижний предел 3
+ * \param bz Верхний предел 3
+ * \param n Число точек
+ * \return Результат интегрирования
+ */
 std::complex<double> CadAMath::simpson3(const std::function<std::complex<double>(double, double, double)>& func, double ax, double bx,
                                         double ay, double by, double az, double bz, int n)
 {

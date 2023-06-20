@@ -14,7 +14,12 @@ AntennaArrayParametersRect::AntennaArrayParametersRect(QWidget *parent):
     ui->sizeXBox->selectAll();
 }
 
-
+/*!
+ * \brief AntennaArrayParametersRect::arrCapacity
+ * Метод для зеркального количества элементов
+ * \param Ar Верхние ряды
+ * \param Ar1 Нижние ряды
+ */
 void AntennaArrayParametersRect::arrCapacity(QVector<int> & Ar,
                   const QVector<int> & Ar1) {
     if (numRow & 1) // Нечетное число рядов
