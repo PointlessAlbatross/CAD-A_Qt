@@ -21,6 +21,7 @@ SOURCES += \
     mainwindow.cpp \
     operatingSystemParameters.cpp \
     patternCharts.cpp \
+    plot3d.cpp \
     reverberationParameters.cpp \
     selectWeight.cpp \
     selectionOfCorrectiveElements.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     mainwindow.h \
     operatingSystemParameters.h \
     patternCharts.h \
+    plot3d.h \
     reverberationParameters.h \
     selectWeight.h \
     selectionOfCorrectiveElements.h \
@@ -55,6 +57,7 @@ FORMS += \
     mainwindow.ui \
     operatingSystemParameters.ui \
     patternCharts.ui \
+    plot3d.ui \
     reverberationParameters.ui \
     selectWeight.ui \
     selectionOfCorrectiveElements.ui \

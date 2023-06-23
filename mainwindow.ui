@@ -144,6 +144,7 @@
     <addaction name="separator"/>
     <addaction name="charts_action"/>
     <addaction name="chartsParameters"/>
+    <addaction name="action3D"/>
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
@@ -293,6 +294,11 @@
   <action name="actionCalcParam">
    <property name="text">
     <string>Параметры расчетов</string>
+   </property>
+  </action>
+  <action name="action3D">
+   <property name="text">
+    <string>3D графики</string>
    </property>
   </action>
  </widget>

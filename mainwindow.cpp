@@ -1377,3 +1377,17 @@ void MainWindow::on_actionCalcParam_triggered()
     window.exec();
 }
 
+
+void MainWindow::on_action3D_triggered()
+{
+    Plot3D window;
+    connect(this, &MainWindow::signal_MainToPlot3D, &window, &Plot3D::slot_MainToPlot3D);
+    emit signal_MainToPlot3D(CurrNumElem, WeightCoef, CenterPos, k,
+                            sizeX, sizeZ, distX, distZ,
+                            radCircScr, distHex, overlayType,
+                            TableChannel, Arr_sensitivityGroup, SubarrayCenter, SelectedElem, Centroids, antennaType,
+                            chartsChannel);
+    window.setModal(true);
+    window.exec();
+}
+

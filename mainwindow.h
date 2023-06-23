@@ -18,6 +18,7 @@
 #include "echoSignal.h"
 #include "chartsParameters.h"
 #include "calcParam.h"
+#include "plot3d.h"
 
 #include <array>
 #include <ccomplex>
@@ -226,6 +227,8 @@ private slots:
 
     void on_actionCalcParam_triggered();
 
+    void on_action3D_triggered();
+
 signals:
     void signalMainToParamRect(double size_x, double size_z,
                 double dist_x, double dist_z,
@@ -290,6 +293,18 @@ signals:
 
     void signal_mainToChartsParameters(int chartsChannel);
     void signal_mainToCalcParam(int opt, int integDot);
+
+    void signal_MainToPlot3D(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,
+                             double k,
+                             double size_x, double size_z, double dist_x, double dist_z,
+                             double rad_circ_scr, double dist_hex,
+                             int overlay_type,
+                             std::array<std::array<bool, 16>, 30> TableChannel,
+                             std::array<double,16> Arr_sensitivityGroup,
+                             std::array<QPair<double, double>, 30> SubarrayCenter,
+                             std::array<QVector<QVector<bool>>, 16> SelectedElem,
+                             std::array<QPair<double, double>, 16> Centroids,
+                             int antennaType, int chartsChannel);
 
 public slots:
     void slotParamRectToMain(double size_x, double size_z,
