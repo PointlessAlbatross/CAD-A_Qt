@@ -1354,6 +1354,7 @@ std::complex<double> MainWindow::integrate2(std::function<std::complex<double> (
         return m_cadAMath.simpson2(f, a1, b1, a2, b2, N);
     if (integrateOption == 4) // метод Монте-Карло
         return m_cadAMath.monteCarlo2(f, a1, b1, a2, b2, N);
+    return 0;
 }
 
 void MainWindow::on_chartsParameters_triggered()
