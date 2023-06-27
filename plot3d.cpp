@@ -72,6 +72,11 @@ std::complex<double> Plot3D::Dt(double theta, double phi)
     return D_numerator / D_denumerator;
 }
 
+
+/*!
+ * \brief Plot3D::plot3D
+ * Метод для построения трехмерного графика
+ */
 void Plot3D::plot3D()
 {
     // Создание экземпляра трехмерного графика
@@ -131,23 +136,29 @@ void Plot3D::plot3D()
 }
 
 
-/*
-                   switch (reg_chart) {
-                   case 1:
-                       phi = 0;
-                       for (double deg = 0; deg <= 181; deg += 0.1)
-                           series->append(deg, abs(Dt(deg / 180.0 * M_PI, phi)));
-                       break;
-                   case 2:
-                       theta = M_PI_2;
-                       for (double deg = -90; deg <= 91; deg += 0.1)
-                           series->append(deg, abs(Dt(theta, deg / 180.0 * M_PI)));
-                       break;
-                   }
-
-*/
-
-
+/*!
+ * \brief Plot3D::slot_MainToPlot3D
+ * Слот для приема данных из главного меню
+ * \param Curr_num_elem1 Текущее число элементов
+ * \param Weight_coef1 Чувствительности элементов
+ * \param Center_pos1 Центры тяжести групп
+ * \param k1 Волновое число
+ * \param size_x1 Размер прямоугольного элемента по x
+ * \param size_z1 Размер прямоугольного элемента по z
+ * \param dist_x1 Зазор прямоугольного элемента по x
+ * \param dist_z1 Зазор прямоугольного элемента по z
+ * \param rad_circ_scr1 Диаметр описанной окружности шестиугольного элемента
+ * \param dist_hex1 Зазор шестиугольного элемента
+ * \param overlay_type1 Тип накладки 0: 4-х угольная, 1: 6-и угольная
+ * ***дописать коменты***
+ * \param TableChannel1
+ * \param Arr_sensitivityGroup1
+ * \param SubarrayCenter1
+ * \param SelectedElem1
+ * \param Centroids1
+ * \param antennaType1
+ * \param chartsChannel1
+ */
 void Plot3D::slot_MainToPlot3D(QVector<int> Curr_num_elem1,
                                std::array<QVector<QVector<double> >, 17> Weight_coef1,
                                QVector<QVector<QPair<double, double> > > Center_pos1,
