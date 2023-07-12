@@ -6,6 +6,8 @@
 #include <ccomplex>
 #include <QPainter>
 
+#include <QVBoxLayout>
+
 #include <QtDataVisualization/Q3DSurface>
 #include <QtDataVisualization/QSurfaceDataProxy>
 #include <QtDataVisualization/QSurface3DSeries>

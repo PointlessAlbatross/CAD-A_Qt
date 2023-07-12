@@ -49,7 +49,6 @@ FORMS += \
     antennaArrayParametersHex.ui \
     antennaArrayParametersRect.ui \
     arrangementOfElements.ui \
-    calcParam.ui \
     carrierParameters.ui \
     channelParameters.ui \
     chartsParameters.ui \

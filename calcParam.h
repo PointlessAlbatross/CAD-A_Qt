@@ -3,19 +3,24 @@
 
 #include <QDialog>
 #include <QApplication>
-#include <QComboBox>
-#include <QVBoxLayout>
 #include <QWidget>
 
-namespace Ui {
-class CalcParam;
-}
+#include <QComboBox>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
 
 class CalcParam : public QDialog
 {
     Q_OBJECT
 
     int selectedOption;
+
+    QComboBox* comboBox;
+    QSpinBox* spinBox;
+
 
 public:
     explicit CalcParam(QWidget *parent = nullptr);
@@ -32,8 +37,6 @@ private slots:
 
     void on_comboBox_currentIndexChanged(int index);
 
-private:
-    Ui::CalcParam *ui;
 };
 
 #endif // CALCPARAM_H
