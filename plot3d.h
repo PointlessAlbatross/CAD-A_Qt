@@ -10,11 +10,6 @@
 #include <QtDataVisualization/QSurfaceDataProxy>
 #include <QtDataVisualization/QSurface3DSeries>
 
-#include <QDialog>
-
-namespace Ui {
-class Plot3D;
-}
 
 class Plot3D : public QDialog
 {
@@ -61,7 +56,8 @@ public:
     ~Plot3D();
 
 private:
-    Ui::Plot3D *ui;
+    Q3DSurface *graph;
+    QWidget *container;
 
 public slots:
     void slot_MainToPlot3D(QVector<int> Curr_num_elem, std::array<QVector<QVector<double>>, 17> Weight_coef, QVector<QVector<QPair<double,double>>> Center_pos,

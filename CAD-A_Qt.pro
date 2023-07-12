@@ -57,7 +57,6 @@ FORMS += \
     mainwindow.ui \
     operatingSystemParameters.ui \
     patternCharts.ui \
-    plot3d.ui \
     reverberationParameters.ui \
     selectWeight.ui \
     selectionOfCorrectiveElements.ui \

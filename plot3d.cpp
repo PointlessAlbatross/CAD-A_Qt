@@ -1,16 +1,16 @@
 #include "plot3d.h"
-#include "ui_plot3d.h"
 
 Plot3D::Plot3D(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Plot3D)
+    QDialog(parent)
 {
-    ui->setupUi(this);
+    setWindowTitle("3D Plot");
+    resize(800, 600);
 }
 
 Plot3D::~Plot3D()
 {
-    delete ui;
+    delete graph;
+    delete container;
 }
 
 /*!
@@ -80,59 +80,54 @@ std::complex<double> Plot3D::Dt(double theta, double phi)
 void Plot3D::plot3D()
 {
     // Создание экземпляра трехмерного графика
-    Q3DSurface *graph = new Q3DSurface();
-    QWidget *container = QWidget::createWindowContainer(graph);
+        graph = new Q3DSurface();
+        container = QWidget::createWindowContainer(graph);
 
-    // Создание данных для графика
-    QSurfaceDataProxy *dataProxy = new QSurfaceDataProxy();
-    QSurface3DSeries *series = new QSurface3DSeries(dataProxy);
-    series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
+        // Создание данных для графика
+        QSurfaceDataProxy *dataProxy = new QSurfaceDataProxy();
+        QSurface3DSeries *series = new QSurface3DSeries(dataProxy);
+        series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
 
-    double step = 2;
-    int numPointsX = 180/step+1; // Количество точек по оси X
-    int numPointsZ = 2 * 180/step+1; // Количество точек по оси Y
+        double step = 2;
+        int numPointsX = 180 / step + 1; // Количество точек по оси X
+        int numPointsZ = 2 * 180 / step + 1; // Количество точек по оси Y
 
-    QSurfaceDataArray *dataArray = new QSurfaceDataArray;
-    dataArray->reserve(numPointsX);
+        QSurfaceDataArray *dataArray = new QSurfaceDataArray;
+        dataArray->reserve(numPointsX);
 
-    for (double theta = 0.0; theta <= 360; theta += step) {
-        QSurfaceDataRow *dataRow = new QSurfaceDataRow(numPointsZ);
-        float x =  theta;
+        for (double theta = 0.0; theta <= 360; theta += step) {
+            QSurfaceDataRow *dataRow = new QSurfaceDataRow(numPointsZ);
+            float x = theta;
 
-        for (double phi = -90, j = 0; phi <= 90; phi += step, j++) {
-            float z = phi;
-            float y = double(abs(Dt(x / 180.0 * M_PI, phi / 180.0 * M_PI)));
-            (*dataRow)[j].setPosition(QVector3D(x, y, z));
+            for (double phi = -90, j = 0; phi <= 90; phi += step, j++) {
+                float z = phi;
+                float y = double(abs(Dt(x / 180.0 * M_PI, phi / 180.0 * M_PI)));
+                (*dataRow)[j].setPosition(QVector3D(x, y, z));
+            }
+
+            *dataArray << dataRow;
         }
 
-        *dataArray << dataRow;
-    }
+        dataProxy->resetArray(dataArray);
 
-    dataProxy->resetArray(dataArray);
+        // Настройка параметров графика
+        graph->axisX()->setRange(0.0, 180.0);
+        graph->axisZ()->setRange(-90.0, 90.0);
+        graph->addSeries(series);
+        graph->axisX()->setTitle("X");
+        graph->axisY()->setTitle("Y");
+        graph->axisZ()->setTitle("Z");
 
-    // Настройка параметров графика
-    graph->axisX()->setRange(0.0, 180.0);
-    graph->axisZ()->setRange(-90.0, 90.0);
-    graph->addSeries(series);
-    graph->axisX()->setTitle("X");
-    graph->axisY()->setTitle("Y");
-    graph->axisZ()->setTitle("Z");
-
-    // Получение виджета формы из Qt Designer
-    QWidget *plotWidget = findChild<QWidget*>("plot");
-    if (plotWidget) {
-        // Установка виджета с графиком в элемент формы "plot"
-        QVBoxLayout *layout = new QVBoxLayout(plotWidget);
+        // Установка виджета с графиком в элемент формы
+        QVBoxLayout *layout = new QVBoxLayout(this);
         layout->addWidget(container);
-        plotWidget->setLayout(layout);
-    }
+        setLayout(layout);
 
-    // Включение возможности вращения графика
-    graph->setFlags(graph->flags() ^ Qt::FramelessWindowHint);
+        // Включение возможности вращения графика
+        graph->setFlags(graph->flags() ^ Qt::FramelessWindowHint);
 
-
-    // Отображение графика
-    container->show();
+        // Отображение графика
+        show();
 }
 
 
