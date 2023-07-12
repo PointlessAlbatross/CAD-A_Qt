@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QWidget>
 
+#include <QLabel>
 #include <QComboBox>
 #include <QSpinBox>
 #include <QPushButton>
@@ -18,8 +19,10 @@ class CalcParam : public QDialog
 
     int selectedOption;
 
-    QComboBox* comboBox;
-    QSpinBox* spinBox;
+    QComboBox *comboBox;
+    QSpinBox *spinBox;
+    QLabel *label;
+    QLabel *spinLabel;
 
 
 public:

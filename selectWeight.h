@@ -3,10 +3,12 @@
 
 #include <QDialog>
 
+#include <QLabel>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
-namespace Ui {
-class SelectWeight;
-}
 
 class SelectWeight : public QDialog
 {
@@ -16,6 +18,10 @@ private:
     int i, j, n;
     double weigth;
 
+    QLabel *weightLabel;
+    QLabel *label;
+    QLabel *label_num;
+    QDoubleSpinBox *weightBox;
 
 public:
     explicit SelectWeight(QWidget *parent = nullptr);
@@ -31,8 +37,6 @@ private slots:
 
     void on_pushButtonCancel_clicked();
 
-private:
-    Ui::SelectWeight *ui;
 };
 
 #endif // SELECT_WEIGHT_H

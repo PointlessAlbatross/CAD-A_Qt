@@ -1,5 +1,4 @@
 #include "calcParam.h"
-#include "ui_calcParam.h"
 
 CalcParam::CalcParam(QWidget *parent) :
     QDialog(parent)
