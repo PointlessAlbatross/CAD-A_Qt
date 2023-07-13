@@ -2,14 +2,26 @@
 #define WORKINGENVIRONMENTSETTINGS_H
 
 #include <QDialog>
+#include <QGridLayout>
+#include <QFormLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QDoubleSpinBox>
+#include <QRadioButton>
 
-namespace Ui {
-class WorkingEnvironmentSettings;
-}
 
 class WorkingEnvironmentSettings : public QDialog
 {
     Q_OBJECT
+
+    QDoubleSpinBox *depthSeaBox;
+    QDoubleSpinBox *windBox;
+    QDoubleSpinBox *salinityBox;
+    QDoubleSpinBox *tempBox;
+    QDoubleSpinBox *volumeDispBox;
+    QDoubleSpinBox *surfReflBox;
+    QDoubleSpinBox *botReflBox;
 
 public:
     explicit WorkingEnvironmentSettings(QWidget *parent = nullptr);
@@ -32,9 +44,6 @@ private slots:
     void on_pushButtonSave_clicked();
 
     void on_pushButtonCancel_clicked();
-
-private:
-    Ui::WorkingEnvironmentSettings *ui;
 };
 
 #endif // WORKINGENVIRONMENTSETTINGS_H

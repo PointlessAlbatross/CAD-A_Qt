@@ -56,8 +56,7 @@ FORMS += \
     operatingSystemParameters.ui \
     patternCharts.ui \
     reverberationParameters.ui \
-    selectionOfCorrectiveElements.ui \
-    workingEnvironmentSettings.ui
+    selectionOfCorrectiveElements.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
