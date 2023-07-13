@@ -4,7 +4,7 @@
 SelectWeight::SelectWeight(QWidget *parent) :
     QDialog(parent)
 {
-    qDebug() << "запуск конструктора";
+
     setWindowTitle("Выбор весового коэффициента");
 
 
@@ -42,8 +42,6 @@ SelectWeight::SelectWeight(QWidget *parent) :
 
     weightBox->setFocus(); ///< выбирает окошко для ввода числа
     weightBox->selectAll(); ///< выделяет содержимое окошка
-
-    qDebug() << "конец конструктора";
 }
 
 SelectWeight::~SelectWeight()

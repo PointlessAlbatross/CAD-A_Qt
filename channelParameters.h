@@ -4,6 +4,12 @@
 #include <QDialog>
 #include <array>
 #include <QTableWidgetItem>
+#include <QTableWidget>
+#include <QLabel>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QHeaderView>
 
 namespace Ui {
 class ChannelParameters;
@@ -14,6 +20,8 @@ class ChannelParameters : public QDialog
     Q_OBJECT
 
     std::array<std::array<bool, 16>, 30> Table;
+
+    QTableWidget *tableWidget;
 
 public:
     explicit ChannelParameters(QWidget *parent = nullptr);
@@ -33,9 +41,6 @@ private slots:
     void on_pushButtonCancel_clicked();
 
     void on_pushButtonClear_clicked();
-
-private:
-    Ui::ChannelParameters *ui;
 };
 
 #endif // CHANNELPARAMETERS_H

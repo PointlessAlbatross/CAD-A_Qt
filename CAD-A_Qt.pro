@@ -50,14 +50,12 @@ FORMS += \
     antennaArrayParametersRect.ui \
     arrangementOfElements.ui \
     carrierParameters.ui \
-    channelParameters.ui \
     chartsParameters.ui \
     echoSignal.ui \
     mainwindow.ui \
     operatingSystemParameters.ui \
     patternCharts.ui \
     reverberationParameters.ui \
-    selectWeight.ui \
     selectionOfCorrectiveElements.ui \
     workingEnvironmentSettings.ui
 
