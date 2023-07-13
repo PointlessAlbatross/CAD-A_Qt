@@ -1,18 +1,33 @@
 #include "patternCharts.h"
-#include "ui_patternCharts.h"
 #include <QDebug>
 #include "cadAMath.h"
 
 PatternCharts::PatternCharts(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PatternCharts)
+    QDialog(parent)
 {
-    ui->setupUi(this);
+    setWindowTitle("Графики");
+    resize(800, 600);
+
+    QTabWidget *tabWidget = new QTabWidget(this);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    QWidget *tab1 = new QWidget();
+    formLayout1 = new QFormLayout(tab1);
+    tabWidget->addTab(tab1, "Вертикальные сечения");
+
+    QWidget *tab2 = new QWidget();
+    formLayout2 = new QFormLayout(tab2);
+    tabWidget->addTab(tab2, "Азимутальные сечения");
+
+    layout->addWidget(tabWidget);
+
+    setLayout(layout);
 }
 
 PatternCharts::~PatternCharts()
 {
-    delete ui;
+
 }
 
 
@@ -205,10 +220,10 @@ void PatternCharts::drawChart()
         chartView->setRenderHint(QPainter::Antialiasing);
         switch (reg_chart) {
             case 1:
-                ui->formLayout_1->addWidget(chartView);
+                formLayout1->addWidget(chartView);
                 break;
             case 2:
-                ui->formLayout_2->addWidget(chartView);
+                formLayout2->addWidget(chartView);
                 break;
         }
 
@@ -278,10 +293,10 @@ void PatternCharts::drawPhaseChart()
         chartView->setRenderHint(QPainter::Antialiasing);
         switch (reg_chart) {
             case 1:
-                ui->formLayout_1->addWidget(chartView);
+                formLayout_1->addWidget(chartView);
                 break;
             case 2:
-                ui->formLayout_2->addWidget(chartView);
+                formLayout_2->addWidget(chartView);
                 break;
         }
 
@@ -335,10 +350,10 @@ void PatternCharts::drawPolarChart()
 
         switch (reg_chart) {
         case 1:
-            ui->formLayout_1->addWidget(chartView);
+            formLayout1->addWidget(chartView);
             break;
         case 2:
-            ui->formLayout_2->addWidget(chartView);
+            formLayout2->addWidget(chartView);
             break;
         }
     }
@@ -452,7 +467,7 @@ void PatternCharts::drawReverb(QVector<double> VecSurfFreq, QVector<double> VecS
         // Добавление виджета с графиком в форму
         formLayout->addWidget(chartView);
 
-        ui->tabWidget->addTab(newPage, "Реверберация по частоте");
+        tabWidget->addTab(newPage, "Реверберация по частоте");
     }
 
     if (ReverbCalc[1]) // Осуществлялся временной расчет
@@ -554,7 +569,7 @@ void PatternCharts::drawReverb(QVector<double> VecSurfFreq, QVector<double> VecS
         // Добавление виджета с графиком в форму
         formLayout->addWidget(chartView);
 
-        ui->tabWidget->addTab(newPage, "Реверберация по дальности");
+        tabWidget->addTab(newPage, "Реверберация по дальности");
     }
 
 }
@@ -603,7 +618,7 @@ void PatternCharts::drawEcho(QVector<double> VecFreqE, QVector<double> VecEchoFr
         // Добавление виджета с графиком в форму
         formLayout->addWidget(chartView);
 
-        ui->tabWidget->addTab(newPage, "Эхо-сигнал от частоты");
+        tabWidget->addTab(newPage, "Эхо-сигнал от частоты");
     }
 
     if (EchoCalc[1]) // Осуществлялся временной расчет
@@ -650,7 +665,7 @@ void PatternCharts::drawEcho(QVector<double> VecFreqE, QVector<double> VecEchoFr
         // Добавление виджета с графиком в форму
         formLayout->addWidget(chartView);
 
-        ui->tabWidget->addTab(newPage, "Эхо-сигнал от дальности");
+        tabWidget->addTab(newPage, "Эхо-сигнал от дальности");
     }
 }
 

@@ -5,6 +5,7 @@
 #include <cmath>
 #include <ccomplex>
 #include <QPainter>
+#include <QFormLayout>
 
 
 #include <QtWidgets/QApplication>
@@ -23,10 +24,6 @@
 #include "cadAMath.h"
 
 
-namespace Ui {
-class PatternCharts;
-}
-
 class PatternCharts : public QDialog
 {
     Q_OBJECT
@@ -36,6 +33,11 @@ public:
     ~PatternCharts();
 
     CadAMath m_cadAMath;
+
+    QTabWidget *tabWidget;
+
+    QFormLayout *formLayout1;
+    QFormLayout *formLayout2;
 
 private:
 
@@ -119,8 +121,7 @@ public slots:
                              std::array<QVector<QVector<bool>>, 16> SelectedElem,
                              std::array<QPair<double, double>, 16> Centroids,
                              int antennaType, int chartsChannel);
-private:
-    Ui::PatternCharts *ui;
+
 };
 
 #endif // PATTERN_CHARTS_H

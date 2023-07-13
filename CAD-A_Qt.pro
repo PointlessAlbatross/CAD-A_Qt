@@ -49,11 +49,9 @@ FORMS += \
     antennaArrayParametersHex.ui \
     antennaArrayParametersRect.ui \
     arrangementOfElements.ui \
-    carrierParameters.ui \
     echoSignal.ui \
     mainwindow.ui \
     operatingSystemParameters.ui \
-    patternCharts.ui \
     reverberationParameters.ui \
     selectionOfCorrectiveElements.ui
 

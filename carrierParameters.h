@@ -2,14 +2,22 @@
 #define CARRIER_PARAMETERS_H
 
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFormLayout>
+#include <QPushButton>
+#include <QDoubleSpinBox>
+#include <QLabel>
 
-namespace Ui {
-class CarrierParameters;
-}
+
 
 class CarrierParameters : public QDialog
 {
     Q_OBJECT
+    QDoubleSpinBox *HSubBox;
+    QDoubleSpinBox *LSubBox;
+    QDoubleSpinBox *speedBox;
+    QDoubleSpinBox *noiseEngBox;
 
 public:
     explicit CarrierParameters(QWidget *parent = nullptr);
@@ -26,8 +34,6 @@ private slots:
 
     void on_pushButtonSave_clicked();
 
-private:
-    Ui::CarrierParameters *ui;
 };
 
 #endif // CARRIER_PARAMETERS_H
