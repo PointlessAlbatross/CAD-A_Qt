@@ -50,7 +50,6 @@ FORMS += \
     antennaArrayParametersRect.ui \
     arrangementOfElements.ui \
     carrierParameters.ui \
-    chartsParameters.ui \
     echoSignal.ui \
     mainwindow.ui \
     operatingSystemParameters.ui \

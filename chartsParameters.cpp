@@ -1,26 +1,46 @@
 #include "chartsParameters.h"
-#include "ui_chartsParameters.h"
 
 ChartsParameters::ChartsParameters(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ChartsParameters)
+    QDialog(parent)
 {
-    ui->setupUi(this);
+    setWindowTitle("Параметры графиков");
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
+    QHBoxLayout *layout1 = new QHBoxLayout();
+    QLabel *label = new QLabel("Номер канала для ДН");
+    layout1->addWidget(label);
+    channelBox = new QSpinBox();
+    channelBox->setMinimum(1);
+    channelBox->setMaximum(30);
+    layout1->addWidget(channelBox);
+    mainLayout->addLayout(layout1);
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
+
+    QPushButton *saveButton = new QPushButton("Сохранить", this);
+    buttonLayout->addWidget(saveButton);
+    connect(saveButton, SIGNAL(clicked()), this, SLOT(on_pushButtonSave_clicked()));
+
+    QPushButton *cancelButton = new QPushButton("Отменить", this);
+    buttonLayout->addWidget(cancelButton);
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(on_pushButtonCancel_clicked()));
+
+    mainLayout->addLayout(buttonLayout);
 }
 
 ChartsParameters::~ChartsParameters()
 {
-    delete ui;
+
 }
 
 void ChartsParameters::slot_mainToChartsParameters(int chartsChannel)
 {
-    ui->channelBox->setValue(chartsChannel);
+    channelBox->setValue(chartsChannel);
 }
 
 void ChartsParameters::on_pushButtonSave_clicked()
 {
-    emit signal_chartsParametersToMain(ui->channelBox->value());
+    emit signal_chartsParametersToMain(channelBox->value());
     QWidget::close();
 }
 

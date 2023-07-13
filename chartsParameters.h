@@ -2,14 +2,18 @@
 #define CHARTSPARAMETERS_H
 
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QLabel>
 
-namespace Ui {
-class ChartsParameters;
-}
 
 class ChartsParameters : public QDialog
 {
     Q_OBJECT
+
+    QSpinBox *channelBox;
 
 public:
     explicit ChartsParameters(QWidget *parent = nullptr);
@@ -25,11 +29,6 @@ private slots:
     void on_pushButtonSave_clicked();
 
     void on_pushButtonCancel_clicked();
-
-
-
-private:
-    Ui::ChartsParameters *ui;
 };
 
 #endif // CHARTSPARAMETERS_H
