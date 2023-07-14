@@ -46,8 +46,6 @@ HEADERS += \
     workingEnvironmentSettings.h
 
 FORMS += \
-    antennaArrayParametersHex.ui \
-    antennaArrayParametersRect.ui \
     arrangementOfElements.ui \
     echoSignal.ui \
     mainwindow.ui \

@@ -1,16 +1,82 @@
 #include "antennaArrayParametersHex.h"
 #include "ui_antennaArrayParametersHex.h"
 
-    //Конструктор//
+
 AntennaArrayParametersHex::AntennaArrayParametersHex(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AntennaArrayParametersHex)
+    QDialog(parent)
 {
     PARAM_WINDOW_FLAG = false;
-    ui->setupUi(this);
+
+
+    setWindowTitle("Шестиугольный элемент");
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
+
+    QHBoxLayout *layout1 = new QHBoxLayout();
+    QVBoxLayout *VLayout1 = new QVBoxLayout();
+    QLabel *label1 = new QLabel("Радиус описанной окружности, м");
+    QLabel *label2 = new QLabel("Зазор между элементами, м");
+    QLabel *label3 = new QLabel("Радиус антенны, м");
+    QLabel *label4 = new QLabel("Число рядов");
+    QLabel *label5 = new QLabel("Угол поворота решетки, град");
+    VLayout1->addWidget(label1);
+    VLayout1->addWidget(label2);
+    VLayout1->addWidget(label3);
+    VLayout1->addWidget(label4);
+    VLayout1->addWidget(label5);
+
+    QVBoxLayout *VLayout2 = new QVBoxLayout();
+    radHexBox = new QDoubleSpinBox();
+    radHexBox->setMinimum(0);
+    radHexBox->setMaximum(1);
+    radHexBox->setDecimals(3);
+    radHexBox->setSingleStep(0.001);
+    VLayout2->addWidget(radHexBox);
+
+    distHexBox = new QDoubleSpinBox();
+    distHexBox->setMinimum(0);
+    distHexBox->setMaximum(1);
+    distHexBox->setDecimals(3);
+    distHexBox->setSingleStep(0.001);
+    VLayout2->addWidget(distHexBox);
+
+
+    radAntBox = new QDoubleSpinBox();
+    radAntBox->setMinimum(0);
+    radAntBox->setMaximum(1);
+    radAntBox->setSingleStep(0.01);
+    VLayout2->addWidget(radAntBox);
+
+    numRowBox = new QSpinBox();
+    numRowBox->setMinimum(1);
+    numRowBox->setMaximum(20);
+    VLayout2->addWidget(numRowBox);
+
+    angleRotateBox = new QDoubleSpinBox();
+    angleRotateBox->setMinimum(-180);
+    angleRotateBox->setMaximum(180);
+    VLayout2->addWidget(angleRotateBox);
+
+    layout1->addLayout(VLayout1);
+    layout1->addLayout(VLayout2);
+
+    mainLayout->addLayout(layout1);
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
+
+    QPushButton *saveButton = new QPushButton("Сохранить", this);
+    buttonLayout->addWidget(saveButton);
+    connect(saveButton, SIGNAL(clicked()), this, SLOT(on_pushButtonSave_clicked()));
+
+    QPushButton *cancelButton = new QPushButton("Отменить", this);
+    buttonLayout->addWidget(cancelButton);
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(on_pushButtonCancel_clicked()));
+
+    mainLayout->addLayout(buttonLayout);
+
     // выделение верхнего виджета
-    ui->radHexBox->setFocus();
-    ui->radHexBox->selectAll();
+    radHexBox->setFocus();
+    radHexBox->selectAll();
 }
 
 /*!
@@ -78,19 +144,19 @@ int AntennaArrayParametersHex::maxCapacity(int i)
 
 AntennaArrayParametersHex::~AntennaArrayParametersHex()
 {
-    delete ui;
+
 }
 
 /*!
  * \brief AntennaArrayParametersHex::on_saveButton_clicked
  * Кнопка сохранить
  */
-void AntennaArrayParametersHex::on_saveButton_clicked()
+void AntennaArrayParametersHex::on_pushButtonSave_clicked()
 {
-    radCircScr = ui->radHexBox->value();
-    dist = ui->distHexBox->value();
-    radAnt = ui->radAntBox->value();
-    numRow = ui->numRowBox->value();
+    radCircScr = radHexBox->value();
+    dist = distHexBox->value();
+    radAnt = radAntBox->value();
+    numRow = numRowBox->value();
     if (numRow > 1 and numRow % 2 == 0)
         numRow += 1;
     qDebug()<<"size "<<radCircScr<<Qt::endl;
@@ -111,7 +177,7 @@ void AntennaArrayParametersHex::on_saveButton_clicked()
  * \brief AntennaArrayParametersHex::on_cancelButton_clicked
  * Кнопка отмена
  */
-void AntennaArrayParametersHex::on_cancelButton_clicked() // отмена
+void AntennaArrayParametersHex::on_pushButtonCancel_clicked() // отмена
 {
     QWidget::close();
 }
@@ -130,8 +196,8 @@ void AntennaArrayParametersHex::slotMainToParamHex(double rad_circ_scr_1, double
     radCircScr = rad_circ_scr_1; dist = dist_1;
     radAnt = rad_ant_1; numRow = num_row_1;
     PARAM_WINDOW_FLAG = true;
-    ui->radHexBox->setValue(radCircScr);
-    ui->distHexBox->setValue(dist);
-    ui->radAntBox->setValue(radAnt);
-    ui->numRowBox->setValue(numRow);
+    radHexBox->setValue(radCircScr);
+    distHexBox->setValue(dist);
+    radAntBox->setValue(radAnt);
+    numRowBox->setValue(numRow);
 }

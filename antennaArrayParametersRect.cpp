@@ -2,16 +2,126 @@
 #include "ui_antennaArrayParametersRect.h"
 #include "mainwindow.h"
 
-    //Конструктор//
+
 AntennaArrayParametersRect::AntennaArrayParametersRect(QWidget *parent):
-    QDialog(parent),
-    ui(new Ui::AntennaArrayParametersRect)
+    QDialog(parent)
 {
     PARAM_WINDOW_FLAG = false;
-    ui->setupUi(this);
+
+    setWindowTitle("Четырехугольный элемент");
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
+
+    QHBoxLayout *layout1 = new QHBoxLayout();
+    QHBoxLayout *Hlayout1 = new QHBoxLayout();
+    QVBoxLayout *VLayout1 = new QVBoxLayout();
+    QLabel *label1 = new QLabel("Размер по X, м");
+    QLabel *label2 = new QLabel("Размер по Z, м");
+    VLayout1->addWidget(label1);
+    VLayout1->addWidget(label2);
+
+    QVBoxLayout *VLayout2 = new QVBoxLayout();
+    sizeXBox = new QDoubleSpinBox();
+    sizeXBox->setMinimum(0);
+    sizeXBox->setMaximum(1);
+    sizeXBox->setDecimals(3);
+    sizeXBox->setSingleStep(0.001);
+    VLayout2->addWidget(sizeXBox);
+
+    sizeZBox = new QDoubleSpinBox();
+    sizeZBox->setMinimum(0);
+    sizeZBox->setMaximum(1);
+    sizeZBox->setDecimals(3);
+    sizeZBox->setSingleStep(0.001);
+    VLayout2->addWidget(sizeZBox);
+
+    Hlayout1->addLayout(VLayout1);
+    Hlayout1->addLayout(VLayout2);
+
+    /***/
+
+    QHBoxLayout *Hlayout2 = new QHBoxLayout();
+    QVBoxLayout *VLayout3 = new QVBoxLayout();
+    QLabel *label3 = new QLabel("Зазор по X, м");
+    QLabel *label4 = new QLabel("Зазор по Z, м");
+    VLayout3->addWidget(label3);
+    VLayout3->addWidget(label4);
+
+    QVBoxLayout *VLayout4 = new QVBoxLayout();
+    distXBox = new QDoubleSpinBox();
+    distXBox->setMinimum(0);
+    distXBox->setMaximum(1);
+    distXBox->setDecimals(3);
+    distXBox->setSingleStep(0.001);
+    VLayout4->addWidget(distXBox);
+
+    distZBox = new QDoubleSpinBox();
+    distZBox->setMinimum(0);
+    distZBox->setMaximum(1);
+    distZBox->setDecimals(3);
+    distZBox->setSingleStep(0.001);
+    VLayout4->addWidget(distZBox);
+
+    Hlayout2->addLayout(VLayout3);
+    Hlayout2->addLayout(VLayout4);
+
+    layout1->addLayout(Hlayout1);
+    layout1->addLayout(Hlayout2);
+
+    mainLayout->addLayout(layout1);
+
+    /**/
+
+    QHBoxLayout *layout2 = new QHBoxLayout();
+    QVBoxLayout *VLayout5 = new QVBoxLayout();
+    QLabel *label5 = new QLabel("Радиус антенны, м");
+    QLabel *label6 = new QLabel("Число рядов");
+    QLabel *label7 = new QLabel("Угол поворота решетки, град");
+    VLayout5->addWidget(label5);
+    VLayout5->addWidget(label6);
+    VLayout5->addWidget(label7);
+
+    QVBoxLayout *VLayout6 = new QVBoxLayout();
+    radAntBox = new QDoubleSpinBox();
+    radAntBox->setMinimum(0);
+    radAntBox->setMaximum(1);
+    radAntBox->setSingleStep(0.01);
+    VLayout6->addWidget(radAntBox);
+
+    numRowBox = new QSpinBox();
+    numRowBox->setMinimum(1);
+    numRowBox->setMaximum(20);
+    VLayout6->addWidget(numRowBox);
+
+    angleRotateBox = new QDoubleSpinBox();
+    angleRotateBox->setMinimum(-180);
+    angleRotateBox->setMaximum(180);
+    VLayout6->addWidget(angleRotateBox);
+
+    layout2->addLayout(VLayout5);
+    layout2->addLayout(VLayout6);
+    mainLayout->addLayout(layout2);
+
+    /**/
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
+
+    QPushButton *saveButton = new QPushButton("Сохранить", this);
+    buttonLayout->addWidget(saveButton);
+    connect(saveButton, SIGNAL(clicked()), this, SLOT(on_pushButtonSave_clicked()));
+
+    QPushButton *cancelButton = new QPushButton("Отменить", this);
+    buttonLayout->addWidget(cancelButton);
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(on_pushButtonCancel_clicked()));
+
+    mainLayout->addLayout(buttonLayout);
+
+
+
     // выделение верхнего виджета
-    ui->sizeXBox->setFocus();
-    ui->sizeXBox->selectAll();
+    sizeXBox->setFocus();
+    sizeXBox->selectAll();
 }
 
 /*!
@@ -71,29 +181,29 @@ void AntennaArrayParametersRect::arrCapacity(QVector<int> & Ar,
      sizeX = size_x1; sizeZ = size_z1; distX = dist_x1;
      distZ = dist_z1; radAnt = rad_ant1; numRow = num_row1;
      PARAM_WINDOW_FLAG = true;
-     ui->sizeXBox->setValue(sizeX);
-     ui->sizeZBox->setValue(sizeZ);
-     ui->distXBox->setValue(distX);
-     ui->distZBox->setValue(distZ);
-     ui->radAntBox->setValue(radAnt);
-     ui->numRowBox->setValue(numRow);
+     sizeXBox->setValue(sizeX);
+     sizeZBox->setValue(sizeZ);
+     distXBox->setValue(distX);
+     distZBox->setValue(distZ);
+     radAntBox->setValue(radAnt);
+     numRowBox->setValue(numRow);
  }
 
 
 AntennaArrayParametersRect::~AntennaArrayParametersRect()
 {
-    delete ui;
+
 }
 
 
-void AntennaArrayParametersRect::on_pushButton_clicked()
+void AntennaArrayParametersRect::on_pushButtonSave_clicked()
 {
-    sizeX = ui->sizeXBox->value();
-    sizeZ = ui->sizeZBox->value();
-    distX = ui->distXBox->value();
-    distZ = ui->distZBox->value();
-    radAnt = ui->radAntBox->value();
-    numRow = ui->numRowBox->value();
+    sizeX = sizeXBox->value();
+    sizeZ = sizeZBox->value();
+    distX = distXBox->value();
+    distZ = distZBox->value();
+    radAnt = radAntBox->value();
+    numRow = numRowBox->value();
     qDebug()<<"size "<<sizeX<<Qt::endl;
     QVector<int> Arr(numRow);
     QVector<int> Arr1(numRow / 2 + numRow % 2);
@@ -108,7 +218,7 @@ void AntennaArrayParametersRect::on_pushButton_clicked()
 }
 
 
-void AntennaArrayParametersRect::on_pushButton_2_clicked()
+void AntennaArrayParametersRect::on_pushButtonCancel_clicked()
 {
     QWidget::close();
 }

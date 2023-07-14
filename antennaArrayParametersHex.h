@@ -2,29 +2,29 @@
 #define ANTENNA_ARRAY_PARAMETERS_HEX_H
 
 #include <QDialog>
-#include <QDebug>
 #include <vector>
 #include <cmath>
 
-namespace Ui {
-class AntennaArrayParametersHex;
-}
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFormLayout>
+#include <QPushButton>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
+#include <QLabel>
+
 
 class AntennaArrayParametersHex : public QDialog
 {
     Q_OBJECT
 
-public:
-    explicit AntennaArrayParametersHex(QWidget *parent = nullptr);
-    ~AntennaArrayParametersHex();
+    QDoubleSpinBox *radHexBox;
+    QDoubleSpinBox *distHexBox;
+    QDoubleSpinBox *radAntBox;
+    QSpinBox *numRowBox;
+    QDoubleSpinBox *angleRotateBox;
 
-private slots:
-    void on_saveButton_clicked();
 
-    void on_cancelButton_clicked();
-
-private:
-    Ui::AntennaArrayParametersHex *ui;
     void arrCapacity(QVector<int> & Ar,
                       const QVector<int> & Ar1);
     int maxCapacity(int i);
@@ -37,6 +37,14 @@ private:
 
     bool PARAM_WINDOW_FLAG;
 
+public:
+    explicit AntennaArrayParametersHex(QWidget *parent = nullptr);
+    ~AntennaArrayParametersHex();
+
+private slots:
+    void on_pushButtonSave_clicked();
+
+    void on_pushButtonCancel_clicked();
 
 signals:
     void signalParamHexToMain(double rad_circ_scr, double dist,

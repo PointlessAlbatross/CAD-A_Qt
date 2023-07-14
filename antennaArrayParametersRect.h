@@ -2,29 +2,30 @@
 #define ANTENNA_ARRAY_PARAMETERS_RECT_H
 
 #include <QDialog>
-#include <QDebug>
 #include <vector>
 #include <cmath>
 
-namespace Ui {
-class AntennaArrayParametersRect;
-}
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFormLayout>
+#include <QPushButton>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
+#include <QLabel>
+
 
 class AntennaArrayParametersRect : public QDialog
 {
     Q_OBJECT
 
-public:
-    explicit AntennaArrayParametersRect(QWidget *parent = nullptr);
-    ~AntennaArrayParametersRect();
+    QDoubleSpinBox *sizeXBox;
+    QDoubleSpinBox *sizeZBox;
+    QDoubleSpinBox *distXBox;
+    QDoubleSpinBox *distZBox;
+    QDoubleSpinBox *radAntBox;
+    QSpinBox *numRowBox;
+    QDoubleSpinBox *angleRotateBox;
 
-private slots:
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
-
-private:
-    Ui::AntennaArrayParametersRect *ui;
     void arrCapacity(QVector<int> & Ar,
                       const QVector<int> & Ar1);
     int maxCapacity(int i);
@@ -38,6 +39,18 @@ private:
     QVector<int> MaxElem;
 
     bool PARAM_WINDOW_FLAG;
+
+
+public:
+    explicit AntennaArrayParametersRect(QWidget *parent = nullptr);
+    ~AntennaArrayParametersRect();
+
+private slots:
+    void on_pushButtonSave_clicked();
+
+    void on_pushButtonCancel_clicked();
+
+
 
 signals:
     void signalParamRectToMain(double size_x, double size_z,
