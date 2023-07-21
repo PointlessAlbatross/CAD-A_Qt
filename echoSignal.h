@@ -3,15 +3,35 @@
 
 #include <QDialog>
 
-namespace Ui {
-class EchoSignal;
-}
+#include <QLabel>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 class EchoSignal : public QDialog
 {
     Q_OBJECT
 
     int echo_type;
+
+    QDoubleSpinBox *elevationBox;
+    QDoubleSpinBox *azimuthBox;
+    QDoubleSpinBox *relativeSpedBox;
+    QDoubleSpinBox *equivalentRadBox;
+    QSpinBox *channelBox;
+    QSpinBox *numDotBox;
+
+    QDoubleSpinBox *param1Box;
+    QDoubleSpinBox *param2Box;
+    QDoubleSpinBox *param3Box;
+
+    QLabel *labelParam_1;
+    QLabel *labelParam_2;
+    QLabel *labelParam_3;
+
 
 public:
     explicit EchoSignal(QWidget *parent = nullptr);
@@ -28,8 +48,6 @@ private slots:
 
     void on_pushButtonCancel_clicked();
 
-private:
-    Ui::EchoSignal *ui;
 };
 
 #endif // ECHOSIGNAL_H

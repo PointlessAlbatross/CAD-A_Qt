@@ -47,7 +47,6 @@ HEADERS += \
 
 FORMS += \
     arrangementOfElements.ui \
-    echoSignal.ui \
     mainwindow.ui \
     operatingSystemParameters.ui \
     reverberationParameters.ui \
