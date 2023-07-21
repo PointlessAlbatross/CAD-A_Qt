@@ -3,13 +3,31 @@
 
 #include <QDialog>
 
-namespace Ui {
-class OperatingSystemParameters;
-}
+#include <QSpinBox>
+#include <QRadioButton>
+#include <QPushButton>
+#include <QLabel>
+
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
 
 class OperatingSystemParameters : public QDialog
 {
     Q_OBJECT
+
+    QSpinBox *radiationFrequencyBox;
+    QSpinBox *receivingFrequencyBox;
+    QSpinBox *pulseDurationBox;
+    QSpinBox *riseTimeBox;
+    QSpinBox *pressureBox;
+
+    QRadioButton *rectRadioButton;
+    QRadioButton *trapezRadioButton;
+    QRadioButton *unitRadioButton;
+
+    QLabel *label4;
+
 
 public:
     explicit OperatingSystemParameters(QWidget *parent = nullptr);
@@ -23,9 +41,9 @@ public:
     int impulseType;
 
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButtonSave_clicked();
 
-    void on_pushButton_2_clicked();
+    void on_pushButtonCancel_clicked();
 
 
     void on_rectRadioButton_clicked(bool checked);
@@ -44,8 +62,6 @@ public slots:
    void slotMainToOperatingSystemParameters (int pulseDuration, int riseTime, int pressure,
                                                   int radiation_freq,int receiving_freq, int impulseType);
 
-private:
-    Ui::OperatingSystemParameters *ui;
 };
 
 #endif // OPERATING_SYSTEM_PARAMETERS_H

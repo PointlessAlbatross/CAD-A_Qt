@@ -48,7 +48,6 @@ HEADERS += \
 FORMS += \
     arrangementOfElements.ui \
     mainwindow.ui \
-    operatingSystemParameters.ui \
     reverberationParameters.ui \
     selectionOfCorrectiveElements.ui
 
