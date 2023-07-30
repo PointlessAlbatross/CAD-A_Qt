@@ -103,7 +103,7 @@ ReverberationParameters::ReverberationParameters(QWidget *parent) :
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(on_pushButtonCancel_clicked()));
 
     mainLayout->addLayout(buttonLayout);
-
+    setLayout(mainLayout);
 }
 
 ReverberationParameters::~ReverberationParameters()
