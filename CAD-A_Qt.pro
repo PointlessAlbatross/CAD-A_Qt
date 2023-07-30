@@ -48,7 +48,6 @@ HEADERS += \
 FORMS += \
     arrangementOfElements.ui \
     mainwindow.ui \
-    reverberationParameters.ui \
     selectionOfCorrectiveElements.ui
 
 # Default rules for deployment.

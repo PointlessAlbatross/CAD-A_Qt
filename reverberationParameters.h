@@ -2,14 +2,38 @@
 #define REVERBERATIONPARAMETERS_H
 
 #include <QDialog>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QLabel>
 
-namespace Ui {
-class ReverberationParameters;
-}
 
 class ReverberationParameters : public QDialog
 {
     Q_OBJECT
+
+    QCheckBox *surfCheckBox;
+    QCheckBox *surroundCheckBox;
+    QCheckBox *botCheckBox;
+    QCheckBox *sumCheckBox;
+
+    QDoubleSpinBox *param1Box;
+    QDoubleSpinBox *param2Box;
+    QDoubleSpinBox *param3Box;
+    QSpinBox *channel1Box;
+    QSpinBox *channel2Box;
+    QSpinBox *numDotBox;
+
+    QLabel *label1;
+    QLabel *label2;
+    QLabel *label3;
+    QLabel *label4;
+    QLabel *label5;
+
+
 
     double reverbDist1;
     double reverbDist2;
@@ -27,8 +51,6 @@ public:
     explicit ReverberationParameters(QWidget *parent = nullptr);
     ~ReverberationParameters();
 
-private:
-    Ui::ReverberationParameters *ui;
 signals:
     void signal_reverberationParametersToMain1(double param1, double param2, double param3, int channel1, int numDot, std::array<bool, 4> ReverbChecks, int typeReverb, bool isCalculate);
     void signal_reverberationParametersToMain2(double param1, double param2, double param3, int channel1, int channel2, std::array<bool, 4> ReverbChecks, int typeReverb, bool isCalculate);
