@@ -1,5 +1,4 @@
 #include "antennaArrayParametersRect.h"
-#include "ui_antennaArrayParametersRect.h"
 #include "mainwindow.h"
 
 
