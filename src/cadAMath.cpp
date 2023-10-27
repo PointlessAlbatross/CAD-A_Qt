@@ -1,4 +1,4 @@
-#include "cadAMath.h"
+#include "../headers/cadAMath.h"
 
 CadAMath::CadAMath()
 {

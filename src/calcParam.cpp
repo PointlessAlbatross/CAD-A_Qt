@@ -1,4 +1,4 @@
-#include "calcParam.h"
+#include "../headers/calcParam.h"
 
 CalcParam::CalcParam(QWidget *parent) :
     QDialog(parent)

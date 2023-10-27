@@ -1,4 +1,4 @@
-#include "reverberationParameters.h"
+#include "../headers/reverberationParameters.h"
 
 ReverberationParameters::ReverberationParameters(QWidget *parent) :
     QDialog(parent)

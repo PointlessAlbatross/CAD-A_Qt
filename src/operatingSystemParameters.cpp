@@ -1,4 +1,4 @@
-#include "operatingSystemParameters.h"
+#include "../headers/operatingSystemParameters.h"
 
 OperatingSystemParameters::OperatingSystemParameters(QWidget *parent) :
     QDialog(parent)

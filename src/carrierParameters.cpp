@@ -1,4 +1,4 @@
-#include "carrierParameters.h"
+#include "../headers/carrierParameters.h"
 #include <QDebug>
 CarrierParameters::CarrierParameters(QWidget *parent) :
     QDialog(parent)

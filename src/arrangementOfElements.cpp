@@ -1,6 +1,6 @@
-#include "arrangementOfElements.h"
-#include "selectWeight.h"
-#include "ui_arrangementOfElements.h"
+#include "../headers/arrangementOfElements.h"
+#include "../headers/selectWeight.h"
+#include "../ui_arrangementOfElements.h"
 
 
 

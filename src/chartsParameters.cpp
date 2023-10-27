@@ -1,4 +1,4 @@
-#include "chartsParameters.h"
+#include "../headers/chartsParameters.h"
 
 ChartsParameters::ChartsParameters(QWidget *parent) :
     QDialog(parent)

@@ -1,4 +1,4 @@
-#include "selectWeight.h"
+#include "../headers/selectWeight.h"
 #include <QDebug>
 
 SelectWeight::SelectWeight(QWidget *parent) :

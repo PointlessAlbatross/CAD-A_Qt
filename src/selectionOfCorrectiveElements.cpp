@@ -1,4 +1,4 @@
-#include "selectionOfCorrectiveElements.h"
+#include "../headers/selectionOfCorrectiveElements.h"
 
 SelectionOfCorrectiveElements::SelectionOfCorrectiveElements(QWidget *parent) :
     QDialog(parent)

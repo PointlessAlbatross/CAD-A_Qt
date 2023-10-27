@@ -1,4 +1,4 @@
-#include "echoSignal.h"
+#include "../headers/echoSignal.h"
 
 EchoSignal::EchoSignal(QWidget *parent) :
     QDialog(parent)

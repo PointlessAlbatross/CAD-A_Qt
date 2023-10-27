@@ -15,46 +15,48 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core Gui Charts DataVi
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core Gui Charts DataVisualization)
 
 set(PROJECT_SOURCES
-    antennaArrayParametersHex.cpp
-    antennaArrayParametersRect.cpp
-    arrangementOfElements.cpp
-    cadAMath.cpp
-    calcParam.cpp
-    carrierParameters.cpp
-    channelParameters.cpp
-    chartsParameters.cpp
-    echoSignal.cpp
-    main.cpp
-    mainwindow.cpp
-    operatingSystemParameters.cpp
-    patternCharts.cpp
-    plot3d.cpp
-    reverberationParameters.cpp
-    selectWeight.cpp
-    selectionOfCorrectiveElements.cpp
-    workingEnvironmentSettings.cpp
+    src/antennaArrayParametersHex.cpp
+    src/antennaArrayParametersRect.cpp
+    src/arrangementOfElements.cpp
+    src/cadAMath.cpp
+    src/calcParam.cpp
+    src/carrierParameters.cpp
+    src/channelParameters.cpp
+    src/chartsParameters.cpp
+    src/echoSignal.cpp
+    src/main.cpp
+    src/mainwindow.cpp
+    src/operatingSystemParameters.cpp
+    src/patternCharts.cpp
+    src/plot3d.cpp
+    src/reverberationParameters.cpp
+    src/selectWeight.cpp
+    src/selectionOfCorrectiveElements.cpp
+    src/workingEnvironmentSettings.cpp
 
-    antennaArrayParametersHex.h
-    antennaArrayParametersRect.h
-    arrangementOfElements.h
-    cadAMath.h
-    calcParam.h
-    carrierParameters.h
-    channelParameters.h
-    chartsParameters.h
-    echoSignal.h
-    mainwindow.h
-    operatingSystemParameters.h
-    patternCharts.h
-    plot3d.h
-    reverberationParameters.h
-    selectWeight.h
-    selectionOfCorrectiveElements.h
-    workingEnvironmentSettings.h
+    headers/antennaArrayParametersHex.h
+    headers/antennaArrayParametersRect.h
+    headers/arrangementOfElements.h
+    headers/cadAMath.h
+    headers/calcParam.h
+    headers/carrierParameters.h
+    headers/channelParameters.h
+    headers/chartsParameters.h
+    headers/echoSignal.h
+    headers/mainwindow.h
+    headers/operatingSystemParameters.h
+    headers/patternCharts.h
+    headers/plot3d.h
+    headers/reverberationParameters.h
+    headers/selectWeight.h
+    headers/selectionOfCorrectiveElements.h
+    headers/workingEnvironmentSettings.h
+
 
     mainwindow.ui
     arrangementOfElements.ui
 )
+
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(CAD-A_Qt

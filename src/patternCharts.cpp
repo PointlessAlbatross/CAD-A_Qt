@@ -1,6 +1,6 @@
-#include "patternCharts.h"
+#include "../headers/patternCharts.h"
 #include <QDebug>
-#include "cadAMath.h"
+#include "../headers/cadAMath.h"
 
 PatternCharts::PatternCharts(QWidget *parent) :
     QDialog(parent)

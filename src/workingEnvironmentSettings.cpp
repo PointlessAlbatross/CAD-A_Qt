@@ -1,4 +1,4 @@
-#include "workingEnvironmentSettings.h"
+#include "../headers/workingEnvironmentSettings.h"
 
 
 WorkingEnvironmentSettings::WorkingEnvironmentSettings(QWidget *parent) :

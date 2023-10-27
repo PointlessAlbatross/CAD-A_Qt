@@ -1,5 +1,5 @@
-#include "antennaArrayParametersRect.h"
-#include "mainwindow.h"
+#include "../headers/antennaArrayParametersRect.h"
+#include "../headers/mainwindow.h"
 
 
 AntennaArrayParametersRect::AntennaArrayParametersRect(QWidget *parent):

@@ -1,4 +1,4 @@
-#include "antennaArrayParametersHex.h"
+#include "../headers/antennaArrayParametersHex.h"
 
 
 AntennaArrayParametersHex::AntennaArrayParametersHex(QWidget *parent) :

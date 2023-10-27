@@ -1,4 +1,4 @@
-#include "channelParameters.h"
+#include "../headers/channelParameters.h"
 
 ChannelParameters::ChannelParameters(QWidget *parent) :
     QDialog(parent)

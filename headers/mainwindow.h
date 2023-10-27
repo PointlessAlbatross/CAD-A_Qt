@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 
-#include <antennaArrayParametersRect.h>
-#include <antennaArrayParametersHex.h>
+#include "antennaArrayParametersRect.h"
+#include "antennaArrayParametersHex.h"
 #include "operatingSystemParameters.h"
 #include "arrangementOfElements.h"
 #include "antennaArrayParametersRect.h"
